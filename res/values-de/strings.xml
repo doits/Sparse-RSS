@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sparse rss</string>
+<string name="menu_addfeed">Hinzufügen</string>
+<string name="norssfeeds">Keine RSS feeds</string>
+<string name="menu_refresh">Aktualisieren</string>
+<string name="contextmenu_delete">Löschen</string>
+<string name="goto_url">Link aufrufen</string>
+
+<string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://sparserss.googlecode.com\n</string>
+
+<string name="enterurl_title">URL eingeben</string>
+<string name="contextmenu_edit">Bearbeiten</string>
+<string name="contextmenu_refresh">Aktualisieren</string>
+<string name="menu_settings">Einstellungen</string>
+<string name="contextmenu_markasread">Als gelesen markieren</string>
+<string name="menu_about">Info</string>
+
+<string name="settings_category_refresh">Automatische Aktualisierung</string>
+<string name="settings_refreshenabled">Aktiviert</string>
+<string name="settings_refreshenabled_description">Diese Einstellung kontrolliert die Aktualisierung aller Feeds</string>
+<string name="settings_refreshinterval">Aktualisierungsintervall</string>
+<string name="settings_refreshinterval_description">Intervall zwischen zwei Aktualisierungen</string>
+
+<string name="settings_category_notofications">Benachrichtigungen</string>
+<string name="settings_notificationsenabled">Aktiviert</string>
+<string name="settings_notificationsenabled_description">Kontrolliert das Vorhandensein von Benachrichtigungen</string>
+<string name="settings_notificationsringtone">Klingelton</string>
+<string name="settings_notificationsringtone_description">Auswahl eines Klingeltones, der bei neuem Inhalt abgespielt wird</string>
+<string name="settings_notificationsvibrate">Vibration</string>
+<string name="settings_notificationsvibrate_description">Kontrolliert die Vibration bei neuem Inhalt</string>
+
+<string name="update">Aktualisiert</string>
+<string name="never">nie</string>
+<string name="unread">ungelesen</string>
+<string name="newentries">neue Einträge</string>
+<string name="rss_feeds">RSS Feeds</string>
+<string name="error">Fehler</string>
+
+<string name="error_feedurlexists">Die URL existiert bereits.</string>
+
+<string-array name="settings_intervals">
+<item>15 Minuten</item>
+<item>30 Minuten</item>
+<item>1 Stunde</item>
+<item>2 Stunden</item>
+<item>6 Stunden</item>
+<item>1 Tag</item>
+</string-array>
+</resources>

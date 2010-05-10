@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceCategory android:title="@string/settings_category_refresh">
+<CheckBoxPreference
+android:title="@string/settings_refreshenabled"
+android:defaultValue="false"
+android:summary="@string/settings_refreshenabled_description"
+android:key="refresh.enabled" />
+<ListPreference
+android:name="@string/settings_refreshinterval"
+android:summary="@string/settings_refreshinterval_description"
+android:title="@string/settings_refreshinterval"
+android:key="refresh.interval" 
+android:numeric="integer"
+android:dependency="refresh.enabled"
+android:defaultValue="1800000"
+android:entries="@array/settings_intervals"
+android:entryValues="@array/settings_intervalvalues" />
+</PreferenceCategory>
+
+<PreferenceCategory android:title="@string/settings_category_notofications">
+<CheckBoxPreference
+android:title="@string/settings_notificationsenabled"
+android:defaultValue="false"
+android:summary="@string/settings_notificationsenabled_description"
+android:key="notifications.enabled" />
+<RingtonePreference
+android:ringtoneType="notification"
+android:summary="@string/settings_notificationsringtone_description"
+android:title="@string/settings_notificationsringtone"
+android:key="notifications.ringtone"
+android:dependency="notifications.enabled" />
+<CheckBoxPreference
+android:summary="@string/settings_notificationsvibrate_description"
+android:title="@string/settings_notificationsvibrate"
+android:key="notifications.vibrate"
+android:dependency="notifications.enabled" />
+</PreferenceCategory>
+
+
+</PreferenceScreen>

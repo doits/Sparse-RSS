@@ -1,0 +1,227 @@
+/**
+ * Sparse rss
+ * 
+ * Copyright (c) 2010 Stefan Handschuh
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ */
+
+package de.shandschuh.sparserss.service;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Date;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.IBinder;
+import android.preference.PreferenceManager;
+import android.util.Xml;
+import de.shandschuh.sparserss.R;
+import de.shandschuh.sparserss.RSSOverview;
+import de.shandschuh.sparserss.Strings;
+import de.shandschuh.sparserss.handler.RSSHandler;
+import de.shandschuh.sparserss.provider.FeedData;
+
+public class FetcherService extends Service {
+	private static final String KEY_USERAGENT = "User-agent";
+	
+	private static final String VALUE_USERAGENT = "Mozilla/5.0";
+	
+	private static final String CHARSET = "charset=";
+	
+	private static final String COUNT = "COUNT(*)";
+	
+	private static final String CONTENT_TYPE_TEXT_HTML = "text/html";
+	
+	private static final String LINK_RSS = "<link rel=\"alternate\" ";
+	
+	private static final String HREF = "href=\"";
+	
+	private static final String HTML_BODY = "<body";
+	
+	private NotificationManager notificationManager;
+	
+	@Override
+	public void onStart(final Intent intent, int startId) {
+		super.onStart(intent, startId);
+
+		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+		
+		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		
+		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+			new Thread() {
+				public void run() {
+					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID));
+					
+					if (newCount > 0) {
+						SharedPreferences preferences = null;
+
+						try {
+							preferences = PreferenceManager.getDefaultSharedPreferences(createPackageContext(Strings.PACKAGE, 0));
+						} catch (NameNotFoundException e) {
+							preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
+						}
+						if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false) && RefreshService.SHOWNOTIFICATION) {
+							Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);
+							
+							cursor.moveToFirst();
+							newCount = cursor.getInt(0);
+							cursor.close();
+							
+							String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.newentries)).toString();
+							
+							Notification notification = new Notification(R.drawable.ic_statusbar_rss, text, System.currentTimeMillis());
+							
+							Intent notificationIntent = new Intent(FetcherService.this, RSSOverview.class);
+							
+							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+							notification.flags |= Notification.FLAG_AUTO_CANCEL;
+							if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSVIBRATE, false)) {
+								notification.defaults |= Notification.DEFAULT_VIBRATE;
+							}
+							
+							String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
+							
+							if (ringtone != null && ringtone.length() > 0) {
+								notification.sound = Uri.parse(ringtone);
+							}
+							notification.setLatestEventInfo(FetcherService.this, getString(R.string.rss_feeds), text, contentIntent);
+							notificationManager.notify(0, notification);
+						} else {
+							notificationManager.cancel(0);
+						}
+					}
+					
+					stopSelf();
+				}
+			}.start();
+		}
+	}
+
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
+	}
+
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+	}
+	
+	private static int refreshFeedsStatic(Context context, String feedId) {
+		Cursor cursor = context.getContentResolver().query(feedId == null ? FeedData.FeedColumns.CONTENT_URI : FeedData.FeedColumns.CONTENT_URI(feedId), null, null, null, null); // no managed query here
+		
+		int urlPosition = cursor.getColumnIndex(FeedData.FeedColumns.URL);
+		
+		int idPosition = cursor.getColumnIndex(FeedData.FeedColumns._ID);
+		
+		int lastUpdatePosition = cursor.getColumnIndex(FeedData.FeedColumns.LASTUPDATE);
+		
+//		HttpURLConnection.setFollowRedirects(false);
+		
+		int result = 0;
+				
+		while(cursor.moveToNext()) {
+			String id = cursor.getString(idPosition);
+			
+			try {
+				URLConnection connection = setupConnection(cursor.getString(urlPosition));
+				
+				String contentType = connection.getContentType();
+				
+				if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
+					BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					
+					String line = null;
+					
+					int pos = -1;
+					
+					while ((line = reader.readLine()) != null) {
+						if (line.indexOf(HTML_BODY) > -1) {
+							break;
+						} else {
+							pos = line.indexOf(LINK_RSS);
+							
+							if (pos > -1) {
+								int posStart = line.indexOf(HREF, pos);
+
+								if (posStart > -1) {
+									String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(RSSHandler.AMP_SG, RSSHandler.AMP);
+									
+									ContentValues values = new ContentValues();
+									
+									values.put(FeedData.FeedColumns.URL, url);
+									context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+									connection = setupConnection(url);
+									contentType = connection.getContentType();
+									break;
+								}
+							}
+						}
+					}
+				}
+			
+				RSSHandler handler = new RSSHandler(context, new Date(cursor.getLong(lastUpdatePosition)), id);
+				
+				Xml.parse(connection.getInputStream(), Xml.findEncodingByName(contentType.substring(contentType.indexOf(CHARSET)+8)), handler);
+				result += handler.getNewCount();
+			} catch (Exception e) {
+				ContentValues values = new ContentValues();
+				
+				values.put(FeedData.FeedColumns.ERROR, e.getMessage());
+				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+			}
+		}
+		cursor.close();
+		
+		if (result > 0) {
+			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
+		}
+		return result;
+	}
+	
+	private static final URLConnection setupConnection(String url) throws IOException {
+		URLConnection connection = new URL(url).openConnection();
+		
+		connection.setDoInput(true);
+		connection.setDoOutput(false);
+		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
+		connection.connect();
+		return connection;
+	}
+}

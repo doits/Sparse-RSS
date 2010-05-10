@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="de.shandschuh.sparserss"
+      android:versionCode="2" android:versionName="0.1">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RESTART_PACKAGES" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application android:icon="@drawable/icon" android:label="@string/app_name" android:allowClearUserData="true" android:testOnly="false" android:allowBackup="true">
+    	<service android:name=".service.RefreshService"/>
+    	<service android:name=".service.FetcherService"/>
+    	<provider android:name=".provider.FeedDataContentProvider" android:authorities="de.shandschuh.sparserss.provider.FeedData" />
+        <activity android:name=".RSSOverview" android:label="@string/app_name" android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".AboutActivity" android:launchMode="singleTask" />
+		<activity android:name=".EntriesListActivity" android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.dir/vnd.feeddata.entry" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".EntryActivity" android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:mimeType="vnd.android.cursor.item/vnd.feeddata.entry" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ApplicationPreferencesActivity"/>
+        <receiver android:name=".widget.SparseRSSAppWidgetProvider" >
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		        <action android:name="de.shandschuh.sparserss.widget.UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/widgetinfo" />
+		</receiver>
+		<receiver android:name=".RefreshBroadcastReceiver" >
+		    <intent-filter>
+		        <action android:name="de.shandschuh.sparserss.REFRESH" />
+		    </intent-filter>
+		</receiver>
+		<receiver android:name=".SDMountBroadcastReceiver" >
+		    <intent-filter>
+		        <action android:name="android.intent.action.MEDIA_MOUNTED" />
+		        <data android:scheme="file" />
+		    </intent-filter>
+		</receiver>
+		<receiver android:name=".BootCompletedBroadcastReceiver" >
+		    <intent-filter>
+		        <action android:name="android.intent.action.BOOT_COMPLETED" />
+		    </intent-filter>
+		</receiver>
+    </application>
+    <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="4"/>
+</manifest> 

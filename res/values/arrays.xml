@@ -1,0 +1,9 @@
+<resources><string-array name="settings_intervalvalues">
+<item>900000</item>
+<item>1800000</item>
+<item>3600000</item>
+<item>7200000</item>
+<item>21600000</item>
+<item>86400000</item>
+</string-array>
+</resources>
