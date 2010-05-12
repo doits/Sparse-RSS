@@ -129,6 +129,8 @@ public class FetcherService extends Service {
 					stopSelf();
 				}
 			}.start();
+		} else {
+			stopSelf();
 		}
 	}
 
