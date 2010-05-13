@@ -7,7 +7,7 @@
 <string name="contextmenu_delete">Delete</string>
 <string name="goto_url">Goto link</string>
 
-<string name="enterurl_title">Enter URL</string>
+<string name="editfeed_title">Edit feed</string>
 <string name="contextmenu_edit">Edit</string>
 <string name="contextmenu_refresh">Refresh</string>
 <string name="menu_settings">Settings</string>
@@ -55,6 +55,10 @@ THE SOFTWARE.
 <string name="error">Error</string>
 
 <string name="error_feedurlexists">The URL already exists.</string>
+
+<string name="feed_url">URL</string>
+<string name="optional">(optional)</string>
+<string name="feed_title">Title</string>
 
 <string-array name="settings_intervals">
 <item>15 minutes</item>

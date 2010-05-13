@@ -44,10 +44,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
@@ -142,21 +140,12 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case CONTEXTMENU_EDIT_ID: {
-				final EditText input = new EditText(this);  
-				
-				final String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
+				String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
 				
 				Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null);
 				
 				cursor.moveToFirst();
-				createURLDialog(cursor.getString(0), cursor.getString(1), new OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						ContentValues values = new ContentValues();
-						
-						values.put(FeedData.FeedColumns.URL, input.getText().toString());
-						getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-					}
-				}, input).show();
+				createURLDialog(cursor.getString(0), cursor.getString(1), id).show();
 				cursor.close();
 				break;
 			}
@@ -221,27 +210,7 @@ public class RSSOverview extends ListActivity {
 
 		switch (id) {
 			case DIALOG_ADDFEED_ID: {
-				final EditText input = new EditText(this);  
-				
-				dialog = createURLDialog(null, null, new OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						String url = input.getText().toString();
-						
-						Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
-						
-						
-						if (cursor.getCount() > 0) {
-							showDialog(DIALOG_ERROR_FEEDURLEXISTS);
-						} else {
-							ContentValues values = new ContentValues();
-							
-							values.put(FeedData.FeedColumns.URL, url);
-							values.put(FeedData.FeedColumns.ERROR, (String) null);
-							getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values);
-						}
-						cursor.close();
-					}
-				}, input);
+				dialog = createURLDialog(null, null, null);
 				break;
 			}
 			case DIALOG_ERROR_FEEDURLEXISTS: {
@@ -264,38 +233,71 @@ public class RSSOverview extends ListActivity {
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		if (id == DIALOG_ADDFEED_ID) {
-			EditText editText = (EditText) dialog.findViewById(1);
+			EditText editText = (EditText) dialog.findViewById(R.id.feed_url);
 			
 			editText.setText(HTTP);
 			editText.setSelection(7);
+			((EditText) dialog.findViewById(R.id.feed_title)).setText("");
 		}
 		super.onPrepareDialog(id, dialog);
 	}
 
-	private Dialog createURLDialog(String title, String url, OnClickListener onClickListener, EditText editText) {
+	private Dialog createURLDialog(String title, String url, final String id) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		View view = getLayoutInflater().inflate(R.layout.feedsettings, null);
+		
+		final EditText nameEditText = (EditText) view.findViewById(R.id.feed_title);
+		
+		final EditText urlEditText = (EditText) view.findViewById(R.id.feed_url);
 		
 		if (title != null) {
 			builder.setTitle(title);
+			nameEditText.setText(title);
 		} else {
-			builder.setTitle(R.string.enterurl_title);
+			builder.setTitle(R.string.editfeed_title);
 		}
-		
-		LinearLayout layout = new LinearLayout(this);
-		
-		layout.setPadding(5, 0, 5, 0);
-		
-		editText.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-		if (url != null) {
-			editText.setText(url);
-			editText.setSelection(url.length()-1);
+		if (url != null) { // indicates an edit
+			urlEditText.setText(url);
+			urlEditText.setSelection(url.length()-1);
+			builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					ContentValues values = new ContentValues();
+						
+					values.put(FeedData.FeedColumns.URL, urlEditText.getText().toString());
+					values.put(FeedData.FeedColumns.NAME, nameEditText.getText().toString());
+					getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+				}
+			});
+		} else {
+			builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					String url = urlEditText.getText().toString();
+					
+					Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
+					
+					if (cursor.getCount() > 0) {
+						showDialog(DIALOG_ERROR_FEEDURLEXISTS);
+					} else {
+						ContentValues values = new ContentValues();
+						
+						values.put(FeedData.FeedColumns.URL, url);
+						values.put(FeedData.FeedColumns.ERROR, (String) null);
+						
+						String name = nameEditText.getText().toString();
+						
+						if (name != null && name.length() > 0) {
+							values.put(FeedData.FeedColumns.NAME, name);
+						}
+						getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values);
+					}
+					cursor.close();
+				}
+			});
 		}
-		editText.setId(1);
-		editText.setSingleLine();
-		layout.addView(editText);
-		builder.setView(layout); 
+		builder.setView(view); 
 		
-		builder.setPositiveButton(android.R.string.ok, onClickListener);
+		
 		builder.setNegativeButton(android.R.string.cancel, null);
 		return builder.create();
 	}

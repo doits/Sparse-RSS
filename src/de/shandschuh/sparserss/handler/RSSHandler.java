@@ -94,9 +94,11 @@ public class RSSHandler extends DefaultHandler {
 	
 	private StringBuilder title;
 	
+	private StringBuilder dateStringBuilder;
+	
 	private Date entryDate;
 	
-	private String entryLink;
+	private StringBuilder entryLink;
 	
 	private StringBuilder description;
 	
@@ -106,7 +108,9 @@ public class RSSHandler extends DefaultHandler {
 	
 	private boolean feedRefreshed;
 	
-	public RSSHandler(Context context, Date lastUpdateDate, String id) {
+	private String feedTitle;
+	
+	public RSSHandler(Context context, Date lastUpdateDate, String id, String title) {
 		this.context = context;
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
@@ -114,17 +118,21 @@ public class RSSHandler extends DefaultHandler {
 		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(System.currentTimeMillis()-KEEP_TIME).toString(), null);
 		newCount = 0;
 		feedRefreshed = false;
+		feedTitle = title;
 	}
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 		if (TAG_UPDATED.equals(localName)) {
 			updatedTagEntered = true;
+			dateStringBuilder = new StringBuilder();
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
 			if (!feedRefreshed) {
 				ContentValues values = new ContentValues();
 					
-				values.put(FeedData.FeedColumns.NAME, title.toString());
+				if (feedTitle == null) {
+					values.put(FeedData.FeedColumns.NAME, title.toString());
+				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
 				values.put(FeedData.FeedColumns.LASTUPDATE, entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000);
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
@@ -135,15 +143,22 @@ public class RSSHandler extends DefaultHandler {
 			titleTagEntered = true;
 			title = new StringBuilder();
 		} else if (TAG_LINK.equals(localName)) {
-			entryLink = attributes.getValue(0);
-			linkTagEntered = entryLink == null;
+			entryLink = new StringBuilder();
+			if (attributes.getValue(0) != null) {
+				entryLink.append(attributes.getValue(0));
+				linkTagEntered = false;
+			} else {
+				linkTagEntered = true;
+			}
 		} else if (TAG_DESCRIPTION.equals(localName)) {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_PUBDATE.equals(localName)) {
 			pubDateTagEntered = true;
+			dateStringBuilder = new StringBuilder();
 		} else if (TAG_DATE.equals(localName)) {
 			dateTagEntered = true;
+			dateStringBuilder = new StringBuilder();
 		}
 	}
 
@@ -152,31 +167,15 @@ public class RSSHandler extends DefaultHandler {
 		if (titleTagEntered) {
 			title.append(ch, start, length);
 		} else if (updatedTagEntered) {
-			try {
-				entryDate = UPDATE_DATEFORMAT.parse(new String(ch, start, length));
-			} catch (ParseException e) {
-				
-			}
-			updatedTagEntered = false;
+			dateStringBuilder.append(ch, start, length);
 		} else if (linkTagEntered) {
-			entryLink = new String(ch, start, length);
-			linkTagEntered = false;
+			entryLink.append(ch, start, length);
 		} else if (descriptionTagEntered) {
 			description.append(ch, start, length);
 		} else if (pubDateTagEntered) {
-			try {
-				entryDate = PUBDATE_DATEFORMAT.parse(new String(ch, start, length));
-			} catch (ParseException e) {
-				
-			}
-			pubDateTagEntered = false;
+			dateStringBuilder.append(ch, start, length);
 		} else if (dateTagEntered) {
-			try {
-				entryDate = UPDATE_DATEFORMAT.parse(new String(ch, start, length));
-			} catch (ParseException e) {
-
-			}
-			dateTagEntered = false;
+			dateStringBuilder.append(ch, start, length);
 		}
 	}
 	
@@ -186,6 +185,29 @@ public class RSSHandler extends DefaultHandler {
 			titleTagEntered = false;
 		} else if (TAG_DESCRIPTION.equals(localName)) {
 			descriptionTagEntered = false;
+		} else if (TAG_LINK.equals(localName)) {
+			linkTagEntered = false;
+		} else if (TAG_UPDATED.equals(localName)) {
+			try {
+				entryDate = UPDATE_DATEFORMAT.parse(dateStringBuilder.toString());
+			} catch (ParseException e) {
+				
+			}
+			updatedTagEntered = false;
+		} else if (TAG_PUBDATE.equals(localName)) {
+			try {
+				entryDate = PUBDATE_DATEFORMAT.parse(dateStringBuilder.toString());
+			} catch (ParseException e) {
+				
+			}
+			pubDateTagEntered = false;
+		} else if (TAG_DATE.equals(localName)) {
+			try {
+				entryDate = UPDATE_DATEFORMAT.parse(dateStringBuilder.toString());
+			} catch (ParseException e) {
+
+			}
+			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
 			if (entryDate != null && entryDate.after(lastUpdateDate)) {
 				ContentValues values = new ContentValues();
@@ -197,8 +219,10 @@ public class RSSHandler extends DefaultHandler {
 					description = null;
 				}
 				
-				if (context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLink}) == 0) {
-					values.put(FeedData.EntryColumns.LINK, entryLink);
+				String entryLinkString = entryLink.toString();
+				
+				if (context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
+					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					
 					context.getContentResolver().insert(feedEntiresUri, values);
 					newCount++;

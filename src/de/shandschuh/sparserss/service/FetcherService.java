@@ -154,6 +154,8 @@ public class FetcherService extends Service {
 		
 		int lastUpdatePosition = cursor.getColumnIndex(FeedData.FeedColumns.LASTUPDATE);
 		
+		int titlePosition = cursor.getColumnIndex(FeedData.FeedColumns.NAME);
+		
 //		HttpURLConnection.setFollowRedirects(false);
 		
 		int result = 0;
@@ -198,7 +200,7 @@ public class FetcherService extends Service {
 					}
 				}
 			
-				RSSHandler handler = new RSSHandler(context, new Date(cursor.getLong(lastUpdatePosition)), id);
+				RSSHandler handler = new RSSHandler(context, new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
 				
 				Xml.parse(connection.getInputStream(), Xml.findEncodingByName(contentType.substring(contentType.indexOf(CHARSET)+8)), handler);
 				result += handler.getNewCount();
