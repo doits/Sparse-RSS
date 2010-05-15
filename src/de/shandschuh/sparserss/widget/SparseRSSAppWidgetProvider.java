@@ -67,17 +67,13 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
         
         while (cursor.moveToNext() && n < ids.length) {
         	views.setTextViewText(ids[n], cursor.getString(0));
-        	
         	views.setOnClickPendingIntent(ids[n++], PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.ENTRY_CONTENT_URI(cursor.getString(1))), 0));
         }
         cursor.close();
         for (; n < ids.length; n++) {
-        	views.setTextViewText(ids[n++], EMPTY);
+        	views.setTextViewText(ids[n], EMPTY);
         }
-        n = 0;
-        for (final int i = appWidgetIds.length; n < i; n++) {
-            appWidgetManager.updateAppWidget(appWidgetIds[n], views);
-        }
+        appWidgetManager.updateAppWidget(appWidgetIds, views);
     }
 
 }

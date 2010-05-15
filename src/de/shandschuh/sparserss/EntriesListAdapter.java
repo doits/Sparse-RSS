@@ -46,7 +46,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private int readDateColumn;
 	
 	public EntriesListAdapter(Activity context, Uri uri) {
-		super(context, android.R.layout.simple_list_item_2, context.managedQuery(uri, null, null, null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString()));
+		super(context, R.layout.listitem, context.managedQuery(uri, null, null, null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString()));
 		titleColumnPosition = getCursor().getColumnIndex(FeedData.EntryColumns.TITLE);
 		dateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.DATE);
 		readDateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.READDATE);
@@ -57,11 +57,18 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		TextView textView = (TextView) view.findViewById(android.R.id.text1);
 		
 		textView.setText(cursor.getString(titleColumnPosition));
+		
+		TextView dateTextView = ((TextView) view.findViewById(android.R.id.text2));
+		
 		if (cursor.isNull(readDateColumn)) {
 			textView.setTypeface(Typeface.DEFAULT_BOLD);
+			textView.setEnabled(true);
+			dateTextView.setEnabled(true);
 		} else {
 			textView.setTypeface(Typeface.DEFAULT);
+			textView.setEnabled(false);
+			dateTextView.setEnabled(false);
 		}
-		((TextView) view.findViewById(android.R.id.text2)).setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+		dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
 	}
 }

@@ -68,7 +68,7 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_DATE = "date";
 	
-	private static final long KEEP_TIME = 345600000; // 4 days
+	private static final long KEEP_TIME = 172800000; // 2 days
 	
 	private static final DateFormat UPDATE_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	

@@ -55,7 +55,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	private int errorPosition;
 	
 	public RSSOverviewListAdapter(Activity context) {
-		super(context, android.R.layout.simple_list_item_2, context.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
+		super(context, R.layout.listitem, context.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
 		nameColumnPosition = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
 		lastUpdateColumn = getCursor().getColumnIndex(FeedData.FeedColumns.LASTUPDATE);
 		idPosition = getCursor().getColumnIndex(FeedData.FeedColumns._ID);
@@ -80,13 +80,22 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		
 		long date = cursor.getLong(lastUpdateColumn);
 		
-		if (cursor.isNull(errorPosition)) {
-			((TextView) view.findViewById(android.R.id.text2)).setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(date == 0 ? context.getString(R.string.never) : new StringBuilder(DateFormat.getDateTimeInstance().format(new Date(date))).append(COMMA).append(unreadCount).append(' ').append(context.getString(R.string.unread))));
-		} else {
-			((TextView) view.findViewById(android.R.id.text2)).setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
-		}
+		TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));;
 		
-		textView.setTypeface(unreadCount > 0 ? Typeface.DEFAULT_BOLD : Typeface.DEFAULT);
+		if (cursor.isNull(errorPosition)) {
+			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(date == 0 ? context.getString(R.string.never) : new StringBuilder(DateFormat.getDateTimeInstance().format(new Date(date))).append(COMMA).append(unreadCount).append(' ').append(context.getString(R.string.unread))));
+		} else {
+			updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
+		}
+		if (unreadCount > 0) {
+			textView.setTypeface(Typeface.DEFAULT_BOLD);
+			textView.setEnabled(true);
+			updateTextView.setEnabled(true);
+		} else {
+			textView.setTypeface(Typeface.DEFAULT);
+			textView.setEnabled(false);
+			updateTextView.setEnabled(false);
+		}
 	}
 
 }

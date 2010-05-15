@@ -68,7 +68,11 @@ public class EntriesListActivity extends ListActivity {
 	}
 
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		getContentResolver().update(uri, RSSOverview.getReadContentValues(), null, null);
+		new Thread() { // the update process takes some time
+			public void run() {
+				getContentResolver().update(uri, RSSOverview.getReadContentValues(), null, null);
+			}
+		}.start();
 		return true;
 	}
 	
