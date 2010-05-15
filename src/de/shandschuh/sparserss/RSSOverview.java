@@ -103,7 +103,7 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread);
 			}
         });
-        if (!serviceConnected && PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, true)) {
+        if (!serviceConnected && PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
         	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
         	bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
         	serviceConnected = true;
