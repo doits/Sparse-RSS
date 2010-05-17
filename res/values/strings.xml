@@ -58,6 +58,7 @@ THE SOFTWARE.
 
 <string name="feed_url">URL</string>
 <string name="optional">(optional)</string>
+<string name="websiteorfeed">(website or feed)</string>
 <string name="feed_title">Title</string>
 
 <string-array name="settings_intervals">

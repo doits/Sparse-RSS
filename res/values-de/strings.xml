@@ -41,6 +41,8 @@
 
 <string name="feed_title">Titel</string>
 
+<string name="websiteorfeed">(Webseite oder Feed)</string>
+
 <string-array name="settings_intervals">
 <item>15 Minuten</item>
 <item>30 Minuten</item>

@@ -92,7 +92,7 @@ public class EntryActivity extends Activity {
 				((TextView) findViewById(R.id.entry_date)).setText(DateFormat.getDateTimeInstance().format(new Date(entryCursor.getLong(datePosition))));
 				
 				// loadData does not recognize the encoding without correct html-header
-				((WebView) findViewById(R.id.entry_abstract)).loadDataWithBaseURL(null, abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
+				((WebView) findViewById(R.id.entry_abstract)).loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? abstractText : abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
 				((Button) findViewById(R.id.url_button)).setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
 						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(entryCursor.getString(linkPosition))));
