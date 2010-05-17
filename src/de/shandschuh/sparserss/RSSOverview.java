@@ -54,6 +54,8 @@ import de.shandschuh.sparserss.service.RefreshService;
 public class RSSOverview extends ListActivity {	
 	private static final String HTTP = "http://";
 	
+	private static final String HTTPS = "https://";
+	
 	private static final int MENU_ADDFEED_ID = 1;
 	
 	private static final int MENU_REFRESH_ID = 2;
@@ -228,15 +230,12 @@ public class RSSOverview extends ListActivity {
 		return dialog;
 	}
 	
-	
-	
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		if (id == DIALOG_ADDFEED_ID) {
 			EditText editText = (EditText) dialog.findViewById(R.id.feed_url);
 			
-			editText.setText(HTTP);
-			editText.setSelection(7);
+			editText.setText("");
 			((EditText) dialog.findViewById(R.id.feed_title)).setText("");
 		}
 		super.onPrepareDialog(id, dialog);
@@ -284,6 +283,9 @@ public class RSSOverview extends ListActivity {
 					} else {
 						ContentValues values = new ContentValues();
 						
+						if (!url.startsWith(HTTP) && !url.startsWith(HTTPS)) {
+							url = HTTP+url;
+						}
 						values.put(FeedData.FeedColumns.URL, url);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						

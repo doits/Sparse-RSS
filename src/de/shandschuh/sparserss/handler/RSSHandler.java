@@ -46,12 +46,6 @@ public class RSSHandler extends DefaultHandler {
 	
 	public static final String AMP = "&";
 	
-	private static final String IMG_TAG = "<img";
-	
-	private static final String IMG_TAG_UPPER = "<IMG";
-	
-	private static final String NOOP_TAG = "<noop";
-	
 	private static final String TAG_ENTRY = "entry";
 	
 	private static final String TAG_ITEM = "item";
@@ -242,7 +236,7 @@ public class RSSHandler extends DefaultHandler {
 				values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
 				values.put(FeedData.EntryColumns.TITLE, title.toString().replace(AMP_SG, AMP));
 				if (description != null) {
-					values.put(FeedData.EntryColumns.ABSTRACT, description.toString().trim().replace(IMG_TAG, NOOP_TAG).replace(IMG_TAG_UPPER, NOOP_TAG)); // maybe better use regex, but this will do it for now
+					values.put(FeedData.EntryColumns.ABSTRACT, description.toString().trim()); // maybe better use regex, but this will do it for now
 					description = null;
 				}
 				

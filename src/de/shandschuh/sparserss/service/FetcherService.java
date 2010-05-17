@@ -214,7 +214,9 @@ public class FetcherService extends Service {
 				int index = contentType.indexOf(CHARSET);
 				
 				if (index > -1) {
-					Xml.parse(connection.getInputStream(), Xml.findEncodingByName(contentType.substring(index+8)), handler);
+					int index2 = contentType.indexOf(';', index);
+					
+					Xml.parse(connection.getInputStream(), Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
 				} else {
 					Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
 				}
