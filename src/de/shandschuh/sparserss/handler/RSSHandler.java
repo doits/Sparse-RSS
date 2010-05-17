@@ -64,13 +64,19 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_DESCRIPTION = "description";
 	
+	private static final String TAG_SUMMARY = "summary";
+	
 	private static final String TAG_PUBDATE = "pubDate";
 	
 	private static final String TAG_DATE = "date";
 	
+	private static final String ATTRIBUTE_HREF = "href";
+	
 	private static final long KEEP_TIME = 172800000; // 2 days
 	
 	private static final DateFormat UPDATE_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+	
+	private static final DateFormat UPDATE_DATEFORMAT_SLOPPY = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	
 	private static final DateFormat PUBDATE_DATEFORMAT = new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
 
@@ -144,13 +150,26 @@ public class RSSHandler extends DefaultHandler {
 			title = new StringBuilder();
 		} else if (TAG_LINK.equals(localName)) {
 			entryLink = new StringBuilder();
-			if (attributes.getValue(0) != null) {
-				entryLink.append(attributes.getValue(0));
-				linkTagEntered = false;
-			} else {
+			
+			boolean foundLink = false;
+			
+			for (int n = 0, i = attributes.getLength(); n < i; n++) {
+				if (ATTRIBUTE_HREF.equals(attributes.getLocalName(n))) {
+					if (attributes.getValue(n) != null) {
+						entryLink.append(attributes.getValue(n));
+						foundLink = true;
+						linkTagEntered = false;
+					} else {
+						linkTagEntered = true;
+					}
+					break;
+				}
+			}
+			if (!foundLink) {
 				linkTagEntered = true;
 			}
-		} else if (TAG_DESCRIPTION.equals(localName)) {
+			
+		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName)) {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_PUBDATE.equals(localName)) {
@@ -183,7 +202,7 @@ public class RSSHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (TAG_TITLE.equals(localName)) {
 			titleTagEntered = false;
-		} else if (TAG_DESCRIPTION.equals(localName)) {
+		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName)) {
 			descriptionTagEntered = false;
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;
@@ -191,7 +210,11 @@ public class RSSHandler extends DefaultHandler {
 			try {
 				entryDate = UPDATE_DATEFORMAT.parse(dateStringBuilder.toString());
 			} catch (ParseException e) {
-				
+				try {
+					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateStringBuilder.toString());
+				} catch (ParseException e2) {
+					
+				}
 			}
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
@@ -205,7 +228,11 @@ public class RSSHandler extends DefaultHandler {
 			try {
 				entryDate = UPDATE_DATEFORMAT.parse(dateStringBuilder.toString());
 			} catch (ParseException e) {
-
+				try {
+					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateStringBuilder.toString());
+				} catch (ParseException e2) {
+					
+				}
 			}
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {

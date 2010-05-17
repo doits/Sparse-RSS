@@ -265,7 +265,10 @@ public class RSSOverview extends ListActivity {
 					ContentValues values = new ContentValues();
 						
 					values.put(FeedData.FeedColumns.URL, urlEditText.getText().toString());
-					values.put(FeedData.FeedColumns.NAME, nameEditText.getText().toString());
+					
+					String name = nameEditText.getText().toString();
+					
+					values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
 					getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				}
 			});
@@ -286,7 +289,7 @@ public class RSSOverview extends ListActivity {
 						
 						String name = nameEditText.getText().toString();
 						
-						if (name != null && name.length() > 0) {
+						if (name.trim().length() > 0) {
 							values.put(FeedData.FeedColumns.NAME, name);
 						}
 						getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values);

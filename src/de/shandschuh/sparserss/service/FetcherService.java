@@ -67,9 +67,13 @@ public class FetcherService extends Service {
 	
 	private static final String LINK_RSS = "<link rel=\"alternate\" ";
 	
+	private static final String LINK_RSS_SLOPPY = "<link rel=alternate "; 
+	
 	private static final String HREF = "href=\"";
 	
 	private static final String HTML_BODY = "<body";
+	
+	private static final String SLASH = "/";
 	
 	private NotificationManager notificationManager;
 	
@@ -167,7 +171,6 @@ public class FetcherService extends Service {
 				URLConnection connection = setupConnection(cursor.getString(urlPosition));
 				
 				String contentType = connection.getContentType();
-				
 				if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 					
@@ -181,6 +184,9 @@ public class FetcherService extends Service {
 						} else {
 							pos = line.indexOf(LINK_RSS);
 							
+							if (pos == -1) {
+								pos = line.indexOf(LINK_RSS_SLOPPY);
+							}
 							if (pos > -1) {
 								int posStart = line.indexOf(HREF, pos);
 
@@ -189,6 +195,9 @@ public class FetcherService extends Service {
 									
 									ContentValues values = new ContentValues();
 									
+									if (url.startsWith(SLASH)) {
+										url = cursor.getString(urlPosition)+url;
+									} 
 									values.put(FeedData.FeedColumns.URL, url);
 									context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 									connection = setupConnection(url);
@@ -202,11 +211,17 @@ public class FetcherService extends Service {
 			
 				RSSHandler handler = new RSSHandler(context, new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
 				
-				Xml.parse(connection.getInputStream(), Xml.findEncodingByName(contentType.substring(contentType.indexOf(CHARSET)+8)), handler);
+				int index = contentType.indexOf(CHARSET);
+				
+				if (index > -1) {
+					Xml.parse(connection.getInputStream(), Xml.findEncodingByName(contentType.substring(index+8)), handler);
+				} else {
+					Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
+				}
 				result += handler.getNewCount();
 			} catch (Exception e) {
 				ContentValues values = new ContentValues();
-				
+
 				values.put(FeedData.FeedColumns.ERROR, e.getMessage());
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 			}

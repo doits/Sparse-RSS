@@ -69,7 +69,6 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		
 		textView.setText(cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition));
 		
-		
 		Cursor countCursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI(cursor.getString(idPosition)), new String[] {COUNT}, null, null, null);
 		
 		countCursor.moveToFirst();
