@@ -38,6 +38,8 @@ public final class Strings {
 	
 	public static final String SETTINGS_NOTIFICATIONSVIBRATE = "notifications.vibrate";
 	
+	public static final String SETTINGS_PRIORITIZE = "contentpresentation.prioritize";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";
@@ -49,5 +51,7 @@ public final class Strings {
 	public static final String DB_DESC = " DESC";
 	
 	public static final String DB_ARG = "=?";
+	
+	public static final String EMPTY = "";
 
 }

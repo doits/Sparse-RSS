@@ -33,6 +33,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
@@ -45,8 +46,11 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private int readDateColumn;
 	
+	private static final String SQLREAD = "length(readdate) ASC, ";
+	
+	
 	public EntriesListAdapter(Activity context, Uri uri) {
-		super(context, R.layout.listitem, context.managedQuery(uri, null, null, null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString()));
+		super(context, R.layout.listitem, context.managedQuery(uri, null, null, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString()));
 		titleColumnPosition = getCursor().getColumnIndex(FeedData.EntryColumns.TITLE);
 		dateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.DATE);
 		readDateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.READDATE);

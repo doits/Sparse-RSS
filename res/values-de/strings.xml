@@ -30,6 +30,10 @@
 <string name="settings_notificationsvibrate">Vibration</string>
 <string name="settings_notificationsvibrate_description">Kontrolliert die Vibration bei neuem Inhalt</string>
 
+<string name="settings_category_contentpresentation">Inhaltsanzeige</string>
+<string name="settings_prioritize">Bevorzuge ungelesenen Inhalt</string>
+<string name="settings_prioritize_description">Zeige ungelesene Feedeinträge über gelesenen Einträgen</string>
+
 <string name="update">Aktualisiert</string>
 <string name="never">nie</string>
 <string name="unread">ungelesen</string>

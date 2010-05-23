@@ -37,5 +37,13 @@ android:key="notifications.vibrate"
 android:dependency="notifications.enabled" />
 </PreferenceCategory>
 
+<PreferenceCategory android:title="@string/settings_category_contentpresentation">
+<CheckBoxPreference
+android:title="@string/settings_prioritize"
+android:defaultValue="false"
+android:summary="@string/settings_prioritize_description"
+android:key="contentpresentation.prioritize" />
+</PreferenceCategory>
+
 
 </PreferenceScreen>

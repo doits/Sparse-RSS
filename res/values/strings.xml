@@ -47,6 +47,10 @@ THE SOFTWARE.
 <string name="settings_notificationsvibrate">Vibrate</string>
 <string name="settings_notificationsvibrate_description">Controls if there will be vibration on new feed content</string>
 
+<string name="settings_category_contentpresentation">Content presentation</string>
+<string name="settings_prioritize">Prioritize unread content</string>
+<string name="settings_prioritize_description">Show unread feed entries above read entries</string>
+
 <string name="never">never</string>
 <string name="update">Update</string>
 <string name="unread">unread</string>

@@ -167,6 +167,8 @@ public class FetcherService extends Service {
 		while(cursor.moveToNext()) {
 			String id = cursor.getString(idPosition);
 			
+			RSSHandler handler = new RSSHandler(context);
+			
 			try {
 				URLConnection connection = setupConnection(cursor.getString(urlPosition));
 				
@@ -208,8 +210,7 @@ public class FetcherService extends Service {
 						}
 					}
 				}
-			
-				RSSHandler handler = new RSSHandler(context, new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
+				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
 				
 				int index = contentType.indexOf(CHARSET);
 				
@@ -221,11 +222,13 @@ public class FetcherService extends Service {
 					Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
 				}
 				result += handler.getNewCount();
-			} catch (Exception e) {
-				ContentValues values = new ContentValues();
-
-				values.put(FeedData.FeedColumns.ERROR, e.getMessage());
-				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+			} catch (Throwable e) {
+				if (!handler.isDone()) {
+					ContentValues values = new ContentValues();
+					
+					values.put(FeedData.FeedColumns.ERROR, e.getMessage());
+					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+				}
 			}
 		}
 		cursor.close();

@@ -46,6 +46,12 @@ public class RSSHandler extends DefaultHandler {
 	
 	public static final String AMP = "&";
 	
+	private static final String TAG_RSS = "rss";
+	
+	private static final String TAG_RDF = "rdf";
+	
+	private static final String TAG_FEED = "feed";
+	
 	private static final String TAG_ENTRY = "entry";
 	
 	private static final String TAG_ITEM = "item";
@@ -110,8 +116,13 @@ public class RSSHandler extends DefaultHandler {
 	
 	private String feedTitle;
 	
-	public RSSHandler(Context context, Date lastUpdateDate, String id, String title) {
+	private boolean done;
+	
+	public RSSHandler(Context context) {
 		this.context = context;
+	}
+	
+	public void init(Date lastUpdateDate, String id, String title) {
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
 		feedEntiresUri = FeedData.EntryColumns.CONTENT_URI(id);
@@ -119,6 +130,7 @@ public class RSSHandler extends DefaultHandler {
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;
+		done = false;
 	}
 
 	@Override
@@ -130,7 +142,7 @@ public class RSSHandler extends DefaultHandler {
 			if (!feedRefreshed) {
 				ContentValues values = new ContentValues();
 					
-				if (feedTitle == null) {
+				if (feedTitle == null && title != null && title.length() > 0) {
 					values.put(FeedData.FeedColumns.NAME, title.toString());
 				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
@@ -249,11 +261,17 @@ public class RSSHandler extends DefaultHandler {
 					newCount++;
 				}
 			}
+		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
+			done = true;
 		}
 	}
 	
 	public int getNewCount() {
 		return newCount;
+	}
+	
+	public boolean isDone() {
+		return done;
 	}
 	
 }
