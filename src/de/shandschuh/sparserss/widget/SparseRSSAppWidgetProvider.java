@@ -39,9 +39,7 @@ import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
-	private static final String EMPTY = "";
-	
-	private static final String LIMIT_4 = " limit 4";
+	private static final String LIMIT = " limit 7";
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -55,13 +53,13 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 	}
 
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID}, null /* new StringBuilder(FeedData.EntryColumns.READDATE).append(" IS NULL").toString()*/, null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT_4).toString());
+		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID}, null /* new StringBuilder(FeedData.EntryColumns.READDATE).append(" IS NULL").toString()*/, null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT).toString());
         
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.homescreenwidget);
 
         views.setOnClickPendingIntent(R.id.feed_icon, PendingIntent.getActivity(context, 0, new Intent(context, RSSOverview.class), 0));
         
-        int[] ids = {R.id.news_1, R.id.news_2, R.id.news_3, R.id.news_4/*, R.id.news_5, R.id.news_6, R.id.news_7, R.id.news_8, R.id.news_9*/};
+        int[] ids = {R.id.news_1, R.id.news_2, R.id.news_3, R.id.news_4, R.id.news_5, R.id.news_6, R.id.news_7};
         
         int n = 0;
         
@@ -71,7 +69,7 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
         }
         cursor.close();
         for (; n < ids.length; n++) {
-        	views.setTextViewText(ids[n], EMPTY);
+        	views.setTextViewText(ids[n], Strings.EMPTY);
         }
         appWidgetManager.updateAppWidget(appWidgetIds, views);
     }
