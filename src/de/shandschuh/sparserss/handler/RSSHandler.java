@@ -38,6 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -71,6 +72,10 @@ public class RSSHandler extends DefaultHandler {
 	private static final String TAG_DATE = "date";
 	
 	private static final String ATTRIBUTE_HREF = "href";
+	
+	private static final String MEST = "MEST";
+	
+	private static final String PLUS200 = "+0200";
 	
 	private static final long KEEP_TIME = 172800000; // 2 days
 	
@@ -225,9 +230,8 @@ public class RSSHandler extends DefaultHandler {
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
 			try {
-				entryDate = PUBDATE_DATEFORMAT.parse(dateStringBuilder.toString());
+				entryDate = PUBDATE_DATEFORMAT.parse(dateStringBuilder.toString().replace(MEST, PLUS200));
 			} catch (ParseException e) {
-				
 			}
 			pubDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
@@ -242,6 +246,7 @@ public class RSSHandler extends DefaultHandler {
 			}
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
+			Log.d("Date", ""+entryDate);
 			if (entryDate != null && entryDate.after(lastUpdateDate)) {
 				ContentValues values = new ContentValues();
 				
