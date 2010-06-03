@@ -38,7 +38,6 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -230,8 +229,9 @@ public class RSSHandler extends DefaultHandler {
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
 			try {
-				entryDate = PUBDATE_DATEFORMAT.parse(dateStringBuilder.toString().replace(MEST, PLUS200));
+				entryDate = PUBDATE_DATEFORMAT.parse(dateStringBuilder.toString().replace(MEST, PLUS200)); // replace is needed because mest is no supported timezone
 			} catch (ParseException e) {
+				
 			}
 			pubDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
@@ -246,7 +246,6 @@ public class RSSHandler extends DefaultHandler {
 			}
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
-			Log.d("Date", ""+entryDate);
 			if (entryDate != null && entryDate.after(lastUpdateDate)) {
 				ContentValues values = new ContentValues();
 				

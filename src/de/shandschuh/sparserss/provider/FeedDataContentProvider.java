@@ -153,9 +153,14 @@ public class FeedDataContentProvider extends ContentProvider {
 			case URI_FEED : {
 				table = TABLE_FEEDS;
 			
-				String feedId = uri.getPathSegments().get(1);
+				final String feedId = uri.getPathSegments().get(1);
 				
-				delete(FeedData.EntryColumns.CONTENT_URI(feedId), null, null);
+				new Thread() {
+					public void run() {
+						delete(FeedData.EntryColumns.CONTENT_URI(feedId), null, null);
+					}
+				}.start();
+				
 				where.append(FeedData.FeedColumns._ID).append('=').append(feedId);
 				break;
 			}

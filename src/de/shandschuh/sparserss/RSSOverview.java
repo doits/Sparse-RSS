@@ -28,6 +28,7 @@ package de.shandschuh.sparserss;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -74,7 +75,9 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int MENU_SETTINGS_ID = 7;
 	
-	private static final int MENU_ABOUT_ID = 8;
+	private static final int MENU_ALLREAD = 8;
+	
+	private static final int MENU_ABOUT_ID = 9;
 	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
@@ -126,12 +129,13 @@ public class RSSOverview extends ListActivity {
 		menu.add(0, MENU_ADDFEED_ID, Menu.NONE, R.string.menu_addfeed).setIcon(android.R.drawable.ic_menu_add);
 		menu.add(0, MENU_REFRESH_ID, Menu.NONE, R.string.menu_refresh).setIcon(android.R.drawable.ic_menu_rotate);
 		menu.add(0, MENU_SETTINGS_ID, Menu.NONE, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
+		menu.add(0, MENU_ALLREAD, Menu.NONE, R.string.menu_allread).setIcon(android.R.drawable.ic_menu_revert);
 		menu.add(0, MENU_ABOUT_ID, Menu.NONE, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
 		return true;
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onMenuItemSelected(int featureId, final MenuItem item) {
 		switch (item.getItemId()) {
 			case MENU_ADDFEED_ID: {
 				showDialog(DIALOG_ADDFEED_ID);
@@ -156,16 +160,53 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case CONTEXTMENU_DELETE_ID: {
-				getContentResolver().delete(FeedData.FeedColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), null, null);
-				sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
+				String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
+				
+				Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.NAME}, null, null, null);
+				
+				cursor.moveToFirst();
+				
+				Builder builder = new AlertDialog.Builder(this);
+				
+				builder.setIcon(android.R.drawable.ic_dialog_alert);
+				builder.setTitle(cursor.getString(0));
+				builder.setMessage(R.string.question_deletefeed);
+				builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	new Thread() {
+		            		public void run() {
+		            			getContentResolver().delete(FeedData.FeedColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), null, null);
+								sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
+		            		}
+		            	}.start();
+		            }
+
+		        });
+				builder.setNegativeButton(android.R.string.no, null);
+				cursor.close();
+				builder.show();
 				break;
 			}
 			case CONTEXTMENU_MARKASREAD_ID: {
-				getContentResolver().update(FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), getReadContentValues(), new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
+				new Thread() {
+					public void run() {
+						getContentResolver().update(FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), getReadContentValues(), new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
+					}
+				}.start();
 				break;
 			}
 			case MENU_SETTINGS_ID: {
 				startActivityForResult(new Intent(this, ApplicationPreferencesActivity.class), ACTIVITY_APPLICATIONPREFERENCES_ID);
+				break;
+			}
+			case MENU_ALLREAD: {
+				new Thread() {
+					public void run() {
+						if (getContentResolver().update(FeedData.EntryColumns.CONTENT_URI, getReadContentValues(), new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null) > 0) {
+							getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI, null);
+						}
+					}
+				}.start();
 				break;
 			}
 			case MENU_ABOUT_ID: {
