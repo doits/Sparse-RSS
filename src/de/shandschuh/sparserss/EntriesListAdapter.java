@@ -48,9 +48,19 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
+	private static final String READDATEISNULL = "readdate is null";
+	
+	private boolean showRead;
+	
+	private Activity context;
+	
+	private Uri uri;
 	
 	public EntriesListAdapter(Activity context, Uri uri) {
-		super(context, R.layout.listitem, context.managedQuery(uri, null, null, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString()));
+		super(context, R.layout.listitem, createManagedCursor(context, uri, true));
+		showRead = true;
+		this.context = context;
+		this.uri = uri;
 		titleColumnPosition = getCursor().getColumnIndex(FeedData.EntryColumns.TITLE);
 		dateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.DATE);
 		readDateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.READDATE);
@@ -74,5 +84,16 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			dateTextView.setEnabled(false);
 		}
 		dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+	}
+
+	public void showRead(boolean showRead) {
+		if (showRead != this.showRead) {
+			changeCursor(createManagedCursor(context, uri, showRead));
+			this.showRead = showRead;
+		}
+	}
+	
+	private static Cursor createManagedCursor(Activity context, Uri uri, boolean showRead) {
+		return context.managedQuery(uri, null, showRead ? null : READDATEISNULL, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
 	}
 }

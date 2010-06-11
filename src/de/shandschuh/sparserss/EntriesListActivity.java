@@ -38,13 +38,16 @@ import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntriesListActivity extends ListActivity {
 	private Uri uri;
+	
+	private EntriesListAdapter entriesListAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 		uri = getIntent().getData();
-        setListAdapter(new EntriesListAdapter(this, uri));
+		entriesListAdapter = new EntriesListAdapter(this, uri);
+        setListAdapter(entriesListAdapter);
         if (getIntent().hasExtra(FeedData.FeedColumns.NAME)) {
         	setTitle(getIntent().getStringExtra(FeedData.FeedColumns.NAME));
         }
@@ -58,21 +61,32 @@ public class EntriesListActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 0, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_revert);
+		menu.add(1, 1, Menu.NONE, R.string.contextmenu_hideread).setCheckable(true).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return true;
 	}
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.setGroupVisible(0, getListAdapter().getCount() > 0);
+		menu.setGroupVisible(0, entriesListAdapter.getCount() > 0);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		new Thread() { // the update process takes some time
-			public void run() {
-				getContentResolver().update(uri, RSSOverview.getReadContentValues(), null, null);
+		if (item.getItemId() == 0) {
+			new Thread() { // the update process takes some time
+				public void run() {
+					getContentResolver().update(uri, RSSOverview.getReadContentValues(), null, null);
+				}
+			}.start();
+		} else {
+			if (item.isChecked()) {
+				item.setChecked(false).setTitle(R.string.contextmenu_hideread).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+				entriesListAdapter.showRead(true);
+			} else {
+				item.setChecked(true).setTitle(R.string.contextmenu_showread).setIcon(android.R.drawable.ic_menu_view);
+				entriesListAdapter.showRead(false);
 			}
-		}.start();
+		}
 		return true;
 	}
 	

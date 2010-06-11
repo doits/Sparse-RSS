@@ -6,4 +6,12 @@
 <item>21600000</item>
 <item>86400000</item>
 </string-array>
+<string-array name="settings_keeptimevalues">
+<item>1</item>
+<item>2</item>
+<item>4</item>
+<item>7</item>
+<item>14</item>
+<item>30</item>
+</string-array>
 </resources>

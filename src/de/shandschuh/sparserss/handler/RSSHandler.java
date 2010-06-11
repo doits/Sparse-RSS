@@ -38,6 +38,7 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -76,7 +77,7 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String PLUS200 = "+0200";
 	
-	private static final long KEEP_TIME = 172800000; // 2 days
+	private static long KEEP_TIME = 172800000; // 2 days
 	
 	private static final DateFormat UPDATE_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	
@@ -123,6 +124,7 @@ public class RSSHandler extends DefaultHandler {
 	private boolean done;
 	
 	public RSSHandler(Context context) {
+		KEEP_TIME = PreferenceManager.getDefaultSharedPreferences(context).getInt(Strings.SETTINGS_KEEPTIME, 2)*86400000;
 		this.context = context;
 	}
 	
@@ -156,8 +158,10 @@ public class RSSHandler extends DefaultHandler {
 				feedRefreshed = true;
 			}
 		} else if (TAG_TITLE.equals(localName)) {
-			titleTagEntered = true;
-			title = new StringBuilder();
+			if (title == null) {
+				titleTagEntered = true;
+				title = new StringBuilder();
+			}
 		} else if (TAG_LINK.equals(localName)) {
 			entryLink = new StringBuilder();
 			
@@ -265,6 +269,7 @@ public class RSSHandler extends DefaultHandler {
 					newCount++;
 				}
 			}
+			title = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
 		}

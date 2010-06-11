@@ -43,6 +43,15 @@ android:title="@string/settings_prioritize"
 android:defaultValue="false"
 android:summary="@string/settings_prioritize_description"
 android:key="contentpresentation.prioritize" />
+<ListPreference
+android:name="@string/settings_keeptime"
+android:summary="@string/settings_keeptime_description"
+android:title="@string/settings_keeptime"
+android:key="keeptime" 
+android:numeric="integer"
+android:defaultValue="2"
+android:entries="@array/settings_keeptimes"
+android:entryValues="@array/settings_keeptimevalues" />
 </PreferenceCategory>
 
 
