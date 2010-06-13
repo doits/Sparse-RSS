@@ -123,8 +123,11 @@ public class RSSHandler extends DefaultHandler {
 	
 	private boolean done;
 	
+	private Date keepDateBorder;
+	
 	public RSSHandler(Context context) {
-		KEEP_TIME = PreferenceManager.getDefaultSharedPreferences(context).getInt(Strings.SETTINGS_KEEPTIME, 2)*86400000;
+		KEEP_TIME = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000;
+		keepDateBorder = new Date(System.currentTimeMillis()-KEEP_TIME);
 		this.context = context;
 	}
 	
@@ -154,7 +157,7 @@ public class RSSHandler extends DefaultHandler {
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
 				values.put(FeedData.FeedColumns.LASTUPDATE, entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000);
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-				
+				title = null;
 				feedRefreshed = true;
 			}
 		} else if (TAG_TITLE.equals(localName)) {
@@ -250,7 +253,10 @@ public class RSSHandler extends DefaultHandler {
 			}
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
-			if (entryDate != null && entryDate.after(lastUpdateDate)) {
+			if (title != null && (entryDate == null || (entryDate.after(lastUpdateDate) && entryDate.after(keepDateBorder)))) {
+				if (entryDate == null) {
+					entryDate = new Date();
+				}
 				ContentValues values = new ContentValues();
 				
 				values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
