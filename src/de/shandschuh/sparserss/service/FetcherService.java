@@ -28,8 +28,8 @@ package de.shandschuh.sparserss.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Date;
 
 import android.app.Notification;
@@ -74,6 +74,8 @@ public class FetcherService extends Service {
 	private static final String HTML_BODY = "<body";
 	
 	private static final String SLASH = "/";
+	
+	private static final String ENCODING = "encoding=\"";
 	
 	private NotificationManager notificationManager;
 	
@@ -170,7 +172,7 @@ public class FetcherService extends Service {
 			RSSHandler handler = new RSSHandler(context);
 			
 			try {
-				URLConnection connection = setupConnection(cursor.getString(urlPosition));
+				HttpURLConnection connection = setupConnection(cursor.getString(urlPosition));
 				
 				String contentType = connection.getContentType();
 				if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
@@ -219,7 +221,20 @@ public class FetcherService extends Service {
 					
 					Xml.parse(connection.getInputStream(), Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
 				} else {
-					Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
+					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+					
+					String xmlDescription = bufferedReader.readLine();
+					
+					connection.disconnect();
+					connection = setupConnection(connection.getURL());
+					
+					int start = xmlDescription.indexOf(ENCODING);
+					
+					if (start > -1) {
+						
+					}
+					InputStreamReader reader = new InputStreamReader(connection.getInputStream(), start > -1 ? xmlDescription.substring(start+10, xmlDescription.indexOf('"', start+11)) : null);
+					Xml.parse(reader, handler);
 				}
 				result += handler.getNewCount();
 			} catch (Throwable e) {
@@ -239,8 +254,12 @@ public class FetcherService extends Service {
 		return result;
 	}
 	
-	private static final URLConnection setupConnection(String url) throws IOException {
-		URLConnection connection = new URL(url).openConnection();
+	private static final HttpURLConnection setupConnection(String url) throws IOException {
+		return setupConnection(new URL(url));
+	}
+	
+	private static final HttpURLConnection setupConnection(URL url) throws IOException {
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		
 		connection.setDoInput(true);
 		connection.setDoOutput(false);

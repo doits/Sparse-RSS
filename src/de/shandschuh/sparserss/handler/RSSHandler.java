@@ -267,8 +267,8 @@ public class RSSHandler extends DefaultHandler {
 				}
 				
 				String entryLinkString = entryLink.toString();
-				
-				if (context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
+
+				if (entryLinkString.length() > 0 && context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					
 					context.getContentResolver().insert(feedEntiresUri, values);
