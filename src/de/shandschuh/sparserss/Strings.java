@@ -34,6 +34,8 @@ public final class Strings {
 	
 	public static final String SETTINGS_REFRESHENABLED = "refresh.enabled";
 	
+	public static final String SETTINGS_REFRESHONPENENABLED = "refreshonopen.enabled";
+	
 	public static final String SETTINGS_NOTIFICATIONSRINGTONE = "notifications.ringtone";
 	
 	public static final String SETTINGS_NOTIFICATIONSVIBRATE = "notifications.vibrate";

@@ -39,6 +39,9 @@
 <string name="settings_keeptime">Zeit für die die Einträge aufbewahrt werden</string>
 <string name="settings_keeptime_description">Die Einträge, die älter sind, werden automatisch gelöscht</string>
 
+<string name="settings_refreshonopen">Aktualisiere bei Start</string>
+<string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
+
 <string name="update">Aktualisiert</string>
 <string name="never">nie</string>
 <string name="unread">ungelesen</string>

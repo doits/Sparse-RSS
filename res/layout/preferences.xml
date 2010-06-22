@@ -16,6 +16,11 @@ android:dependency="refresh.enabled"
 android:defaultValue="1800000"
 android:entries="@array/settings_intervals"
 android:entryValues="@array/settings_intervalvalues" />
+<CheckBoxPreference
+android:title="@string/settings_refreshonopen"
+android:defaultValue="false"
+android:summary="@string/settings_refreshonopen_description"
+android:key="refreshonopen.enabled" />
 </PreferenceCategory>
 
 <PreferenceCategory android:title="@string/settings_category_notofications">

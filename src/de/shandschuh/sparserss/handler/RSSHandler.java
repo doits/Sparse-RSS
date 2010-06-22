@@ -254,12 +254,12 @@ public class RSSHandler extends DefaultHandler {
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
 			if (title != null && (entryDate == null || (entryDate.after(lastUpdateDate) && entryDate.after(keepDateBorder)))) {
-				if (entryDate == null) {
-					entryDate = new Date();
-				}
 				ContentValues values = new ContentValues();
 				
-				values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
+				if (entryDate != null) {
+					values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
+					values.putNull(FeedData.EntryColumns.READDATE);
+				}
 				values.put(FeedData.EntryColumns.TITLE, title.toString().replace(AMP_SG, AMP));
 				if (description != null) {
 					values.put(FeedData.EntryColumns.ABSTRACT, description.toString().trim()); // maybe better use regex, but this will do it for now
@@ -270,7 +270,11 @@ public class RSSHandler extends DefaultHandler {
 
 				if (entryLinkString.length() > 0 && context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
-					
+					if (entryDate == null) {
+						values.put(FeedData.EntryColumns.DATE, System.currentTimeMillis());
+					} else {
+						values.remove(FeedData.EntryColumns.READDATE);
+					}
 					context.getContentResolver().insert(feedEntiresUri, values);
 					newCount++;
 				}

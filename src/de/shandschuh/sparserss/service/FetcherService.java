@@ -151,7 +151,7 @@ public class FetcherService extends Service {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
-	private static int refreshFeedsStatic(Context context, String feedId) {
+	private static synchronized int refreshFeedsStatic(Context context, String feedId) {
 		Cursor cursor = context.getContentResolver().query(feedId == null ? FeedData.FeedColumns.CONTENT_URI : FeedData.FeedColumns.CONTENT_URI(feedId), null, null, null, null); // no managed query here
 		
 		int urlPosition = cursor.getColumnIndex(FeedData.FeedColumns.URL);
@@ -233,7 +233,7 @@ public class FetcherService extends Service {
 					if (start > -1) {
 						
 					}
-					InputStreamReader reader = new InputStreamReader(connection.getInputStream(), start > -1 ? xmlDescription.substring(start+10, xmlDescription.indexOf('"', start+11)) : null);
+					InputStreamReader reader = start > -1 ? new InputStreamReader(connection.getInputStream(), xmlDescription.substring(start+10, xmlDescription.indexOf('"', start+11))) : new InputStreamReader(connection.getInputStream());
 					Xml.parse(reader, handler);
 				}
 				result += handler.getNewCount();

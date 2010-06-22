@@ -113,6 +113,9 @@ public class RSSOverview extends ListActivity {
         	bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
         	serviceConnected = true;
         }
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
+        	sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
+        }
     }
     
 	@Override

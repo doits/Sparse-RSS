@@ -56,6 +56,8 @@ THE SOFTWARE.
 <string name="settings_keeptime">Time that the entries will be kept</string>
 <string name="settings_keeptime_description">The entries that are older than the given date will be deleted</string>
 
+<string name="settings_refreshonopen">Refresh feeds on open</string>
+<string name="settings_refreshonopen_description">Refreshes all feeds after opening the application</string>
 
 <string name="never">never</string>
 <string name="update">Update</string>
