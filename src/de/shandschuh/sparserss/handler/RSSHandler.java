@@ -126,7 +126,7 @@ public class RSSHandler extends DefaultHandler {
 	private Date keepDateBorder;
 	
 	public RSSHandler(Context context) {
-		KEEP_TIME = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000;
+		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000;
 		keepDateBorder = new Date(System.currentTimeMillis()-KEEP_TIME);
 		this.context = context;
 	}
