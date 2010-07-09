@@ -77,7 +77,7 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String PLUS200 = "+0200";
 	
-	private static long KEEP_TIME = 172800000; // 2 days
+	private static long KEEP_TIME = 172800000l; // 2 days
 	
 	private static final DateFormat UPDATE_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	
@@ -126,7 +126,7 @@ public class RSSHandler extends DefaultHandler {
 	private Date keepDateBorder;
 	
 	public RSSHandler(Context context) {
-		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000;
+		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
 		keepDateBorder = new Date(System.currentTimeMillis()-KEEP_TIME);
 		this.context = context;
 	}
