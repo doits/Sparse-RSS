@@ -38,12 +38,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.Environment;
 import android.text.TextUtils;
 
 public class FeedDataContentProvider extends ContentProvider {
 	private static final String AND = " AND ";
 	
-	private static final String FOLDER = "/sdcard/sparserss/";
+	private static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
@@ -84,14 +85,28 @@ public class FeedDataContentProvider extends ContentProvider {
 			File file = new File(FOLDER);
 			
 			if ((file.exists() && file.isDirectory() || file.mkdir()) && file.canWrite()) {
-				database = SQLiteDatabase.openDatabase(FOLDER+name, null, SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY);
-				
-				if (database.getVersion() == 0) {
-					onCreate(database);
-				} else {
-					onUpgrade(database, database.getVersion(), DATABASE_VERSION);
+				try {
+					database = SQLiteDatabase.openDatabase(FOLDER+name, null, SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY);
+					
+					if (database.getVersion() == 0) {
+						onCreate(database);
+					} else {
+						onUpgrade(database, database.getVersion(), DATABASE_VERSION);
+					}
+					database.setVersion(DATABASE_VERSION);
+				} catch (SQLException sqlException) {
+					database = new SQLiteOpenHelper(context, name, null, version) {
+						@Override
+						public void onCreate(SQLiteDatabase db) {
+							DatabaseHelper.this.onCreate(db);
+						}
+
+						@Override
+						public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+							DatabaseHelper.this.onUpgrade(db, oldVersion, newVersion);
+						}
+					}.getWritableDatabase();
 				}
-				database.setVersion(DATABASE_VERSION);
 			} else {
 				database = new SQLiteOpenHelper(context, name, null, version) {
 					@Override
