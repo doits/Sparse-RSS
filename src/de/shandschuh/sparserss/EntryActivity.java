@@ -131,10 +131,11 @@ public class EntryActivity extends Activity {
 
 				public void onClick(View arg0) {
 					uri = FeedData.EntryColumns.ENTRY_CONTENT_URI(id);
+					getIntent().setData(uri);
+					entryCursor.close();
 					entryCursor = managedQuery(uri, null, null, null, null);
 					reload();
 				}
-				
 			});
 		} else {
 			button.setEnabled(false);
