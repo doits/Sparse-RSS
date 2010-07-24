@@ -82,6 +82,7 @@ public class EntryActivity extends Activity {
 		abstractPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.ABSTRACT);
 		linkPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.LINK);
 		idPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FEED_ID);
+		RSSOverview.notificationManager.cancel(0);
 		reload();
 	}
 	

@@ -25,18 +25,16 @@
 
 package de.shandschuh.sparserss.service;
 
-import de.shandschuh.sparserss.Strings;
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import de.shandschuh.sparserss.Strings;
 
 public class RefreshService extends Service {   
 	private static final String SIXTYMINUTES = "3600000";
@@ -55,11 +53,9 @@ public class RefreshService extends Service {
 	
 	private PendingIntent timerIntent;
 	
-	private NotificationManager notificationManager;
+	
 	
 	private SharedPreferences preferences = null;
-	
-	public static boolean SHOWNOTIFICATION = true;
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -70,13 +66,10 @@ public class RefreshService extends Service {
 	@Override
 	public void onRebind(Intent intent) {
 		super.onRebind(intent);
-		notificationManager.cancel(0);
-		SHOWNOTIFICATION = false;
 	}
 
 	@Override
 	public boolean onUnbind(Intent intent) {
-		SHOWNOTIFICATION = true;
 		return true;  // we want to use rebind
 	}
 
@@ -88,7 +81,7 @@ public class RefreshService extends Service {
 		} catch (NameNotFoundException e) {
 			preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		}
-		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		
 		refreshBroadcastIntent = new Intent(Strings.ACTION_REFRESHFEEDS);
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		preferences.registerOnSharedPreferenceChangeListener(listener);
@@ -116,7 +109,6 @@ public class RefreshService extends Service {
 		if (timerIntent != null) {
 			alarmManager.cancel(timerIntent);
 		}
-		SHOWNOTIFICATION = true;
 		preferences.unregisterOnSharedPreferenceChangeListener(listener);
 	}
 }

@@ -28,9 +28,11 @@ package de.shandschuh.sparserss;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.NotificationManager;
 import android.app.AlertDialog.Builder;
 import android.content.ComponentName;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -83,6 +85,8 @@ public class RSSOverview extends ListActivity {
 	
 	private boolean serviceConnected = false;
 	
+	static NotificationManager notificationManager; // package scope
+	
 	private ServiceConnection serviceConnection = new ServiceConnection() {
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			serviceConnected = true;
@@ -97,6 +101,7 @@ public class RSSOverview extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         setContentView(R.layout.main);
         setListAdapter(new RSSOverviewListAdapter(this));
         getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
@@ -112,12 +117,18 @@ public class RSSOverview extends ListActivity {
         	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
         	bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
         	serviceConnected = true;
-        }
+        } 
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
         	sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
         }
     }
     
+	@Override
+	protected void onResume() {
+		super.onResume();
+		notificationManager.cancel(0);
+	}
+
 	@Override
 	protected void onDestroy() {
 		if (serviceConnected) {

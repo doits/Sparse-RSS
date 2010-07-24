@@ -51,6 +51,7 @@ public class EntriesListActivity extends ListActivity {
         if (getIntent().hasExtra(FeedData.FeedColumns.NAME)) {
         	setTitle(getIntent().getStringExtra(FeedData.FeedColumns.NAME));
         }
+        RSSOverview.notificationManager.cancel(0);
 	}
 
 	@Override

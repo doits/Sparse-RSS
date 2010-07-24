@@ -100,7 +100,7 @@ public class FetcherService extends Service {
 						} catch (NameNotFoundException e) {
 							preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
 						}
-						if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false) && RefreshService.SHOWNOTIFICATION) {
+						if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
 							Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);
 							
 							cursor.moveToFirst();
