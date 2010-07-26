@@ -101,7 +101,9 @@ public class RSSOverview extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if (notificationManager == null) {
+        	notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        }
         setContentView(R.layout.main);
         setListAdapter(new RSSOverviewListAdapter(this));
         getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {

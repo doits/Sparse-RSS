@@ -29,7 +29,9 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -82,10 +84,28 @@ public class EntryActivity extends Activity {
 		abstractPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.ABSTRACT);
 		linkPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.LINK);
 		idPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FEED_ID);
+		entryCursor.close();
+		if (RSSOverview.notificationManager == null) {
+			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		RSSOverview.notificationManager.cancel(0);
+		uri = getIntent().getData();
 		reload();
 	}
 	
+	
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		setIntent(intent);
+	}
+
 	private void reload() {
 		ContentValues values = new ContentValues();
 		
@@ -93,6 +113,7 @@ public class EntryActivity extends Activity {
 		
 		getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
 		
+		entryCursor = managedQuery(uri, null, null, null, null);
 		if (entryCursor.moveToFirst()) {
 			String abstractText = entryCursor.getString(abstractPosition);
 			

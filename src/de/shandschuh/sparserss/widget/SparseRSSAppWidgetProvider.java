@@ -65,7 +65,7 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
         
         while (cursor.moveToNext() && n < ids.length) {
         	views.setTextViewText(ids[n], cursor.getString(0));
-        	views.setOnClickPendingIntent(ids[n++], PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.ENTRY_CONTENT_URI(cursor.getString(1))), 0));
+        	views.setOnClickPendingIntent(ids[n++], PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.ENTRY_CONTENT_URI(cursor.getString(1))), PendingIntent.FLAG_CANCEL_CURRENT));
         }
         cursor.close();
         for (; n < ids.length; n++) {
