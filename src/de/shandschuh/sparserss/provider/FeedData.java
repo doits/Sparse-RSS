@@ -39,6 +39,8 @@ public class FeedData {
 	
 	private static final String TYPE_DATETIME = "DATETIME";
 	
+	public static final String TYPE_INT = "INT";
+	
 	public static class FeedColumns implements BaseColumns {
 		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds").toString());
 		
@@ -52,9 +54,11 @@ public class FeedData {
 		
 		public static final String ERROR = "error";
 		
-		public static final String[] COLUMNS = new String[] {_ID, URL, NAME, LASTUPDATE, ICON, ERROR};
+		public static final String PRIORITY = "priority";
 		
-		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "TEXT UNIQUE", TYPE_TEXT, TYPE_DATETIME, "BLOB", TYPE_TEXT};
+		public static final String[] COLUMNS = new String[] {_ID, URL, NAME, LASTUPDATE, ICON, ERROR, PRIORITY};
+		
+		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "TEXT UNIQUE", TYPE_TEXT, TYPE_DATETIME, "BLOB", TYPE_TEXT, TYPE_INT};
 		
 		public static final Uri CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds/").append(feedId).toString());

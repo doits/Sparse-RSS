@@ -16,11 +16,12 @@
   	android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="horizontal">
-  	<Button android:layout_height="wrap_content" android:text="&lt;-" android:id="@+id/prev_button" android:layout_width="wrap_content"/>
+  	<Button android:layout_height="wrap_content" android:text="&lt;-" android:id="@+id/prev_button" android:layout_width="70dp"/>
   	<Button android:layout_height="wrap_content" android:text="@string/goto_url" android:id="@+id/url_button" android:layout_width="fill_parent"
   	android:layout_gravity="fill"
 		android:layout_weight="1"/>
-  	<Button android:layout_height="wrap_content" android:text="-&gt;" android:id="@+id/next_button" android:layout_width="wrap_content"/>
+  	<Button android:layout_height="wrap_content" android:text="-&gt;" android:id="@+id/next_button" android:layout_width="70dp"
+		/>
   </LinearLayout>
   
 </LinearLayout>

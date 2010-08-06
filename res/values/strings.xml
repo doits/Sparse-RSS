@@ -65,6 +65,9 @@ THE SOFTWARE.
 <string name="newentries">new entries</string>
 <string name="rss_feeds">RSS feeds</string>
 <string name="error">Error</string>
+<string name="priority">Priority</string>
+<string name="select_feeds">Select feeds</string>
+<string name="all_feeds">All feeds (incl. future)</string>
 
 <string name="error_feedurlexists">The URL already exists.</string>
 

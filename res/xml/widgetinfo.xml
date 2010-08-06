@@ -2,5 +2,7 @@
 	android:minWidth="240dp"
     android:minHeight="80dp"
     android:updatePeriodMillis="0"
-    android:initialLayout="@layout/homescreenwidget">
+    android:initialLayout="@layout/homescreenwidget"
+    android:configure="de.shandschuh.sparserss.widget.WidgetConfigActivity" >
+    >
 </appwidget-provider>

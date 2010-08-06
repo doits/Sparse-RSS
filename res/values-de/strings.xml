@@ -48,6 +48,9 @@
 <string name="newentries">neue Einträge</string>
 <string name="rss_feeds">RSS Feeds</string>
 <string name="error">Fehler</string>
+<string name="priority">Priorität</string>
+<string name="select_feeds">Feeds auswählen</string>
+<string name="all_feeds">Alle Feeds (inkl. zukünftige)</string>
 
 <string name="error_feedurlexists">Die URL existiert bereits.</string>
 

@@ -47,6 +47,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.Xml;
 import de.shandschuh.sparserss.R;
 import de.shandschuh.sparserss.RSSOverview;
@@ -78,6 +79,10 @@ public class FetcherService extends Service {
 	private static final String ENCODING = "encoding=\"";
 	
 	private NotificationManager notificationManager;
+	
+	static {
+		HttpURLConnection.setFollowRedirects(true);
+	}
 	
 	@Override
 	public void onStart(final Intent intent, int startId) {
@@ -230,14 +235,13 @@ public class FetcherService extends Service {
 					
 					int start = xmlDescription.indexOf(ENCODING);
 					
-					if (start > -1) {
-						
-					}
 					InputStreamReader reader = start > -1 ? new InputStreamReader(connection.getInputStream(), xmlDescription.substring(start+10, xmlDescription.indexOf('"', start+11))) : new InputStreamReader(connection.getInputStream());
+					
 					Xml.parse(reader, handler);
 				}
 				result += handler.getNewCount();
 			} catch (Throwable e) {
+				Log.d("e", "e", e);
 				if (!handler.isDone()) {
 					ContentValues values = new ContentValues();
 					

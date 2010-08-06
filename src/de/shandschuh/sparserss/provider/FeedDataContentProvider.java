@@ -48,7 +48,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 	
 	private static final int URI_FEEDS = 1;
 	
@@ -146,7 +146,9 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			
+			if (oldVersion == 1) {
+				database.execSQL(new StringBuilder("ALTER TABLE ").append(TABLE_FEEDS).append(" ADD ").append(FeedData.FeedColumns.PRIORITY).append(' ').append(FeedData.TYPE_INT).toString());
+			}
 		}
 
 		public SQLiteDatabase getWritableDatabase() {

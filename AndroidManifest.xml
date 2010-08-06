@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="de.shandschuh.sparserss"
-      android:versionCode="19" android:versionName="0.3.2">
+      android:versionCode="20" android:versionName="0.4-pre">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
@@ -34,6 +34,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".ApplicationPreferencesActivity"/>
+        <activity android:name=".widget.WidgetConfigActivity">
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+		    </intent-filter>
+		</activity>
         <receiver android:name=".widget.SparseRSSAppWidgetProvider" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
