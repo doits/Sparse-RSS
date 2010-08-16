@@ -135,7 +135,7 @@ public class RSSHandler extends DefaultHandler {
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
 		feedEntiresUri = FeedData.EntryColumns.CONTENT_URI(id);
-		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(System.currentTimeMillis()-KEEP_TIME).toString(), null);
+		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(System.currentTimeMillis()-KEEP_TIME).append(Strings.DB_AND).append(FeedData.EntryColumns.FAVORITE).append('=').append('0').toString(), null);
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;

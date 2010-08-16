@@ -54,6 +54,8 @@ public final class Strings {
 	
 	public static final String DB_ARG = "=?";
 	
+	public static final String DB_AND = " AND ";
+	
 	public static final String EMPTY = "";
 
 	public static final String SETTINGS_KEEPTIME = "keeptime";

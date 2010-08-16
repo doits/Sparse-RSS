@@ -27,6 +27,8 @@ package de.shandschuh.sparserss.provider;
 
 import java.io.File;
 
+import de.shandschuh.sparserss.Strings;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -42,8 +44,6 @@ import android.os.Environment;
 import android.text.TextUtils;
 
 public class FeedDataContentProvider extends ContentProvider {
-	private static final String AND = " AND ";
-	
 	private static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
 	
 	private static final String DATABASE_NAME = "sparserss.db";
@@ -215,7 +215,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 		
 		if (!TextUtils.isEmpty(selection)) {
-			where.append(AND).append(selection);
+			where.append(Strings.DB_AND).append(selection);
 		}
 		
 		int count = database.delete(table, where.toString(), selectionArgs);
@@ -362,7 +362,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		if (!TextUtils.isEmpty(selection)) {
 			if (where.length() > 0) {
-				where.append(AND).append(selection);
+				where.append(Strings.DB_AND).append(selection);
 			} else {
 				where.append(selection);
 			}
