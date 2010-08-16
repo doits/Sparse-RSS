@@ -40,6 +40,8 @@ public class FeedData {
 	private static final String TYPE_DATETIME = "DATETIME";
 	
 	public static final String TYPE_INT = "INT";
+
+	public static final String TYPE_BOOLEAN = "INTEGER(1)";
 	
 	public static class FeedColumns implements BaseColumns {
 		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds").toString());
@@ -78,9 +80,11 @@ public class FeedData {
 		
 		public static final String LINK = "link";
 		
-		public static final String[] COLUMNS = new String[] {_ID, FEED_ID, TITLE, ABSTRACT, DATE, READDATE, LINK};
+		public static final String FAVORITE = "favorite";
 		
-		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "INTEGER(7)", TYPE_TEXT, TYPE_TEXT, TYPE_DATETIME, TYPE_DATETIME, TYPE_TEXT};
+		public static final String[] COLUMNS = new String[] {_ID, FEED_ID, TITLE, ABSTRACT, DATE, READDATE, LINK, FAVORITE};
+		
+		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "INTEGER(7)", TYPE_TEXT, TYPE_TEXT, TYPE_DATETIME, TYPE_DATETIME, TYPE_TEXT, TYPE_BOOLEAN};
 
 		public static Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/entries").toString());
 

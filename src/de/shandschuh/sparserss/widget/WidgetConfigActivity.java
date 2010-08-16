@@ -46,8 +46,6 @@ public class WidgetConfigActivity extends PreferenceActivity {
 	
 	private static final String ZERO = "0";
 	
-	private PreferenceCategory feedsPreferenceCategory;
-
 	@Override
 	protected void onCreate(Bundle bundle) {
 		super.onCreate(bundle);

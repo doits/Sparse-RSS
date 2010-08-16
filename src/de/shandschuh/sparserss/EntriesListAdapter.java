@@ -29,12 +29,15 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
@@ -45,6 +48,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private int dateColumn;
 	
 	private int readDateColumn;
+	
+	private int favoriteColumn;
+	
+	private int idColumn;
 	
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
@@ -64,6 +71,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		titleColumnPosition = getCursor().getColumnIndex(FeedData.EntryColumns.TITLE);
 		dateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.DATE);
 		readDateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.READDATE);
+		favoriteColumn = getCursor().getColumnIndex(FeedData.EntryColumns.FAVORITE);
+		idColumn = getCursor().getColumnIndex(FeedData.EntryColumns._ID);
 	}
 
 	@Override
@@ -72,8 +81,23 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		
 		textView.setText(cursor.getString(titleColumnPosition));
 		
-		TextView dateTextView = ((TextView) view.findViewById(android.R.id.text2));
+		TextView dateTextView = (TextView) view.findViewById(android.R.id.text2);
 		
+		ImageView imageView = (ImageView) view.findViewById(android.R.id.icon);
+		 
+		final boolean favourite = cursor.getInt(favoriteColumn) == 1;
+		
+		final String id = cursor.getString(idColumn);
+		
+		imageView.setImageResource(favourite ? android.R.drawable.star_on : android.R.drawable.star_off);
+		imageView.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				ContentValues values = new ContentValues();
+				
+				values.put(FeedData.EntryColumns.FAVORITE, favourite ? 0 : 1);
+				view.getContext().getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns._ID).append(Strings.DB_ARG).toString(), new String[] {id});
+			}
+		});
 		if (cursor.isNull(readDateColumn)) {
 			textView.setTypeface(Typeface.DEFAULT_BOLD);
 			textView.setEnabled(true);
