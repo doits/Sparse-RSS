@@ -233,7 +233,7 @@ public class FetcherService extends Service {
 					connection.disconnect();
 					connection = setupConnection(connection.getURL());
 					
-					int start = xmlDescription.indexOf(ENCODING);
+					int start = xmlDescription != null ?  xmlDescription.indexOf(ENCODING) : -1;
 					
 					InputStreamReader reader = start > -1 ? new InputStreamReader(connection.getInputStream(), xmlDescription.substring(start+10, xmlDescription.indexOf('"', start+11))) : new InputStreamReader(connection.getInputStream());
 					
