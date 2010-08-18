@@ -27,8 +27,6 @@ package de.shandschuh.sparserss.provider;
 
 import java.io.File;
 
-import de.shandschuh.sparserss.Strings;
-
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -42,8 +40,11 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Environment;
 import android.text.TextUtils;
+import de.shandschuh.sparserss.Strings;
 
 public class FeedDataContentProvider extends ContentProvider {
+	public static boolean USE_SDCARD;
+	
 	private static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
 	
 	private static final String DATABASE_NAME = "sparserss.db";
@@ -98,6 +99,7 @@ public class FeedDataContentProvider extends ContentProvider {
 						onUpgrade(database, database.getVersion(), DATABASE_VERSION);
 					}
 					database.setVersion(DATABASE_VERSION);
+					USE_SDCARD = true;
 				} catch (SQLException sqlException) {
 					database = new SQLiteOpenHelper(context, name, null, version) {
 						@Override
@@ -110,6 +112,7 @@ public class FeedDataContentProvider extends ContentProvider {
 							DatabaseHelper.this.onUpgrade(db, oldVersion, newVersion);
 						}
 					}.getWritableDatabase();
+					USE_SDCARD = false;
 				}
 			} else {
 				database = new SQLiteOpenHelper(context, name, null, version) {
@@ -123,6 +126,7 @@ public class FeedDataContentProvider extends ContentProvider {
 						DatabaseHelper.this.onUpgrade(db, oldVersion, newVersion);
 					}
 				}.getWritableDatabase();
+				USE_SDCARD = false;
 			}
 		}
 
@@ -149,7 +153,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 		}
 
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 			if (oldVersion < 2) {
 				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.PRIORITY).append(' ').append(FeedData.TYPE_INT).toString());
 			}

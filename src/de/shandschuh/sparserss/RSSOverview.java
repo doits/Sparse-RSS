@@ -36,7 +36,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.DialogInterface.OnClickListener;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -46,12 +45,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
+import de.shandschuh.sparserss.provider.FeedDataContentProvider;
 import de.shandschuh.sparserss.service.RefreshService;
 
 public class RSSOverview extends ListActivity {	
@@ -122,6 +124,17 @@ public class RSSOverview extends ListActivity {
         } 
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
         	sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
+        }
+        
+        if (!FeedDataContentProvider.USE_SDCARD) {
+        	Button button = (Button) findViewById(R.id.reload_button);
+        	
+        	button.setOnClickListener(new OnClickListener() {
+    			public void onClick(View view) {
+    				sendBroadcast(new Intent(Strings.ACTION_RESTART));
+    			}
+            });
+        	button.setVisibility(View.VISIBLE);
         }
     }
     
@@ -316,7 +329,7 @@ public class RSSOverview extends ListActivity {
 		if (url != null) { // indicates an edit
 			urlEditText.setText(url);
 			urlEditText.setSelection(url.length()-1);
-			builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					ContentValues values = new ContentValues();
 						
@@ -329,7 +342,7 @@ public class RSSOverview extends ListActivity {
 				}
 			});
 		} else {
-			builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					String url = urlEditText.getText().toString();
 					

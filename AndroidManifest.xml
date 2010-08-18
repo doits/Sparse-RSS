@@ -55,7 +55,9 @@
 		<receiver android:name=".SDMountBroadcastReceiver" >
 		    <intent-filter>
 		        <action android:name="android.intent.action.MEDIA_MOUNTED" />
-		        <data android:scheme="file" />
+		    </intent-filter>
+		    <intent-filter>
+		        <action android:name="de.shandschuh.sparserss.RESTART" />
 		    </intent-filter>
 		</receiver>
 		<receiver android:name=".BootCompletedBroadcastReceiver" >

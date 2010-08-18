@@ -78,6 +78,9 @@ THE SOFTWARE.
 
 <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 
+<string name="button_usesdcard">Use SD-card (if present) - this will close the application. Please restart it manually.</string>
+
+
 <string-array name="settings_intervals">
 <item>15 minutes</item>
 <item>30 Minutes</item>

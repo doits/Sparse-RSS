@@ -34,13 +34,12 @@ public class SDMountBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (!intent.getBooleanExtra("read-only", true)) {
+		if (!intent.getBooleanExtra("read-only", false)) {
 			ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 			
 			manager.restartPackage(Strings.PACKAGE);
 			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
-		
 	}
 
 }

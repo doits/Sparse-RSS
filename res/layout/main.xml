@@ -5,7 +5,21 @@
 	android:id="@+id/main_layout">
     	<ListView android:id="@android:id/list" android:layout_width="fill_parent"
     		android:layout_height="fill_parent" android:drawSelectorOnTop="false" />
-		<TextView android:id="@id/android:empty" android:layout_width="fill_parent"
+    	<LinearLayout
+    	    android:id="@id/android:empty" android:layout_width="fill_parent"
 			android:layout_height="fill_parent"
-			android:text="@string/norssfeeds" />
+			android:orientation="vertical">
+		<TextView android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/norssfeeds"
+			android:gravity="center" />
+		<Button
+			android:layout_marginTop="30dip"
+		    android:id="@+id/reload_button"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/button_usesdcard"
+			android:visibility="gone"
+			/>
+		</LinearLayout>
 </FrameLayout>

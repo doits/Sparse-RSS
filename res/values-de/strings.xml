@@ -60,6 +60,8 @@
 
 <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
 
+<string name="button_usesdcard">Benutze SD-Karte (wenn vorhanden) - das schließt das Programm. Bitte starten Sie es manuell neu.</string>
+
 <string-array name="settings_intervals">
 <item>15 Minuten</item>
 <item>30 Minuten</item>

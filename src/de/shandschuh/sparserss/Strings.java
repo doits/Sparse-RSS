@@ -46,6 +46,8 @@ public final class Strings {
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";
 	
+	public static final String ACTION_RESTART = "de.shandschuh.sparserss.RESTART";
+	
 	public static final String FEEDID = "feedid";
 	
 	public static final String DB_ISNULL = " IS NULL";
