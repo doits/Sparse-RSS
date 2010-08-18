@@ -85,16 +85,16 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		
 		ImageView imageView = (ImageView) view.findViewById(android.R.id.icon);
 		 
-		final boolean favourite = cursor.getInt(favoriteColumn) == 1;
+		final boolean favorite = cursor.getInt(favoriteColumn) == 1;
 		
 		final String id = cursor.getString(idColumn);
 		
-		imageView.setImageResource(favourite ? android.R.drawable.star_on : android.R.drawable.star_off);
+		imageView.setImageResource(favorite ? android.R.drawable.star_on : android.R.drawable.star_off);
 		imageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				ContentValues values = new ContentValues();
 				
-				values.put(FeedData.EntryColumns.FAVORITE, favourite ? 0 : 1);
+				values.put(FeedData.EntryColumns.FAVORITE, favorite ? 0 : 1);
 				view.getContext().getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns._ID).append(Strings.DB_ARG).toString(), new String[] {id});
 			}
 		});

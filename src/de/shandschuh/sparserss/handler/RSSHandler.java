@@ -84,6 +84,8 @@ public class RSSHandler extends DefaultHandler {
 	private static final DateFormat UPDATE_DATEFORMAT_SLOPPY = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 	
 	private static final DateFormat PUBDATE_DATEFORMAT = new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
+	
+	private static final StringBuilder DB_FAVORITE = new StringBuilder(" AND (").append(FeedData.EntryColumns.FAVORITE).append(Strings.DB_ISNULL).append(" OR ").append(FeedData.EntryColumns.FAVORITE).append('=').append("0)");
 
 	private Context context;
 	
@@ -135,7 +137,7 @@ public class RSSHandler extends DefaultHandler {
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
 		feedEntiresUri = FeedData.EntryColumns.CONTENT_URI(id);
-		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(System.currentTimeMillis()-KEEP_TIME).append(Strings.DB_AND).append(FeedData.EntryColumns.FAVORITE).append('=').append('0').toString(), null);
+		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(System.currentTimeMillis()-KEEP_TIME).append(DB_FAVORITE).toString(), null);
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;

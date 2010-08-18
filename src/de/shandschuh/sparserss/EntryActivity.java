@@ -40,6 +40,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -70,7 +71,11 @@ public class EntryActivity extends Activity {
 	
 	private int idPosition;
 	
+	private int favoritePosition;
+	
 	private Uri uri;
+	
+	boolean favorite;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,7 @@ public class EntryActivity extends Activity {
 		abstractPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.ABSTRACT);
 		linkPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.LINK);
 		idPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FEED_ID);
+		favoritePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FAVORITE);
 		entryCursor.close();
 		if (RSSOverview.notificationManager == null) {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -127,6 +133,22 @@ public class EntryActivity extends Activity {
 				
 				((TextView) findViewById(R.id.entry_date)).setText(DateFormat.getDateTimeInstance().format(new Date(date)));
 				
+				final ImageView imageView = (ImageView) findViewById(android.R.id.icon);
+				
+				favorite = entryCursor.getInt(favoritePosition) == 1;
+				
+				imageView.setImageResource(favorite ? android.R.drawable.star_on : android.R.drawable.star_off);
+				imageView.setOnClickListener(new OnClickListener() {
+					public void onClick(View view) {
+						favorite = !favorite;
+						imageView.setImageResource(favorite ? android.R.drawable.star_on : android.R.drawable.star_off);
+						ContentValues values = new ContentValues();
+						
+						values.put(FeedData.EntryColumns.FAVORITE, favorite ? 1 : 0);
+						getContentResolver().update(uri, values, null, null);
+					
+					}
+				});
 				// loadData does not recognize the encoding without correct html-header
 				((WebView) findViewById(R.id.entry_abstract)).loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? abstractText : abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
 				((Button) findViewById(R.id.url_button)).setOnClickListener(new OnClickListener() {
