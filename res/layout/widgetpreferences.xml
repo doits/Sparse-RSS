@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-<PreferenceCategory android:title="Entry settings">
+
+<!--  
+<PreferenceCategory android:title="@string/settings_entrysettings">
 <CheckBoxPreference
-android:title="@string/settings_refreshenabled"
+android:title="@string/settings_hideread"
 android:defaultValue="false"
-android:summary="@string/settings_refreshenabled_description"
+android:summary="@string/settings_hideread_description"
 android:key="widget.hideread" />
 </PreferenceCategory>
-<PreferenceCategory android:title="Visible feeds">
+-->
+<PreferenceCategory android:title="@string/settings_visiblefeeds">
 </PreferenceCategory>
 
 

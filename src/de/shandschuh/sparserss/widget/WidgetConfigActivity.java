@@ -35,7 +35,6 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.RemoteViews;
 import de.shandschuh.sparserss.R;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -44,7 +43,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
 	
 	private static final String NAMECOLUMN = new StringBuilder("ifnull(").append(FeedData.FeedColumns.NAME).append(',').append(FeedData.FeedColumns.URL).append(") as title").toString();
 	
-	private static final String ZERO = "0";
+	public static final String ZERO = "0";
 	
 	@Override
 	protected void onCreate(Bundle bundle) {
@@ -62,7 +61,7 @@ public class WidgetConfigActivity extends PreferenceActivity {
         addPreferencesFromResource(R.layout.widgetpreferences);
         setContentView(R.layout.widgetconfig);
         
-        PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) getPreferenceScreen().getPreference(1);
+        final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) getPreferenceScreen().getPreference(0); // change to 1 on hideread usage
         
 		
 		Cursor cursor = this.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, NAMECOLUMN}, null, null, null);
@@ -91,16 +90,32 @@ public class WidgetConfigActivity extends PreferenceActivity {
 				public void onClick(View view) {
 					SharedPreferences.Editor preferences = getSharedPreferences(SparseRSSAppWidgetProvider.class.getName(), 0).edit();
 					
-					preferences.putBoolean(widgetId+".hideread", ((CheckBoxPreference) getPreferenceManager().findPreference("widget.hideread")).isChecked());
+					boolean hideRead = false;//((CheckBoxPreference) getPreferenceManager().findPreference("widget.hideread")).isChecked();
 					
-					// store the selected feed ids
+					preferences.putBoolean(widgetId+".hideread", hideRead);
 					
-					AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(WidgetConfigActivity.this);
+					StringBuilder builder = new StringBuilder();
 					
-					RemoteViews views = new RemoteViews(getPackageName(), R.layout.homescreenwidget);
+					for (int n = 0, i = feedsPreferenceCategory.getPreferenceCount(); n < i; n++) {
+						CheckBoxPreference preference = (CheckBoxPreference) feedsPreferenceCategory.getPreference(n);
+						
+						if (preference.isChecked()) {
+							if (n == 0) {
+								break;
+							} else {
+								if (builder.length() > 0) {
+									builder.append(',');
+								}
+								builder.append(preference.getKey());
+							}
+						}
+					}
 					
-					appWidgetManager.updateAppWidget(widgetId, views);
+					String feedIds = builder.toString();
 					
+					preferences.putString(widgetId+".feeds", feedIds);
+					preferences.commit();
+					SparseRSSAppWidgetProvider.updateAppWidget(WidgetConfigActivity.this, widgetId, hideRead, feedIds);
 					setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
 					finish();
 				}

@@ -59,8 +59,6 @@ public class EntryActivity extends Activity {
 	
 	private static final String DESC = "date desc limit 1";
 	
-	private Cursor entryCursor;
-	
 	private int titlePosition;
 	
 	private int datePosition;
@@ -69,11 +67,15 @@ public class EntryActivity extends Activity {
 	
 	private int linkPosition;
 	
-	private int idPosition;
+	private int feedIdPosition;
 	
 	private int favoritePosition;
 	
+	private int readDatePosition;
+	
 	private Uri uri;
+	
+	private int feedId;
 	
 	boolean favorite;
 
@@ -83,13 +85,16 @@ public class EntryActivity extends Activity {
 		setContentView(R.layout.entry);
 		
 		uri = getIntent().getData();
-		entryCursor = managedQuery(uri, null, null, null, null);
+		
+		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
+		
 		titlePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.TITLE);
 		datePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.DATE);
 		abstractPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.ABSTRACT);
 		linkPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.LINK);
-		idPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FEED_ID);
+		feedIdPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FEED_ID);
 		favoritePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FAVORITE);
+		readDatePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.READDATE);
 		entryCursor.close();
 		if (RSSOverview.notificationManager == null) {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -103,8 +108,6 @@ public class EntryActivity extends Activity {
 		uri = getIntent().getData();
 		reload();
 	}
-	
-	
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -117,17 +120,21 @@ public class EntryActivity extends Activity {
 		
 		values.put(FeedData.EntryColumns.READDATE, System.currentTimeMillis());
 		
-		getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
+		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 		
-		entryCursor = managedQuery(uri, null, null, null, null);
 		if (entryCursor.moveToFirst()) {
 			String abstractText = entryCursor.getString(abstractPosition);
 			
+			if (entryCursor.isNull(readDatePosition)) {
+				getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
+			}
 			if (abstractText == null) {
+				entryCursor.close();
 				finish();
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(entryCursor.getString(linkPosition))));
 			} else {
 				setTitle(entryCursor.getString(titlePosition));
+				feedId = entryCursor.getInt(feedIdPosition);
 				
 				long date = entryCursor.getLong(datePosition);
 				
@@ -151,19 +158,32 @@ public class EntryActivity extends Activity {
 				});
 				// loadData does not recognize the encoding without correct html-header
 				((WebView) findViewById(R.id.entry_abstract)).loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? abstractText : abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
+				
+				final String link = entryCursor.getString(linkPosition);
+				
 				((Button) findViewById(R.id.url_button)).setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(entryCursor.getString(linkPosition))));
+						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
 					}
 				});
+				entryCursor.close();
 				setupButton(R.id.prev_button, false, date);
 				setupButton(R.id.next_button, true, date);
 			}
+		} else {
+			entryCursor.close();
 		}
+		/*
+		new Thread() {
+			public void run() {
+				sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET)); // this is slow
+			}
+		}.start();
+		*/
 	}
 	
 	private void setupButton(int buttonId, boolean successor, long date) {
-		Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns._ID}, new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(entryCursor.getInt(idPosition)).append(AND_DATE).append(successor ? '<' : '>').append(date).toString(), null, successor ? DESC : ASC);
+		Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns._ID}, new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(successor ? '<' : '>').append(date).toString(), null, successor ? DESC : ASC);
 		
 		Button button = (Button) findViewById(buttonId);
 		
@@ -176,8 +196,6 @@ public class EntryActivity extends Activity {
 				public void onClick(View arg0) {
 					uri = FeedData.EntryColumns.ENTRY_CONTENT_URI(id);
 					getIntent().setData(uri);
-					entryCursor.close();
-					entryCursor = managedQuery(uri, null, null, null, null);
 					reload();
 				}
 			});

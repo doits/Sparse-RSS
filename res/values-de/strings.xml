@@ -42,6 +42,11 @@
 <string name="settings_refreshonopen">Aktualisiere bei Start</string>
 <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
 
+<string name="settings_hideread">Verstecke gelesene Einträge</string>
+<string name="settings_hideread_description">Verstecke Einträge, wenn sie gelesen wurden</string>
+<string name="settings_entrysettings">Einträgeeinstellungen</string>
+<string name="settings_visiblefeeds">Sichtbare Feeds</string>
+
 <string name="update">Aktualisiert</string>
 <string name="never">nie</string>
 <string name="unread">ungelesen</string>
