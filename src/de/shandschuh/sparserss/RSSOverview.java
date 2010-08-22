@@ -131,7 +131,7 @@ public class RSSOverview extends ListActivity {
         	
         	button.setOnClickListener(new OnClickListener() {
     			public void onClick(View view) {
-    				sendBroadcast(new Intent(Strings.ACTION_RESTART));
+    				android.os.Process.killProcess(android.os.Process.myPid());
     			}
             });
         	button.setVisibility(View.VISIBLE);

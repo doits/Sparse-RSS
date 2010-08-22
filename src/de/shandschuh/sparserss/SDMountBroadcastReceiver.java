@@ -38,7 +38,6 @@ public class SDMountBroadcastReceiver extends BroadcastReceiver {
 			ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 			
 			manager.restartPackage(Strings.PACKAGE);
-			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
 	}
 

@@ -129,9 +129,11 @@ public class EntryActivity extends Activity {
 				getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
 			}
 			if (abstractText == null) {
+				String link = entryCursor.getString(linkPosition);
+				
 				entryCursor.close();
 				finish();
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(entryCursor.getString(linkPosition))));
+				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
 			} else {
 				setTitle(entryCursor.getString(titlePosition));
 				feedId = entryCursor.getInt(feedIdPosition);

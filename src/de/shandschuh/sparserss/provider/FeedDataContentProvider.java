@@ -31,6 +31,7 @@ import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -128,6 +129,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				}.getWritableDatabase();
 				USE_SDCARD = false;
 			}
+			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
 
 		public void onCreate(SQLiteDatabase database) {
