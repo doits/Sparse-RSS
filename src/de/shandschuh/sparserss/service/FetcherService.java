@@ -47,7 +47,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.util.Xml;
 import de.shandschuh.sparserss.R;
 import de.shandschuh.sparserss.RSSOverview;
@@ -180,6 +179,7 @@ public class FetcherService extends Service {
 				HttpURLConnection connection = setupConnection(cursor.getString(urlPosition));
 				
 				String contentType = connection.getContentType();
+				
 				if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
 					BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 					
@@ -188,6 +188,7 @@ public class FetcherService extends Service {
 					int pos = -1;
 					
 					while ((line = reader.readLine()) != null) {
+						connection = null;
 						if (line.indexOf(HTML_BODY) > -1) {
 							break;
 						} else {
@@ -216,6 +217,9 @@ public class FetcherService extends Service {
 							}
 						}
 					}
+					if (connection == null) { // this indicates a badly configured feed
+						connection = setupConnection(cursor.getString(urlPosition));
+					}
 				}
 				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
 				
@@ -241,7 +245,6 @@ public class FetcherService extends Service {
 				}
 				result += handler.getNewCount();
 			} catch (Throwable e) {
-				Log.d("e", "e", e);
 				if (!handler.isDone()) {
 					ContentValues values = new ContentValues();
 					
