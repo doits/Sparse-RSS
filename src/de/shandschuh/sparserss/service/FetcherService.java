@@ -28,6 +28,7 @@ package de.shandschuh.sparserss.service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
@@ -228,7 +229,11 @@ public class FetcherService extends Service {
 				if (index > -1) {
 					int index2 = contentType.indexOf(';', index);
 					
-					Xml.parse(connection.getInputStream(), Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
+					try {
+						Xml.parse(connection.getInputStream(), Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
+					} catch (UnsupportedEncodingException uee) {
+						Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
+					}
 				} else {
 					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 					
