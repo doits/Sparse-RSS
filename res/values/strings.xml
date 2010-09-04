@@ -15,6 +15,8 @@
 <string name="contextmenu_hideread">Hide read entries</string>
 <string name="contextmenu_showread">Show read entries</string>
 <string name="menu_allread">Mark all as read</string>
+<string name="menu_import">Import from OPML</string>
+<string name="menu_export">Export to OPML</string>
 <string name="menu_about">About</string>
 <string name="license">Copyright (c) 2010 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\nPermission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -85,6 +87,7 @@ THE SOFTWARE.
 
 <string name="button_usesdcard">Use SD-card (if present) - this will close the application. Please restart it manually.</string>
 
+<string name="message_exportedto">Exported into %s.</string>
 
 <string-array name="settings_intervals">
 <item>15 minutes</item>

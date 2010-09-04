@@ -38,6 +38,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
@@ -52,6 +53,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import de.shandschuh.sparserss.provider.FeedData;
 import de.shandschuh.sparserss.provider.FeedDataContentProvider;
 import de.shandschuh.sparserss.service.RefreshService;
@@ -83,7 +85,13 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int MENU_ABOUT_ID = 9;
 	
+	private static final int MENU_IMPORT_ID = 10;
+	
+	private static final int MENU_EXPORT_ID = 11;
+	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
+	
+	private static final int ACTIVITY_PICKIMPORTFILE = 2;
 	
 	private boolean serviceConnected = false;
 	
@@ -160,6 +168,10 @@ public class RSSOverview extends ListActivity {
 		menu.add(0, MENU_SETTINGS_ID, Menu.NONE, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
 		menu.add(0, MENU_ALLREAD, Menu.NONE, R.string.menu_allread).setIcon(android.R.drawable.ic_menu_revert);
 		menu.add(0, MENU_ABOUT_ID, Menu.NONE, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
+		
+		// no icons will be shown from here
+		menu.add(0, MENU_IMPORT_ID, Menu.NONE, R.string.menu_import);
+		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
 		return true;
 	}
 
@@ -242,6 +254,26 @@ public class RSSOverview extends ListActivity {
 				startActivity(new Intent(this, AboutActivity.class));
 				break;
 			}
+			case MENU_IMPORT_ID: {
+				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+				
+				intent.setType("*/*");
+				intent.addCategory(Intent.CATEGORY_OPENABLE); 
+				startActivityForResult(intent, ACTIVITY_PICKIMPORTFILE);
+				break;
+			}
+			case MENU_EXPORT_ID: {
+				
+				try {
+					String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/sparse_rss_").append(System.currentTimeMillis()).append(".opml").toString();
+					
+					OPML.exportToFile(filename, this);
+					Toast.makeText(this, String.format(getString(R.string.message_exportedto), filename), Toast.LENGTH_LONG).show();
+				} catch (Exception e) {
+
+				}
+				break;
+			}
 		}
 		return true;
 	}
@@ -254,18 +286,32 @@ public class RSSOverview extends ListActivity {
 	}
 	
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == ACTIVITY_APPLICATIONPREFERENCES_ID) {
-			if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
-				if (!serviceConnected) {
-					bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
-					serviceConnected = true;
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		switch (requestCode) {
+			case ACTIVITY_APPLICATIONPREFERENCES_ID: {
+				if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
+					if (!serviceConnected) {
+						bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
+						serviceConnected = true;
+					}
+				} else if (serviceConnected) {
+					unbindService(serviceConnection);
+					serviceConnected = false;
+				}	
+				break;
+			}
+			case ACTIVITY_PICKIMPORTFILE: {
+				if (intent.getData() != null && "file".equals(intent.getData().getScheme())) {
+					try {
+						OPML.importFromFile(intent.getData().getPath(), this);
+					} catch (Exception e) {
+						
+					}
 				}
-			} else if (serviceConnected) {
-				unbindService(serviceConnection);
-				serviceConnected = false;
+				break;
 			}
 		}
+		
 	}
 
 	@Override
@@ -305,8 +351,8 @@ public class RSSOverview extends ListActivity {
 		if (id == DIALOG_ADDFEED_ID) {
 			EditText editText = (EditText) dialog.findViewById(R.id.feed_url);
 			
-			editText.setText("");
-			((EditText) dialog.findViewById(R.id.feed_title)).setText("");
+			editText.setText(Strings.EMPTY);
+			((EditText) dialog.findViewById(R.id.feed_title)).setText(Strings.EMPTY);
 		}
 		super.onPrepareDialog(id, dialog);
 	}

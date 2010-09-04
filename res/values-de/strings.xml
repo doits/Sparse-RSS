@@ -17,6 +17,8 @@
 <string name="contextmenu_hideread">Verstecke gelesene Einträge</string>
 <string name="contextmenu_showread">Zeige gelesene Einträge</string>
 <string name="menu_allread">Alle gelesen</string>
+<string name="menu_import">Importiere von OPML</string>
+<string name="menu_export">Exportiere nach OPML</string>
 <string name="menu_about">Info</string>
 
 <string name="settings_category_refresh">Automatische Aktualisierung</string>
@@ -67,6 +69,7 @@
 
 <string name="button_usesdcard">Benutze SD-Karte (wenn vorhanden) - das schließt das Programm. Bitte starten Sie es manuell neu.</string>
 
+<string name="message_exportedto">In Datei %s exportiert.</string>
 <string-array name="settings_intervals">
 <item>15 Minuten</item>
 <item>30 Minuten</item>
