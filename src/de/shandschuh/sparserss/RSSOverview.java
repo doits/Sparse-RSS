@@ -377,14 +377,23 @@ public class RSSOverview extends ListActivity {
 			urlEditText.setSelection(url.length()-1);
 			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
-					ContentValues values = new ContentValues();
+					String url = urlEditText.getText().toString();
+					
+					Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID}, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
+					
+					if (cursor.moveToFirst() && !id.equals(cursor.getString(0))) {
+						showDialog(DIALOG_ERROR_FEEDURLEXISTS);
+					} else {
+						ContentValues values = new ContentValues();
 						
-					values.put(FeedData.FeedColumns.URL, urlEditText.getText().toString());
-					
-					String name = nameEditText.getText().toString();
-					
-					values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
-					getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+						values.put(FeedData.FeedColumns.URL, urlEditText.getText().toString());
+						
+						String name = nameEditText.getText().toString();
+						
+						values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
+						getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);	
+					}
+					cursor.close();
 				}
 			});
 		} else {
@@ -394,7 +403,7 @@ public class RSSOverview extends ListActivity {
 					
 					Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
 					
-					if (cursor.getCount() > 0) {
+					if (cursor.moveToFirst()) {
 						showDialog(DIALOG_ERROR_FEEDURLEXISTS);
 					} else {
 						ContentValues values = new ContentValues();
