@@ -85,6 +85,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final DateFormat PUBDATE_DATEFORMAT = new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
 	
+	private static final DateFormat PUBDATE_DATEFORMAT_2 = new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
+	
 	private static final StringBuilder DB_FAVORITE = new StringBuilder(" AND (").append(FeedData.EntryColumns.FAVORITE).append(Strings.DB_ISNULL).append(" OR ").append(FeedData.EntryColumns.FAVORITE).append('=').append("0)");
 
 	private Context context;
@@ -240,7 +242,11 @@ public class RSSHandler extends DefaultHandler {
 			try {
 				entryDate = PUBDATE_DATEFORMAT.parse(dateStringBuilder.toString().replace(MEST, PLUS200)); // replace is needed because mest is no supported timezone
 			} catch (ParseException e) {
-				
+				try {
+					entryDate = PUBDATE_DATEFORMAT_2.parse(dateStringBuilder.toString().replace(MEST, PLUS200));
+				} catch (ParseException pe) {
+					
+				}
 			}
 			pubDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
