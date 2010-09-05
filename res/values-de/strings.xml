@@ -60,6 +60,9 @@
 <string name="all_feeds">Alle Feeds (inkl. zukünftige)</string>
 
 <string name="error_feedurlexists">Die URL existiert bereits.</string>
+<string name="error_feedimport">Die ausgewählte Datei konnte nicht importiert werden.</string>
+<string name="error_feedexport">Der Export ist fehlgeschlagen. Bitte gehen Sie sicher, dass Sie eine schreibbare SD-Karte eingehängt haben.</string>
+<string name="error_invalidimportfile">Die ausgewählte Datei ist für den Import nicht gültig.</string>
 
 <string name="feed_title">Titel</string>
 

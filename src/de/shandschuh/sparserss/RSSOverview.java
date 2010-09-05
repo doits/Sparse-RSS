@@ -63,13 +63,19 @@ public class RSSOverview extends ListActivity {
 	
 	private static final String HTTPS = "https://";
 	
-	private static final int MENU_ADDFEED_ID = 1;
-	
-	private static final int MENU_REFRESH_ID = 2;
-	
 	private static final int DIALOG_ADDFEED_ID = 1;
 	
 	private static final int DIALOG_ERROR_FEEDURLEXISTS = 2;
+	
+	private static final int DIALOG_ERROR_FEEDIMPORT = 3;
+	
+	private static final int DIALOG_ERROR_FEEDEXPORT = 4;
+	
+	private static final int DIALOG_ERROR_INVALIDIMPORTFILE = 5;
+	
+	private static final int MENU_ADDFEED_ID = 1;
+	
+	private static final int MENU_REFRESH_ID = 2;
 	
 	private static final int CONTEXTMENU_EDIT_ID = 3;
 	
@@ -263,14 +269,13 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case MENU_EXPORT_ID: {
-				
 				try {
 					String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/sparse_rss_").append(System.currentTimeMillis()).append(".opml").toString();
 					
 					OPML.exportToFile(filename, this);
 					Toast.makeText(this, String.format(getString(R.string.message_exportedto), filename), Toast.LENGTH_LONG).show();
 				} catch (Exception e) {
-
+					showDialog(DIALOG_ERROR_FEEDEXPORT);
 				}
 				break;
 			}
@@ -305,8 +310,10 @@ public class RSSOverview extends ListActivity {
 					try {
 						OPML.importFromFile(intent.getData().getPath(), this);
 					} catch (Exception e) {
-						
+						showDialog(DIALOG_ERROR_FEEDIMPORT);
 					}
+				} else {
+					showDialog(DIALOG_ERROR_INVALIDIMPORTFILE);
 				}
 				break;
 			}
@@ -332,13 +339,19 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case DIALOG_ERROR_FEEDURLEXISTS: {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				
-				builder.setMessage(R.string.error_feedurlexists);
-				builder.setTitle(R.string.error);
-				builder.setIcon(android.R.drawable.ic_dialog_alert);
-				builder.setPositiveButton(android.R.string.ok, null);
-				dialog = builder.create();
+				dialog = createErrorDialog(R.string.error_feedurlexists);
+				break;
+			}
+			case DIALOG_ERROR_FEEDIMPORT: {
+				dialog = createErrorDialog(R.string.error_feedimport);
+				break;
+			}
+			case DIALOG_ERROR_FEEDEXPORT: {
+				dialog = createErrorDialog(R.string.error_feedexport);
+				break;
+			}
+			case DIALOG_ERROR_INVALIDIMPORTFILE: {
+				dialog = createErrorDialog(R.string.error_invalidimportfile);
 				break;
 			}
 			default: dialog = null;
@@ -429,6 +442,16 @@ public class RSSOverview extends ListActivity {
 		
 		
 		builder.setNegativeButton(android.R.string.cancel, null);
+		return builder.create();
+	}
+	
+	private Dialog createErrorDialog(int messageId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		
+		builder.setMessage(messageId);
+		builder.setTitle(R.string.error);
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setPositiveButton(android.R.string.ok, null);
 		return builder.create();
 	}
     
