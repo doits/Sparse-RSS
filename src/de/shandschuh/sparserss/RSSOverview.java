@@ -292,33 +292,34 @@ public class RSSOverview extends ListActivity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		switch (requestCode) {
-			case ACTIVITY_APPLICATIONPREFERENCES_ID: {
-				if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
-					if (!serviceConnected) {
-						bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
-						serviceConnected = true;
-					}
-				} else if (serviceConnected) {
-					unbindService(serviceConnection);
-					serviceConnected = false;
-				}	
-				break;
-			}
-			case ACTIVITY_PICKIMPORTFILE: {
-				if (intent.getData() != null && "file".equals(intent.getData().getScheme())) {
-					try {
-						OPML.importFromFile(intent.getData().getPath(), this);
-					} catch (Exception e) {
-						showDialog(DIALOG_ERROR_FEEDIMPORT);
-					}
-				} else {
-					showDialog(DIALOG_ERROR_INVALIDIMPORTFILE);
+		if (resultCode == RESULT_OK) {
+			switch (requestCode) {
+				case ACTIVITY_APPLICATIONPREFERENCES_ID: {
+					if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
+						if (!serviceConnected) {
+							bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
+							serviceConnected = true;
+						}
+					} else if (serviceConnected) {
+						unbindService(serviceConnection);
+						serviceConnected = false;
+					}	
+					break;
 				}
-				break;
+				case ACTIVITY_PICKIMPORTFILE: {
+					if (intent.getData() != null && "file".equals(intent.getData().getScheme())) {
+						try {
+							OPML.importFromFile(intent.getData().getPath(), this);
+						} catch (Exception e) {
+							showDialog(DIALOG_ERROR_FEEDIMPORT);
+						}
+					} else {
+						showDialog(DIALOG_ERROR_INVALIDIMPORTFILE);
+					}
+					break;
+				}
 			}
 		}
-		
 	}
 
 	@Override
