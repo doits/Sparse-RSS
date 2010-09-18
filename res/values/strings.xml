@@ -3,9 +3,11 @@
     <string name="app_name">Sparse rss</string>
 <string name="menu_addfeed">Add feed</string>
 <string name="norssfeeds">No RSS feeds</string>
+<string name="noentries">No entries</string>
 <string name="menu_refresh">Refresh</string>
 <string name="contextmenu_delete">Delete</string>
 <string name="goto_url">Goto link</string>
+<string name="favorites">Favorites</string>
 
 <string name="editfeed_title">Edit feed</string>
 <string name="contextmenu_edit">Edit</string>

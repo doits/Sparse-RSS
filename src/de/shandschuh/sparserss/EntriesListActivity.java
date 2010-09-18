@@ -44,7 +44,7 @@ public class EntriesListActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.entries);
 		uri = getIntent().getData();
 		entriesListAdapter = new EntriesListAdapter(this, uri);
         setListAdapter(entriesListAdapter);

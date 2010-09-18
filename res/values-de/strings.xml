@@ -2,10 +2,12 @@
 <resources>
     <string name="app_name">Sparse rss</string>
 <string name="menu_addfeed">Hinzufügen</string>
-<string name="norssfeeds">Keine RSS feeds</string>
+<string name="norssfeeds">Keine RSS Feeds</string>
+<string name="noentries">Keine Einträge</string>
 <string name="menu_refresh">Aktualisieren</string>
 <string name="contextmenu_delete">Löschen</string>
 <string name="goto_url">Link aufrufen</string>
+<string name="favorites">Favoriten</string>
 
 <string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://sparserss.googlecode.com\n</string>
 
