@@ -78,6 +78,8 @@ public class EntryActivity extends Activity {
 	private int feedId;
 	
 	boolean favorite;
+	
+	private boolean showRead;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +87,7 @@ public class EntryActivity extends Activity {
 		setContentView(R.layout.entry);
 		
 		uri = getIntent().getData();
+		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
 		
 		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 		
@@ -185,7 +188,13 @@ public class EntryActivity extends Activity {
 	}
 	
 	private void setupButton(int buttonId, boolean successor, long date) {
-		Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns._ID}, new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(successor ? '<' : '>').append(date).toString(), null, successor ? DESC : ASC);
+		StringBuilder queryString = new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(successor ? '<' : '>').append(date);
+		
+		if (!showRead) {
+			queryString.append(Strings.DB_AND).append(EntriesListAdapter.READDATEISNULL);
+		}
+		
+		Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns._ID}, queryString.toString() , null, successor ? DESC : ASC);
 		
 		Button button = (Button) findViewById(buttonId);
 		

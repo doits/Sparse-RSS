@@ -37,6 +37,8 @@ import android.widget.ListView;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntriesListActivity extends ListActivity {
+	public static final String EXTRA_SHOWREAD = "show_read";
+
 	private Uri uri;
 	
 	private EntriesListAdapter entriesListAdapter;
@@ -56,7 +58,7 @@ public class EntriesListActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView listView, View view, int position, long id) {
-		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)));
+		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()));
 	}
 	
 	@Override

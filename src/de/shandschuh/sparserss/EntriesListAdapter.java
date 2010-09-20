@@ -55,7 +55,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
-	private static final String READDATEISNULL = "readdate is null";
+	public static final String READDATEISNULL = "readdate is null";
 	
 	private boolean showRead;
 	
@@ -115,6 +115,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			changeCursor(createManagedCursor(context, uri, showRead));
 			this.showRead = showRead;
 		}
+	}
+	
+	public boolean isShowRead() {
+		return showRead;
 	}
 	
 	private static Cursor createManagedCursor(Activity context, Uri uri, boolean showRead) {
