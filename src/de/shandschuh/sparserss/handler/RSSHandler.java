@@ -65,6 +65,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_DESCRIPTION = "description";
 	
+	private static final String TAG_CONTENT = "content";
+	
 	private static final String TAG_SUMMARY = "summary";
 	
 	private static final String TAG_PUBDATE = "pubDate";
@@ -82,6 +84,8 @@ public class RSSHandler extends DefaultHandler {
 	private static final DateFormat UPDATE_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	
 	private static final DateFormat UPDATE_DATEFORMAT_SLOPPY = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+	
+	private static final DateFormat UPDATE_DATEFORMAT_SLOPPY2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US);
 	
 	private static final DateFormat PUBDATE_DATEFORMAT = new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
 	
@@ -159,7 +163,7 @@ public class RSSHandler extends DefaultHandler {
 					values.put(FeedData.FeedColumns.NAME, title.toString());
 				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
-				values.put(FeedData.FeedColumns.LASTUPDATE, entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000);
+				values.put(FeedData.FeedColumns.LASTUPDATE, /*entryDate != null ? entryDate.getTime() : */System.currentTimeMillis() - 1000);
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				title = null;
 				feedRefreshed = true;
@@ -189,8 +193,7 @@ public class RSSHandler extends DefaultHandler {
 			if (!foundLink) {
 				linkTagEntered = true;
 			}
-			
-		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName)) {
+		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName) || TAG_CONTENT.equals(localName)) {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_PUBDATE.equals(localName)) {
@@ -223,40 +226,54 @@ public class RSSHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (TAG_TITLE.equals(localName)) {
 			titleTagEntered = false;
-		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName)) {
+		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName) || TAG_CONTENT.equals(localName)) {
 			descriptionTagEntered = false;
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;
 		} else if (TAG_UPDATED.equals(localName)) {
+			String dateString = dateStringBuilder.toString();
+
 			try {
-				entryDate = UPDATE_DATEFORMAT.parse(dateStringBuilder.toString());
+				entryDate = UPDATE_DATEFORMAT.parse(dateString);
 			} catch (ParseException e) {
 				try {
-					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateStringBuilder.toString());
+					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateString);
 				} catch (ParseException e2) {
-					
+					try {
+						entryDate = UPDATE_DATEFORMAT_SLOPPY2.parse(dateString);
+					} catch (ParseException e3) {
+
+					}
 				}
 			}
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
+			String dateString = dateStringBuilder.toString().replace(MEST, PLUS200);
+			
 			try {
-				entryDate = PUBDATE_DATEFORMAT.parse(dateStringBuilder.toString().replace(MEST, PLUS200)); // replace is needed because mest is no supported timezone
+				entryDate = PUBDATE_DATEFORMAT.parse(dateString); // replace is needed because mest is no supported timezone
 			} catch (ParseException e) {
 				try {
-					entryDate = PUBDATE_DATEFORMAT_2.parse(dateStringBuilder.toString().replace(MEST, PLUS200));
+					entryDate = PUBDATE_DATEFORMAT_2.parse(dateString);
 				} catch (ParseException pe) {
 					
 				}
 			}
 			pubDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
+			String dateString = dateStringBuilder.toString();
+			
 			try {
-				entryDate = UPDATE_DATEFORMAT.parse(dateStringBuilder.toString());
+				entryDate = UPDATE_DATEFORMAT.parse(dateString);
 			} catch (ParseException e) {
 				try {
-					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateStringBuilder.toString());
+					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateString);
 				} catch (ParseException e2) {
-					
+					try {
+						entryDate = UPDATE_DATEFORMAT_SLOPPY2.parse(dateString);
+					} catch (ParseException e3) {
+						
+					}
 				}
 			}
 			dateTagEntered = false;
