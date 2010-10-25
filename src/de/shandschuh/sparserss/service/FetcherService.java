@@ -26,8 +26,11 @@
 package de.shandschuh.sparserss.service;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -56,6 +59,10 @@ import de.shandschuh.sparserss.handler.RSSHandler;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class FetcherService extends Service {
+	private static final int FETCHMODE_DIRECT = 1;
+	
+	private static final int FETCHMODE_REENCODE = 2;
+	
 	private static final String KEY_USERAGENT = "User-agent";
 	
 	private static final String VALUE_USERAGENT = "Mozilla/5.0";
@@ -167,6 +174,8 @@ public class FetcherService extends Service {
 		
 		int titlePosition = cursor.getColumnIndex(FeedData.FeedColumns.NAME);
 		
+		int fetchmodePosition = cursor.getColumnIndex(FeedData.FeedColumns.FETCHMODE);
+		
 //		HttpURLConnection.setFollowRedirects(false);
 		
 		int result = 0;
@@ -181,78 +190,161 @@ public class FetcherService extends Service {
 				
 				String contentType = connection.getContentType();
 				
-				if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
-					BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-					
-					String line = null;
-					
-					int pos = -1;
-					
-					while ((line = reader.readLine()) != null) {
-						connection = null;
-						if (line.indexOf(HTML_BODY) > -1) {
-							break;
-						} else {
-							pos = line.indexOf(LINK_RSS);
-							
-							if (pos == -1) {
-								pos = line.indexOf(LINK_RSS_SLOPPY);
-							}
-							if (pos > -1) {
-								int posStart = line.indexOf(HREF, pos);
+				int fetchMode = cursor.getInt(fetchmodePosition);
+				
+				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
+				
+				if (fetchMode == 0) {
+					if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
+						BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+						
+						String line = null;
+						
+						int pos = -1;
+						
+						while ((line = reader.readLine()) != null) {
+							connection = null;
+							if (line.indexOf(HTML_BODY) > -1) {
+								break;
+							} else {
+								pos = line.indexOf(LINK_RSS);
+								
+								if (pos == -1) {
+									pos = line.indexOf(LINK_RSS_SLOPPY);
+								}
+								if (pos > -1) {
+									int posStart = line.indexOf(HREF, pos);
 
-								if (posStart > -1) {
-									String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(RSSHandler.AMP_SG, RSSHandler.AMP);
-									
-									ContentValues values = new ContentValues();
-									
-									if (url.startsWith(SLASH)) {
-										url = cursor.getString(urlPosition)+url;
-									} 
-									values.put(FeedData.FeedColumns.URL, url);
-									context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-									connection = setupConnection(url);
-									contentType = connection.getContentType();
-									break;
+									if (posStart > -1) {
+										String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(RSSHandler.AMP_SG, RSSHandler.AMP);
+										
+										ContentValues values = new ContentValues();
+										
+										if (url.startsWith(SLASH)) {
+											url = cursor.getString(urlPosition)+url;
+										} 
+										values.put(FeedData.FeedColumns.URL, url);
+										context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+										connection = setupConnection(url);
+										contentType = connection.getContentType();
+										break;
+									}
 								}
 							}
 						}
+						if (connection == null) { // this indicates a badly configured feed
+							connection = setupConnection(cursor.getString(urlPosition));
+						}
+					} else if (contentType != null) {
+						
+						int index = contentType.indexOf(CHARSET);
+						
+						if (index > -1) {
+							int index2 = contentType.indexOf(';', index);
+							
+							
+							try {
+								Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8));
+								fetchMode = FETCHMODE_DIRECT;
+							} catch (UnsupportedEncodingException usee) {
+								fetchMode = FETCHMODE_REENCODE;
+							}
+						} else {
+							fetchMode = FETCHMODE_REENCODE;
+						}
+						
+					} else {
+						BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+						
+						char[] chars = new char[20];
+						
+						int length = bufferedReader.read(chars);
+						
+						String xmlDescription = new String(chars, 0, length);
+						
+						connection.disconnect();
+						connection = setupConnection(connection.getURL());
+						
+						int start = xmlDescription != null ?  xmlDescription.indexOf(ENCODING) : -1;
+						
+						if (start > -1) {
+							try {
+								Xml.findEncodingByName(xmlDescription.substring(start+10, xmlDescription.indexOf('"', start+11)));
+								fetchMode = FETCHMODE_DIRECT;
+							} catch (UnsupportedEncodingException usee) {
+								fetchMode = FETCHMODE_REENCODE;
+							}
+						} else {
+							fetchMode = FETCHMODE_DIRECT; // absolutely no encoding information found
+						}
 					}
-					if (connection == null) { // this indicates a badly configured feed
-						connection = setupConnection(cursor.getString(urlPosition));
-					}
+					
+					ContentValues values = new ContentValues();
+					
+					values.put(FeedData.FeedColumns.FETCHMODE, fetchMode); 
+					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				}
-				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
 				
-				int index = contentType.indexOf(CHARSET);
-				
-				if (index > -1) {
-					int index2 = contentType.indexOf(';', index);
-					
-					try {
-						Xml.parse(connection.getInputStream(), Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
-					} catch (UnsupportedEncodingException uee) {
-						Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
+				switch (fetchMode) {
+					case FETCHMODE_DIRECT: {
+						if (contentType != null) {
+							int index = contentType.indexOf(CHARSET);
+							
+							int index2 = contentType.indexOf(';', index);
+							
+							Xml.parse(connection.getInputStream(), Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
+						} else {
+							Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
+						}
+						break;
 					}
-				} else {
-					BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-					
-					String xmlDescription = bufferedReader.readLine();
-					
-					connection.disconnect();
-					connection = setupConnection(connection.getURL());
-					
-					int start = xmlDescription != null ?  xmlDescription.indexOf(ENCODING) : -1;
-					
-					InputStreamReader reader = start > -1 ? new InputStreamReader(connection.getInputStream(), xmlDescription.substring(start+10, xmlDescription.indexOf('"', start+11))) : new InputStreamReader(connection.getInputStream());
-					
-					Xml.parse(reader, handler);
+					case FETCHMODE_REENCODE: {
+						
+						ByteArrayOutputStream ouputStream = new ByteArrayOutputStream();
+						
+						InputStream inputStream = connection.getInputStream();
+						  byte[] byteChunk = new byte[4096]; 
+						  int n;
+
+						  while ( (n = inputStream.read(byteChunk)) > 0 ) {
+							  ouputStream.write(byteChunk, 0, n);
+						  }
+						
+
+						
+						String xmlText = ouputStream.toString();
+						
+						int start = xmlText != null ?  xmlText.indexOf(ENCODING) : -1;
+						
+						if (start > -1) {
+							Xml.parse(new StringReader(new String(ouputStream.toByteArray(), xmlText.substring(start+10, xmlText.indexOf('"', start+11)))), handler);
+						} else {
+							// use content type
+							if (contentType != null) {
+								
+								int index = contentType.indexOf(CHARSET);
+								
+								if (index > -1) {
+									int index2 = contentType.indexOf(';', index);
+									
+									try {
+										Xml.parse(new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8))), handler);
+									} catch (Exception e) {
+										
+									}
+								}
+							}
+						}
+						break;
+					}
 				}
 				result += handler.getNewCount();
+				
 			} catch (Throwable e) {
 				if (!handler.isDone()) {
 					ContentValues values = new ContentValues();
 					
+					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
 					values.put(FeedData.FeedColumns.ERROR, e.getMessage());
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				}
