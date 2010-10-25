@@ -405,6 +405,8 @@ public class RSSOverview extends ListActivity {
 						String name = nameEditText.getText().toString();
 						
 						values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
+						values.put(FeedData.FeedColumns.FETCHMODE, 0);
+						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);	
 					}
 					cursor.close();
