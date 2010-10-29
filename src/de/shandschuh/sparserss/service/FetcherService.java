@@ -235,8 +235,9 @@ public class FetcherService extends Service {
 						if (connection == null) { // this indicates a badly configured feed
 							connection = setupConnection(cursor.getString(urlPosition));
 						}
-					} else if (contentType != null) {
-						
+					}
+					
+					if (contentType != null) {
 						int index = contentType.indexOf(CHARSET);
 						
 						if (index > -1) {
