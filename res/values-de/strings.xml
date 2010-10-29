@@ -60,6 +60,8 @@
 <string name="priority">Priorität</string>
 <string name="select_feeds">Feeds auswählen</string>
 <string name="all_feeds">Alle Feeds (inkl. zukünftige)</string>
+<string name="all">Alle</string>
+<string name="overview">Überblick</string>
 
 <string name="error_feedurlexists">Die URL existiert bereits.</string>
 <string name="error_feedimport">Die ausgewählte Datei konnte nicht importiert werden.</string>

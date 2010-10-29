@@ -66,6 +66,8 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final int URI_FAVORITES = 7;
 	
+	private static final int URI_FAVORITES_ENTRY = 8;
+	
 	private static final String TABLE_FEEDS = "feeds";
 	
 	private static final String TABLE_ENTRIES = "entries";
@@ -87,6 +89,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "entries", URI_ALLENTRIES);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "entries/#", URI_ALLENTRIES_ENTRY);
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites", URI_FAVORITES);
+		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
 	}
 	
 	private static class DatabaseHelper {
@@ -221,6 +224,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				table = TABLE_ENTRIES;
 				break;
 			}
+			case URI_FAVORITES_ENTRY : 
 			case URI_ALLENTRIES_ENTRY : {
 				table = TABLE_ENTRIES;
 				where.append(FeedData.EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));
@@ -255,6 +259,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			case URI_FAVORITES : 
 			case URI_ALLENTRIES :
 			case URI_ENTRIES : return "vnd.android.cursor.dir/vnd.feeddata.entry";
+			case URI_FAVORITES_ENTRY : 
 			case URI_ALLENTRIES_ENTRY : 
 			case URI_ENTRY : return "vnd.android.cursor.item/vnd.feeddata.entry";
 			default : throw new IllegalArgumentException("Unknown URI: "+uri);
@@ -329,6 +334,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				queryBuilder.setTables(TABLE_ENTRIES);
 				break;
 			}
+			case URI_FAVORITES_ENTRY : 
 			case URI_ALLENTRIES_ENTRY : {
 				queryBuilder.setTables(TABLE_ENTRIES);
 				queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns._ID).append('=').append(uri.getPathSegments().get(1)));
@@ -378,6 +384,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				table = TABLE_ENTRIES;
 				break;
 			}
+			case URI_FAVORITES_ENTRY : 
 			case URI_ALLENTRIES_ENTRY : {
 				table = TABLE_ENTRIES;
 				where.append(FeedData.EntryColumns._ID).append('=').append(uri.getPathSegments().get(1));

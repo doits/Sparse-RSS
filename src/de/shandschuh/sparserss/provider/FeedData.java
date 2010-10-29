@@ -89,6 +89,8 @@ public class FeedData {
 		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "INTEGER(7)", TYPE_TEXT, TYPE_TEXT, TYPE_DATETIME, TYPE_DATETIME, TYPE_TEXT, TYPE_BOOLEAN};
 
 		public static Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/entries").toString());
+		
+		public static Uri FAVORITES_CONTENT_URI = Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/favorites").toString());
 
 		public static Uri CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds/").append(feedId).append("/entries").toString());
