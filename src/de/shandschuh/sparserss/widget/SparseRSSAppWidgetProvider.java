@@ -69,7 +69,7 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 		StringBuilder selection = new StringBuilder();
 		
 		if (hideRead) {
-			selection.append(FeedData.EntryColumns.READDATE).append(" IS NULL");
+			selection.append(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL);
 		}
 		
 		if (feedIds.length() > 0) {
