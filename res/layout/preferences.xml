@@ -44,6 +44,11 @@ android:dependency="notifications.enabled" />
 
 <PreferenceCategory android:title="@string/settings_category_contentpresentation">
 <CheckBoxPreference
+android:title="@string/settings_showtabs"
+android:defaultValue="false"
+android:summary="@string/settings_showtabs_description"
+android:key="tabs.show" />
+<CheckBoxPreference
 android:title="@string/settings_prioritize"
 android:defaultValue="false"
 android:summary="@string/settings_prioritize_description"

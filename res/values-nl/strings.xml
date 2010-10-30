@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sparse rss</string>
+<string name="menu_addfeed">Feed toevoegen</string>
+<string name="norssfeeds">Geen RSS feeds</string>
+<string name="noentries">Geen artikelen</string>
+<string name="menu_refresh">Vernieuwen</string>
+<string name="contextmenu_delete">Verwijder</string>
+<string name="goto_url">Ga naar link</string>
+<string name="favorites">Favorieten</string>
+
+<string name="editfeed_title">Wijzig feed</string>
+<string name="contextmenu_edit">Wijzig</string>
+<string name="contextmenu_refresh">Vernieuwen</string>
+<string name="menu_settings">Instellingen</string>
+<string name="contextmenu_markasread">Markeer als gelezen</string>
+<string name="contextmenu_hideread">Verberg gelezen artikelen</string>
+<string name="contextmenu_showread">Toon gelezen artikelen</string>
+<string name="menu_allread">Alles als gelezen markeren</string>
+<string name="menu_import">Importeer uit OPML</string>
+<string name="menu_export">Exporteer naar OPML</string>
+<string name="menu_about">Over</string>
+<string name="license_intro">De software wordt verspreid onder de MIT open source licentie en de broncode is beschikbaar via http://sparserss.googlecode.com\n</string>
+
+<string name="settings_category_refresh">Automatisch vernieuwen</string>
+<string name="settings_refreshenabled">Aan</string>
+<string name="settings_refreshenabled_description">Deze instelling past het automatisch vernieuwen van feeds aan</string>
+<string name="settings_refreshinterval">Interval voor vernieuwen</string>
+<string name="settings_refreshinterval_description">Interval tussen twee keer automatisch vernieuwen</string>
+
+<string name="settings_category_notofications">Notificaties</string>
+<string name="settings_notificationsenabled">Aan</string>
+<string name="settings_notificationsenabled_description">Deze instelling bepaalt hoe u notificaties wilt ontvangen</string>
+<string name="settings_notificationsringtone">Beltoon</string>
+<string name="settings_notificationsringtone_description">Selecteer een beltoon bij het ontvangen van nieuwe artikelen</string>
+<string name="settings_notificationsvibrate">Trillen</string>
+<string name="settings_notificationsvibrate_description">Bepaalt of een de telefoon trilt bij het ontvangen van nieuwe artikelen</string>
+
+<string name="settings_category_contentpresentation">Presentatie van inhoud</string>
+<string name="settings_prioritize">Prioriteer ongelezen artikelen</string>
+<string name="settings_prioritize_description">Toon ongelezen artikelen boven de gelezen artikelen</string>
+<string name="settings_keeptime">Tijd dat de artikelen bewaard worden</string>
+<string name="settings_keeptime_description">Artikelen verwijderen na</string>
+
+<string name="settings_refreshonopen">Artikelen vernieuwen bij openen</string>
+<string name="settings_refreshonopen_description">Alle feeds vernieuwen na het openen van de applicatie</string>
+
+<string name="settings_hideread">Verberg gelezen artikelen</string>
+<string name="settings_hideread_description">Verberg items in de widget als ze gelezen zijn</string>
+<string name="settings_entrysettings">Artikel instellingen</string>
+<string name="settings_visiblefeeds">Zichtbare feeds</string>
+<string name="settings_showtabs">Bekijk Tabs</string>
+<string name="settings_showtabs_description">Additionele tabs voor favorieten en alle feed artikelen</string>
+
+<string name="never">nooit</string>
+<string name="update">Bijwerken</string>
+<string name="unread">ongelezen</string>
+<string name="newentries">nieuwe artikelen</string>
+<string name="rss_feeds">RSS feeds</string>
+<string name="error">Fout</string>
+<string name="priority">Prioriteit</string>
+<string name="select_feeds">Selecteer feeds</string>
+<string name="all_feeds">Alle feeds (incl. toekomst)</string>
+<string name="all">Alle</string>
+<string name="overview">Overzicht</string>
+
+<string name="error_feedurlexists">Het adres bestaat al.</string>
+<string name="error_feedimport">Het geselecteerde bestand kon niet worden geïmporteerd.</string>
+<string name="error_feedexport">Het exporteren is mislukt. Zorg dat een schrijfbare SD kaart is gekoppeld.</string>
+<string name="error_invalidimportfile">Het geselecteerde bestand is niet geschikt voor import.</string>
+
+<string name="feed_url">Adres</string>
+<string name="optional">(optioneel)</string>
+<string name="websiteorfeed">(website of feed)</string>
+<string name="feed_title">Titel</string>
+<string name="select_file">Selecteer een bestand</string>
+
+<string name="question_deletefeed">Wilt u deze feed en alle bijbehorende artikelen echt verwijderen?</string>
+
+<string name="button_usesdcard">Gebruik SD-kaart (mits aanwezig). Dit zal de applicatie sluiten. Handmatig herstarten a.u.b.</string>
+
+<string name="message_exportedto">Exporteren naar %s.</string>
+
+<string-array name="settings_intervals">
+<item>15 minuten</item>
+<item>30 minuten</item>
+<item>1 uur</item>
+<item>2 uren</item>
+<item>6 uren</item>
+<item>1 dag</item>
+</string-array>
+
+<string-array name="settings_keeptimes">
+<item>1 dag</item>
+<item>2 dagen</item>
+<item>4 dagen</item>
+<item>1 week</item>
+<item>2 weken</item>
+<item>1 maand</item>
+</string-array>
+</resources>

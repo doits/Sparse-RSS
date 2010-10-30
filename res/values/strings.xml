@@ -67,6 +67,8 @@ THE SOFTWARE.
 <string name="settings_hideread_description">Hide entries from the widget if they have been read</string>
 <string name="settings_entrysettings">Entry settings</string>
 <string name="settings_visiblefeeds">Visible feeds</string>
+<string name="settings_showtabs">Show tabs</string>
+<string name="settings_showtabs_description">Additional tabs for favorite and all feed-entries</string>
 
 <string name="never">never</string>
 <string name="update">Update</string>
@@ -89,6 +91,7 @@ THE SOFTWARE.
 <string name="optional">(optional)</string>
 <string name="websiteorfeed">(website or feed)</string>
 <string name="feed_title">Title</string>
+<string name="select_file">Select file</string>
 
 <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 

@@ -76,7 +76,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	}
 
 	@Override
-	public void bindView(View view, Context context, Cursor cursor) {
+	public void bindView(View view, final Context context, Cursor cursor) {
 		TextView textView = (TextView) view.findViewById(android.R.id.text1);
 		
 		textView.setText(cursor.getString(titleColumnPosition));
@@ -96,6 +96,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 				
 				values.put(FeedData.EntryColumns.FAVORITE, favorite ? 0 : 1);
 				view.getContext().getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns._ID).append(Strings.DB_ARG).toString(), new String[] {id});
+				context.getContentResolver().notifyChange(FeedData.EntryColumns.FAVORITES_CONTENT_URI, null);
 			}
 		});
 		if (cursor.isNull(readDateColumn)) {

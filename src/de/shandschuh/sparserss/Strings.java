@@ -42,6 +42,8 @@ public final class Strings {
 	
 	public static final String SETTINGS_PRIORITIZE = "contentpresentation.prioritize";
 	
+	public static final String SETTINGS_SHOWTABS = "tabs.show";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";

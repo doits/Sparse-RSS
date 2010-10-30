@@ -54,5 +54,18 @@ public class ApplicationPreferencesActivity extends PreferenceActivity {
 				return true;
 			}
 		});
+		
+		Preference showTabsPreference = (Preference) findPreference(Strings.SETTINGS_SHOWTABS);
+		
+		showTabsPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (MainTabActivity.INSTANCE != null ) {
+					MainTabActivity.INSTANCE.setTabWidgetVisible(Boolean.TRUE.equals(newValue));
+					
+				}
+				return true;
+			}
+		});
+		
 	}
 }

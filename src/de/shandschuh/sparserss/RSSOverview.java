@@ -25,6 +25,9 @@
 
 package de.shandschuh.sparserss;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -96,8 +99,6 @@ public class RSSOverview extends ListActivity {
 	private static final int MENU_EXPORT_ID = 11;
 	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
-	
-	private static final int ACTIVITY_PICKIMPORTFILE = 2;
 	
 	private boolean serviceConnected = false;
 	
@@ -261,11 +262,29 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case MENU_IMPORT_ID: {
-				Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				
-				intent.setType("*/*");
-				intent.addCategory(Intent.CATEGORY_OPENABLE); 
-				startActivityForResult(intent, ACTIVITY_PICKIMPORTFILE);
+				builder.setTitle(R.string.select_file);
+				
+				try {
+					final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
+						public boolean accept(File dir, String filename) {
+							return filename.endsWith(".opml");
+						}
+					});
+					builder.setItems(fileNames, new DialogInterface.OnClickListener()  {
+						public void onClick(DialogInterface dialog, int which) {
+							try {
+								OPML.importFromFile(fileNames[which], RSSOverview.this);
+							} catch (Exception e) {
+								showDialog(DIALOG_ERROR_FEEDIMPORT);
+							}
+						}
+					});
+					builder.create().show();
+				} catch (Exception e) {
+					showDialog(DIALOG_ERROR_FEEDIMPORT);
+				}
 				break;
 			}
 			case MENU_EXPORT_ID: {
@@ -304,18 +323,6 @@ public class RSSOverview extends ListActivity {
 						unbindService(serviceConnection);
 						serviceConnected = false;
 					}	
-					break;
-				}
-				case ACTIVITY_PICKIMPORTFILE: {
-					if (intent.getData() != null && "file".equals(intent.getData().getScheme())) {
-						try {
-							OPML.importFromFile(intent.getData().getPath(), this);
-						} catch (Exception e) {
-							showDialog(DIALOG_ERROR_FEEDIMPORT);
-						}
-					} else {
-						showDialog(DIALOG_ERROR_INVALIDIMPORTFILE);
-					}
 					break;
 				}
 			}
