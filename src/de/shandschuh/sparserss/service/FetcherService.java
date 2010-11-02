@@ -222,7 +222,9 @@ public class FetcherService extends Service {
 										
 										if (url.startsWith(SLASH)) {
 											url = cursor.getString(urlPosition)+url;
-										} 
+										} else if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
+											url = new StringBuilder(cursor.getString(urlPosition)).append('/').append(url).toString();
+										}
 										values.put(FeedData.FeedColumns.URL, url);
 										context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 										connection = setupConnection(url);
@@ -242,7 +244,6 @@ public class FetcherService extends Service {
 						
 						if (index > -1) {
 							int index2 = contentType.indexOf(';', index);
-							
 							
 							try {
 								Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8));
@@ -304,14 +305,14 @@ public class FetcherService extends Service {
 						ByteArrayOutputStream ouputStream = new ByteArrayOutputStream();
 						
 						InputStream inputStream = connection.getInputStream();
-						  byte[] byteChunk = new byte[4096]; 
-						  int n;
-
-						  while ( (n = inputStream.read(byteChunk)) > 0 ) {
-							  ouputStream.write(byteChunk, 0, n);
-						  }
 						
+						byte[] byteBuffer = new byte[4096]; 
+						
+						int n;
 
+						while ( (n = inputStream.read(byteBuffer)) > 0 ) {
+							ouputStream.write(byteBuffer, 0, n);
+						}
 						
 						String xmlText = ouputStream.toString();
 						
@@ -331,8 +332,10 @@ public class FetcherService extends Service {
 									try {
 										Xml.parse(new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8))), handler);
 									} catch (Exception e) {
-										
+
 									}
+								} else {
+									Xml.parse(new StringReader(new String(ouputStream.toByteArray())), handler);
 								}
 							}
 						}

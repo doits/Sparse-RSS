@@ -62,10 +62,6 @@ import de.shandschuh.sparserss.provider.FeedDataContentProvider;
 import de.shandschuh.sparserss.service.RefreshService;
 
 public class RSSOverview extends ListActivity {	
-	private static final String HTTP = "http://";
-	
-	private static final String HTTPS = "https://";
-	
 	private static final int DIALOG_ADDFEED_ID = 1;
 	
 	private static final int DIALOG_ERROR_FEEDURLEXISTS = 2;
@@ -431,8 +427,8 @@ public class RSSOverview extends ListActivity {
 					} else {
 						ContentValues values = new ContentValues();
 						
-						if (!url.startsWith(HTTP) && !url.startsWith(HTTPS)) {
-							url = HTTP+url;
+						if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
+							url = Strings.HTTP+url;
 						}
 						values.put(FeedData.FeedColumns.URL, url);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);

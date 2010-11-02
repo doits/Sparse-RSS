@@ -63,5 +63,9 @@ public final class Strings {
 	public static final String EMPTY = "";
 
 	public static final String SETTINGS_KEEPTIME = "keeptime";
+	
+	public static final String HTTP = "http://";
+	
+	public static final String HTTPS = "https://";
 
 }

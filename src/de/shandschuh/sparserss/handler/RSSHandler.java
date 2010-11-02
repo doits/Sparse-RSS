@@ -291,7 +291,7 @@ public class RSSHandler extends DefaultHandler {
 					description = null;
 				}
 				
-				String entryLinkString = entryLink.toString();
+				String entryLinkString = entryLink.toString().trim();
 
 				if (entryLinkString.length() > 0 && context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);

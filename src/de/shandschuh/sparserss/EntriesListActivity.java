@@ -50,8 +50,11 @@ public class EntriesListActivity extends ListActivity {
 		uri = getIntent().getData();
 		entriesListAdapter = new EntriesListAdapter(this, uri);
         setListAdapter(entriesListAdapter);
-        if (getIntent().hasExtra(FeedData.FeedColumns.NAME)) {
-        	setTitle(getIntent().getStringExtra(FeedData.FeedColumns.NAME));
+        
+        String title = getIntent().getStringExtra(FeedData.FeedColumns.NAME);
+        
+        if (title != null) {
+        	setTitle(title);
         }
         RSSOverview.notificationManager.cancel(0);
 	}
