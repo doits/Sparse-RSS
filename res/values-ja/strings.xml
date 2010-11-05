@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sparse rss</string>
+<string name="menu_addfeed">加える</string>
+<string name="norssfeeds">RSSフィード無</string>
+<string name="noentries">記入しない</string>
+<string name="menu_refresh">更新</string>
+<string name="contextmenu_delete">消去</string>
+<string name="goto_url">リンク先へ飛ぶ</string>
+<string name="favorites">お気に入り</string>
+
+<string name="license_intro">このソフトウェアのライセンスは、MIT　Licenseで公示されており、ソースコードは、http://sparserss.googlecode.comにある\n</string>
+
+<string name="editfeed_title">フィード編集</string>
+<string name="contextmenu_edit">編集</string>
+<string name="contextmenu_refresh">更新</string>
+<string name="menu_settings">設定</string>
+<string name="contextmenu_markasread">既読済みの印をつける</string>
+<string name="contextmenu_hideread">既読済みの記事を表示しない</string>
+<string name="contextmenu_showread">既読済みの記事を表示</string>
+<string name="menu_allread">全て既読済み</string>
+<string name="menu_import">OPMLからインポート</string>
+<string name="menu_export">OPMLへエクスポート</string>
+<string name="menu_about">インフメーション</string>
+
+<string name="settings_category_refresh">自動更新</string>
+<string name="settings_refreshenabled">自動更新する</string>
+<string name="settings_refreshenabled_description">この設定は全てのフィードの更新状況をコントロールします</string>
+<string name="settings_refreshinterval">更新頻度</string>
+<string name="settings_refreshinterval_description">二つの更新の間隔</string>
+
+<string name="settings_category_notofications">通知する</string>
+<string name="settings_notificationsenabled">ＯＮ</string>
+<string name="settings_notificationsenabled_description">通知の現存をコントロールする</string>
+<string name="settings_notificationsringtone">着信音</string>
+<string name="settings_notificationsringtone_description">選択した着信音で記事の更新を知らせする</string>
+<string name="settings_notificationsvibrate">バイブレーション</string>
+<string name="settings_notificationsvibrate_description">記事の更新をバイブレーションで知らせる</string>
+
+<string name="settings_category_contentpresentation">内容表示方法</string>
+<string name="settings_prioritize">未既読の内容を優先する</string>
+<string name="settings_prioritize_description">未既読記事を既読記事の上に表示する</string>
+<string name="settings_keeptime">記事の保存期間</string>
+<string name="settings_keeptime_description">過去の記事を自動的に消去する</string>
+
+<string name="settings_refreshonopen">スタート時に更新する</string>
+<string name="settings_refreshonopen_description">プログラム開始時に全てのフィードを更新する</string>
+
+<string name="settings_hideread">既読済みの記事を表示しない</string>
+<string name="settings_hideread_description">既読済みの記事を表示しない</string>
+<string name="settings_entrysettings">記事設定</string>
+<string name="settings_visiblefeeds">表示されているフィード</string>
+<string name="settings_showtabs">タブを表示する</string>
+<string name="settings_showtabs_description">お気に入りと全ての記事のためのタブを追加</string>
+
+<string name="update">更新</string>
+<string name="never">決してしない</string>
+<string name="unread">未既読</string>
+<string name="newentries">新着記事</string>
+<string name="rss_feeds">RSSフィード</string>
+<string name="error">エラー</string>
+<string name="priority">優先順位</string>
+<string name="select_feeds">フィード選択</string>
+<string name="all_feeds">全てのフィード(これからくるものも含め)</string>
+<string name="all">全て</string>
+<string name="overview">概要</string>
+
+<string name="error_feedurlexists">登録済みのURLです</string>
+<string name="error_feedimport">選択されたデータは、インポートできませんでした</string>
+<string name="error_feedexport">エクスポートに失敗しました。書き込み可能なSDカードが入っているかどうか確認して下さい</string>
+<string name="error_invalidimportfile">選択されたデータはインポートが無効なデータです</string>
+
+<string name="feed_title">タイトル</string>
+<string name="select_file">データを選択</string>
+
+<string name="websiteorfeed">(ウェブサイト又はフィード)</string>
+
+<string name="question_deletefeed">本当にこのフィードとフィード内の全ての記事を消去しますか?</string>
+
+<string name="button_usesdcard">SDカードを使用(手元にある場合) - プログラムを終了します。プログラムを再スタートさせてください</string>
+
+<string name="message_exportedto">データ %s エクスポート</string>
+<string-array name="settings_intervals">
+<item>１５分</item>
+<item>３０分</item>
+<item>１時間</item>
+<item>２時間</item>
+<item>６時間</item>
+<item>１日</item>
+</string-array>
+
+<string-array name="settings_keeptimes">
+<item>１日</item>
+<item>２日</item>
+<item>４日</item>
+<item>１週間</item>
+<item>２週間</item>
+<item>１ヶ月</item>
+</string-array>
+</resources>
