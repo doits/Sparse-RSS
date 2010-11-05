@@ -62,6 +62,10 @@ import de.shandschuh.sparserss.provider.FeedDataContentProvider;
 import de.shandschuh.sparserss.service.RefreshService;
 
 public class RSSOverview extends ListActivity {	
+	private static final String EXTENSION_OPML = ".opml";
+	
+	private static final String EXTENSION_XML = ".xml";
+	
 	private static final int DIALOG_ADDFEED_ID = 1;
 	
 	private static final int DIALOG_ERROR_FEEDURLEXISTS = 2;
@@ -265,13 +269,13 @@ public class RSSOverview extends ListActivity {
 				try {
 					final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
 						public boolean accept(File dir, String filename) {
-							return filename.endsWith(".opml");
+							return filename.endsWith(EXTENSION_OPML) || filename.endsWith(EXTENSION_XML);
 						}
 					});
 					builder.setItems(fileNames, new DialogInterface.OnClickListener()  {
 						public void onClick(DialogInterface dialog, int which) {
 							try {
-								OPML.importFromFile(fileNames[which], RSSOverview.this);
+								OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString()).append(File.separator).append(fileNames[which]).toString(), RSSOverview.this);
 							} catch (Exception e) {
 								showDialog(DIALOG_ERROR_FEEDIMPORT);
 							}
