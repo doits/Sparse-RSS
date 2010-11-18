@@ -81,6 +81,8 @@
 
 <string name="message_exportedto">In Datei %s exportiert.</string>
 <string-array name="settings_intervals">
+<item>1 Minute</item>
+<item>5 Minuten</item>
 <item>15 Minuten</item>
 <item>30 Minuten</item>
 <item>1 Stunde</item>

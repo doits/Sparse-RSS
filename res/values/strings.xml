@@ -103,8 +103,10 @@ THE SOFTWARE.
 <string name="message_exportedto">Exported into %s.</string>
 
 <string-array name="settings_intervals">
+<item>1 minute</item>
+<item>5 Minutes</item>
 <item>15 minutes</item>
-<item>30 Minutes</item>
+<item>30 minutes</item>
 <item>1 hour</item>
 <item>2 hours</item>
 <item>6 hours</item>
