@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sparse rss</string>
+<string name="menu_addfeed">Añadir canal</string>
+<string name="norssfeeds">No hay canales RSS</string>
+<string name="noentries">No hay entradas</string>
+<string name="menu_refresh">Actualizar</string>
+<string name="contextmenu_delete">Eliminar</string>
+<string name="goto_url">Ir al enlace</string>
+<string name="favorites">Favoritos</string>
+
+<string name="editfeed_title">Editar canal</string>
+<string name="contextmenu_edit">Editar</string>
+<string name="contextmenu_refresh">Actualizar</string>
+<string name="menu_settings">Ajustes</string>
+<string name="contextmenu_markasread">Marcar como leído</string>
+<string name="contextmenu_hideread">Ocultar entradas leídas</string>
+<string name="contextmenu_showread">Visualizar entradas leídas</string>
+<string name="menu_allread">Marcar todos como leídos</string>
+<string name="menu_import">Importar desde OPML</string>
+<string name="menu_export">Exportar a OPML</string>
+<string name="menu_about">Acerca de</string>
+<string name="license_intro">Este software se distribuye bajo licencia de código abierto MIT y el código fuente está disponible en http://sparserss.googlecode.com\n</string>
+
+<string name="settings_category_refresh">Ajustes de actualizaciones</string>
+<string name="settings_refreshenabled">Habilitar</string>
+<string name="settings_refreshenabled_description">Este control activa las actualizaciones automáticas de todos los canales</string>
+<string name="settings_refreshinterval">Intervalo de actualización</string>
+<string name="settings_refreshinterval_description">Intervalo entre actualizaciones</string>
+
+<string name="settings_category_notofications">Notificaciones</string>
+<string name="settings_notificationsenabled">Habilitar</string>
+<string name="settings_notificationsenabled_description">Ajustar la configuración de notificaciones para nuevos contenidos</string>
+<string name="settings_notificationsringtone">Melodía</string>
+<string name="settings_notificationsringtone_description">Seleccione un tono de aviso al recibir nuevos contenidos</string>
+<string name="settings_notificationsvibrate">Vibrar</string>
+<string name="settings_notificationsvibrate_description">Activar vibración para aviso de nuevos contenidos</string>
+
+<string name="settings_category_contentpresentation">Opciones de presentación</string>
+<string name="settings_prioritize">Dar prioridad a no leídos</string>
+<string name="settings_prioritize_description">Priorizar canales sin leer sobre los leídos</string>
+<string name="settings_keeptime">Tiempo que se mantendrán las entradas</string>
+<string name="settings_keeptime_description">Las entradas anteriores a la fecha indicada serán eliminadas</string>
+
+<string name="settings_refreshonopen">Al abrir actualizar canales</string>
+<string name="settings_refreshonopen_description">Al abrir actualizar todos los canales</string>
+
+<string name="settings_hideread">Ocultar entradas leídas</string>
+<string name="settings_hideread_description">Ocultar entradas desde el widget si han sido leídas</string>
+<string name="settings_entrysettings">Ajuste de entrada</string>
+<string name="settings_visiblefeeds">Ver canales</string>
+<string name="settings_showtabs">Visualizar pestañas</string>
+<string name="settings_showtabs_description">Añadir pestañas para favoritos y todos los canales</string>
+
+<string name="never">nunca</string>
+<string name="update">Actualizar</string>
+<string name="unread">no leídos</string>
+<string name="newentries">entradas nuevas</string>
+<string name="rss_feeds">Canales RSS</string>
+<string name="error">Error</string>
+<string name="priority">Prioridad</string>
+<string name="select_feeds">Seleccionar canales</string>
+<string name="all_feeds">Todos los canales (incluidos nuevos)</string>
+<string name="all">Todos</string>
+<string name="overview">Agrupado</string>
+
+<string name="error_feedurlexists">La dirección URL ya existe.</string>
+<string name="error_feedimport">El archivo seleccionado no puede ser importado.</string>
+<string name="error_feedexport">Exportar ha fallado. Comprueba que la tarjeta SD tenga acceso de escritura.</string>
+<string name="error_invalidimportfile">El archivo seleccionado no es valido para ser importado.</string>
+
+<string name="feed_url">URL</string>
+<string name="optional">(opcional)</string>
+<string name="websiteorfeed">(página web o canal)</string>
+<string name="feed_title">Título</string>
+<string name="select_file">Seleccionar archivo</string>
+
+<string name="question_deletefeed">Realmente quieres eliminar este canal y todas sus entradas?</string>
+
+<string name="button_usesdcard">Utilizar la tarjeta SD (si está disponible) - se cerrará la aplicación. Por favor, reinicie manualmente.</string>
+
+<string name="message_exportedto">Exportado en %s.</string>
+
+<string-array name="settings_intervals">
+<item>1 minuto</item>
+<item>5 minutos</item>
+<item>15 minutos</item>
+<item>30 minutos</item>
+<item>1 hora</item>
+<item>2 horas</item>
+<item>6 horas</item>
+<item>1 día</item>
+</string-array>
+
+<string-array name="settings_keeptimes">
+<item>1 día</item>
+<item>2 días</item>
+<item>4 días</item>
+<item>1 semana</item>
+<item>2 semanas</item>
+<item>1 mes</item>
+</string-array>
+</resources>

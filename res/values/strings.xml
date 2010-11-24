@@ -20,9 +20,12 @@
 <string name="menu_import">Import from OPML</string>
 <string name="menu_export">Export to OPML</string>
 <string name="menu_about">About</string>
+
+<!-- For translators: you don't need to translate the following string -->
 <string name="license">Copyright (c) 2010 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\n
 Translators\n
  - Dutch: Eelko Berkenpies
+ - Spanish: Sergio Martín
  \n\nPermission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
