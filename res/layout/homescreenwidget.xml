@@ -8,19 +8,27 @@
 	android:gravity="center"
 	android:paddingBottom="5dp"
 >
-<LinearLayout
+<RelativeLayout
 	android:gravity="left|center_vertical"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
 	android:paddingRight="13dp">
-<TextView android:paddingRight="10dp"  android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-<TextView android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_2" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-<TextView android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_3" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-<TextView android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_4" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-<TextView android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_5" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-<TextView android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_6" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-<TextView android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_7" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-</LinearLayout>
+
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_icon_1"/>
+<TextView android:layout_toRightOf="@id/news_icon_1" android:paddingRight="10dp" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_icon_2" android:layout_below="@id/news_1"/>
+<TextView android:layout_toRightOf="@id/news_icon_2" android:layout_below="@id/news_1" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_2" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_width="wrap_content" android:layout_below="@id/news_2" android:layout_height="wrap_content" android:id="@+id/news_icon_3"/>
+<TextView android:layout_toRightOf="@id/news_icon_3" android:layout_below="@id/news_2" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_3" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_below="@id/news_3" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_icon_4"/>
+<TextView android:layout_toRightOf="@id/news_icon_4" android:layout_below="@id/news_3" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_4" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_below="@id/news_4" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_icon_5"/>
+<TextView android:layout_toRightOf="@id/news_icon_5" android:layout_below="@id/news_4" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_5" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_below="@id/news_5" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_icon_6"/>
+<TextView android:layout_toRightOf="@id/news_icon_6" android:layout_below="@id/news_5" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_6" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_below="@id/news_6" android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/news_icon_7"/>
+<TextView android:layout_toRightOf="@id/news_icon_7" android:layout_below="@id/news_6" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_7" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+</RelativeLayout>
 <ImageView android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:src="@xml/widgeticon" android:id="@+id/feed_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 </RelativeLayout>

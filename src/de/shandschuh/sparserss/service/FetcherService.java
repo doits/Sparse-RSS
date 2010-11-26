@@ -176,6 +176,8 @@ public class FetcherService extends Service {
 		
 		int fetchmodePosition = cursor.getColumnIndex(FeedData.FeedColumns.FETCHMODE);
 		
+		int iconPosition = cursor.getColumnIndex(FeedData.FeedColumns.ICON);
+		
 //		HttpURLConnection.setFollowRedirects(false);
 		
 		int result = 0;
@@ -285,6 +287,42 @@ public class FetcherService extends Service {
 					
 					values.put(FeedData.FeedColumns.FETCHMODE, fetchMode); 
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+				}
+				
+				/* check and optionally find favicon */
+				byte[] iconBytes = cursor.getBlob(iconPosition);
+				
+				if (iconBytes == null) {
+					URL faviconURL = new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString());
+
+					try {
+						InputStream input = faviconURL.openStream();
+						
+						ByteArrayOutputStream output = new ByteArrayOutputStream();
+						
+						byte[] buffer = new byte[4096];
+						  
+						int n;
+
+						while ((n = input.read(buffer)) > 0) {
+							output.write(buffer, 0, n);
+						}
+
+						iconBytes = output.toByteArray();
+						
+						output.close();
+						input.close();
+						
+						ContentValues values = new ContentValues();
+						
+						values.put(FeedData.FeedColumns.ICON, iconBytes); 
+						context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+					} catch (Exception e) {
+						ContentValues values = new ContentValues();
+						
+						values.put(FeedData.FeedColumns.ICON, new byte[0]); // no icon found or error
+						context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+					}
 				}
 				
 				switch (fetchMode) {

@@ -28,11 +28,14 @@ package de.shandschuh.sparserss;
 import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ListView;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -42,10 +45,21 @@ public class EntriesListActivity extends ListActivity {
 	private Uri uri;
 	
 	private EntriesListAdapter entriesListAdapter;
+	
+	private byte[] iconBytes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
+
+		if (iconBytes != null && iconBytes.length > 0) { // we cannot insert the icon here because it would be overwritten, but we have to reserve the icon here
+			if (!requestWindowFeature(Window.FEATURE_LEFT_ICON)) {
+				iconBytes = null;
+			}
+		}
+        
 		setContentView(R.layout.entries);
 		uri = getIntent().getData();
 		entriesListAdapter = new EntriesListAdapter(this, uri);
@@ -56,12 +70,15 @@ public class EntriesListActivity extends ListActivity {
         if (title != null) {
         	setTitle(title);
         }
+        if (iconBytes != null && iconBytes.length > 0) {
+        	setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+        }
         RSSOverview.notificationManager.cancel(0);
 	}
 
 	@Override
 	protected void onListItemClick(ListView listView, View view, int position, long id) {
-		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()));
+		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()).putExtra(FeedData.FeedColumns.ICON, iconBytes));
 	}
 	
 	@Override

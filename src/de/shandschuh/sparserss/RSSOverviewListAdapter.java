@@ -31,7 +31,9 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.view.View;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
@@ -54,6 +56,8 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	
 	private int errorPosition;
 	
+	private int iconPosition;
+	
 	public RSSOverviewListAdapter(Activity context) {
 		super(context, R.layout.listitem, context.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
 		nameColumnPosition = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
@@ -61,6 +65,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		idPosition = getCursor().getColumnIndex(FeedData.FeedColumns._ID);
 		linkPosition = getCursor().getColumnIndex(FeedData.FeedColumns.URL);
 		errorPosition = getCursor().getColumnIndex(FeedData.FeedColumns.ERROR);
+		iconPosition = getCursor().getColumnIndex(FeedData.FeedColumns.ICON);
 	}
 
 	@Override
@@ -94,6 +99,15 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			textView.setTypeface(Typeface.DEFAULT);
 			textView.setEnabled(false);
 			updateTextView.setEnabled(false);
+		}
+		
+		
+		byte[] iconBytes = cursor.getBlob(iconPosition);
+		
+		if (iconBytes != null && iconBytes.length > 0) {
+			textView.setText(" "+textView.getText()); // crappy
+			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null, null);
+			view.setTag(iconBytes);
 		}
 	}
 

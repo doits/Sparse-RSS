@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.widget.RemoteViews;
 import de.shandschuh.sparserss.R;
 import de.shandschuh.sparserss.RSSOverview;
@@ -43,6 +44,8 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 	private static final String LIMIT = " limit 7";
 	
 	private static final int[] IDS = {R.id.news_1, R.id.news_2, R.id.news_3, R.id.news_4, R.id.news_5, R.id.news_6, R.id.news_7};
+	
+	private static final int[] ICON_IDS = {R.id.news_icon_1, R.id.news_icon_2, R.id.news_icon_3, R.id.news_icon_4, R.id.news_icon_5, R.id.news_icon_6, R.id.news_icon_7};
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -79,7 +82,7 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 			selection.append(FeedData.EntryColumns.FEED_ID).append(" IN ("+feedIds).append(')');
 		}
 
-		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID}, selection.toString(), null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT).toString());
+		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID, FeedData.EntryColumns.FEED_ID}, selection.toString(), null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT).toString());
         
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.homescreenwidget);
 
@@ -88,7 +91,22 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
         int k = 0;
         
         while (cursor.moveToNext() && k < IDS.length) {
-        	views.setTextViewText(IDS[k], cursor.getString(0));
+        	/* Really crappy code starts here - fix this someday */
+        	Cursor iconCursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(cursor.getString(2)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.ICON}, null, null, null);
+			
+			if (iconCursor.moveToFirst()) {
+				byte[] iconBytes = iconCursor.getBlob(1);
+				
+				views.setBitmap(ICON_IDS[k], "setImageBitmap", BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length));
+				if (iconBytes != null && iconBytes.length > 0) {
+					views.setTextViewText(IDS[k], " "+cursor.getString(0));
+				} else {
+					views.setTextViewText(IDS[k], cursor.getString(0));
+				}
+			} else {
+				views.setTextViewText(IDS[k], cursor.getString(0));
+			}
+			iconCursor.close();
         	views.setOnClickPendingIntent(IDS[k++], PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.ENTRY_CONTENT_URI(cursor.getString(1))), PendingIntent.FLAG_CANCEL_CURRENT));
         }
         cursor.close();

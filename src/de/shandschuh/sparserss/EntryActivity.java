@@ -34,9 +34,12 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
 import android.widget.Button;
@@ -80,14 +83,20 @@ public class EntryActivity extends Activity {
 	boolean favorite;
 	
 	private boolean showRead;
+	
+	private boolean canShowIcon;
+	
+	private byte[] iconBytes;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		canShowIcon = requestWindowFeature(Window.FEATURE_LEFT_ICON);
 		setContentView(R.layout.entry);
 		
 		uri = getIntent().getData();
 		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
+		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
 		
 		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 		
@@ -140,6 +149,21 @@ public class EntryActivity extends Activity {
 			} else {
 				setTitle(entryCursor.getString(titlePosition));
 				feedId = entryCursor.getInt(feedIdPosition);
+				
+				if (canShowIcon) {
+					if (iconBytes != null) {
+						setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+					} else {
+						Cursor iconCursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.ICON}, null, null, null);
+						
+						if (iconCursor.moveToFirst()) {
+							byte[] iconBytes = iconCursor.getBlob(1);
+							
+							setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+						}
+						iconCursor.close();
+					}
+				}
 				
 				long date = entryCursor.getLong(datePosition);
 				

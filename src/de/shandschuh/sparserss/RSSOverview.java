@@ -262,7 +262,7 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case MENU_IMPORT_ID: {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 				
 				builder.setTitle(R.string.select_file);
 				
@@ -334,6 +334,7 @@ public class RSSOverview extends ListActivity {
 		Intent intent = new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI(Long.toString(id)));
 		
 		intent.putExtra(FeedData.FeedColumns.NAME, ((TextView) view.findViewById(android.R.id.text1)).getText());
+		intent.putExtra(FeedData.FeedColumns.ICON, view.getTag() != null ? (byte[]) view.getTag() : null);
 		startActivity(intent);
 	}
 
