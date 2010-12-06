@@ -72,8 +72,6 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {
 		TextView textView = ((TextView) view.findViewById(android.R.id.text1));
 		
-		textView.setText(cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition));
-		
 		Cursor countCursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI(cursor.getString(idPosition)), new String[] {COUNT}, null, null, null);
 		
 		countCursor.moveToFirst();
@@ -101,14 +99,14 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			updateTextView.setEnabled(false);
 		}
 		
-		
 		byte[] iconBytes = cursor.getBlob(iconPosition);
 		
 		if (iconBytes != null && iconBytes.length > 0) {
-			textView.setText(" "+textView.getText()); // crappy
+			textView.setText(" " + (cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition)));
 			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null, null);
 			view.setTag(iconBytes);
+		} else {
+			textView.setText(cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition));
 		}
 	}
-
 }

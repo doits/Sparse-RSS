@@ -82,7 +82,7 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 			selection.append(FeedData.EntryColumns.FEED_ID).append(" IN ("+feedIds).append(')');
 		}
 
-		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID, FeedData.EntryColumns.FEED_ID}, selection.toString(), null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT).toString());
+		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID, FeedData.FeedColumns.ICON}, selection.toString(), null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT).toString());
         
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.homescreenwidget);
 
@@ -91,22 +91,18 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
         int k = 0;
         
         while (cursor.moveToNext() && k < IDS.length) {
-        	/* Really crappy code starts here - fix this someday */
-        	Cursor iconCursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(cursor.getString(2)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.ICON}, null, null, null);
-			
-			if (iconCursor.moveToFirst()) {
-				byte[] iconBytes = iconCursor.getBlob(1);
+			if (!cursor.isNull(2)) {
+				byte[] iconBytes = cursor.getBlob(2);
 				
 				views.setBitmap(ICON_IDS[k], "setImageBitmap", BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length));
 				if (iconBytes != null && iconBytes.length > 0) {
-					views.setTextViewText(IDS[k], " "+cursor.getString(0));
+					views.setTextViewText(IDS[k], " "+cursor.getString(0)); // bad style
 				} else {
 					views.setTextViewText(IDS[k], cursor.getString(0));
 				}
 			} else {
 				views.setTextViewText(IDS[k], cursor.getString(0));
 			}
-			iconCursor.close();
         	views.setOnClickPendingIntent(IDS[k++], PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.ENTRY_CONTENT_URI(cursor.getString(1))), PendingIntent.FLAG_CANCEL_CURRENT));
         }
         cursor.close();

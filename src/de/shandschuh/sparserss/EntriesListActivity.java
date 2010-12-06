@@ -41,6 +41,8 @@ import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntriesListActivity extends ListActivity {
 	public static final String EXTRA_SHOWREAD = "show_read";
+	
+	public static final String EXTRA_SHOWFEEDINFO = "show_feedinfo";
 
 	private Uri uri;
 	
@@ -62,7 +64,7 @@ public class EntriesListActivity extends ListActivity {
         
 		setContentView(R.layout.entries);
 		uri = getIntent().getData();
-		entriesListAdapter = new EntriesListAdapter(this, uri);
+		entriesListAdapter = new EntriesListAdapter(this, uri, getIntent().getBooleanExtra(EXTRA_SHOWFEEDINFO, false));
         setListAdapter(entriesListAdapter);
         
         String title = getIntent().getStringExtra(FeedData.FeedColumns.NAME);

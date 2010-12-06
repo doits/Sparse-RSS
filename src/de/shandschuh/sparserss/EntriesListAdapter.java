@@ -32,7 +32,9 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.view.View;
@@ -53,6 +55,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private int idColumn;
 	
+	private int feedIconColumn;
+	
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
 	public static final String READDATEISNULL = "readdate is null";
@@ -63,7 +67,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private Uri uri;
 	
-	public EntriesListAdapter(Activity context, Uri uri) {
+	private boolean showFeedInfo;
+	
+	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo) {
 		super(context, R.layout.listitem, createManagedCursor(context, uri, true));
 		showRead = true;
 		this.context = context;
@@ -73,6 +79,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		readDateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.READDATE);
 		favoriteColumn = getCursor().getColumnIndex(FeedData.EntryColumns.FAVORITE);
 		idColumn = getCursor().getColumnIndex(FeedData.EntryColumns._ID);
+		this.showFeedInfo = showFeedInfo;
+		if (showFeedInfo) {
+			feedIconColumn = getCursor().getColumnIndex(FeedData.FeedColumns.ICON);
+		}
 	}
 
 	@Override
@@ -108,7 +118,20 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			textView.setEnabled(false);
 			dateTextView.setEnabled(false);
 		}
-		dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+		if (showFeedInfo) {
+			byte[] iconBytes = cursor.getBlob(feedIconColumn);
+			
+			if (iconBytes != null && iconBytes.length > 0) {
+				dateTextView.setText(" "+DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn)))); // bad style
+				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null,  null);
+			} else {
+				dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+			}
+			
+		} else {
+			textView.setText(cursor.getString(titleColumnPosition));
+			dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+		}
 	}
 
 	public void showRead(boolean showRead) {

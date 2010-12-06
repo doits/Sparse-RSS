@@ -309,7 +309,6 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		int option = URI_MATCHER.match(uri);
 		
-		
 		switch(option) {
 			case URI_FEED : {
 				queryBuilder.setTables(TABLE_FEEDS);
@@ -331,7 +330,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				break;
 			}
 			case URI_ALLENTRIES : {
-				queryBuilder.setTables(TABLE_ENTRIES);
+				queryBuilder.setTables("entries join (select name, icon, _id as feed_id from feeds) as F on (entries.feedid = F.feed_id)");
 				break;
 			}
 			case URI_FAVORITES_ENTRY : 
@@ -341,7 +340,7 @@ public class FeedDataContentProvider extends ContentProvider {
 				break;
 			}
 			case URI_FAVORITES : {
-				queryBuilder.setTables(TABLE_ENTRIES);
+				queryBuilder.setTables("entries join (select name, icon, _id as feed_id from feeds) as F on (entries.feedid = F.feed_id)");
 				queryBuilder.appendWhere(new StringBuilder(FeedData.EntryColumns.FAVORITE).append(EQUALS_ONE));
 				break;
 			}
