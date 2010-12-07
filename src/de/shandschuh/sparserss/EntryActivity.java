@@ -151,15 +151,17 @@ public class EntryActivity extends Activity {
 				feedId = entryCursor.getInt(feedIdPosition);
 				
 				if (canShowIcon) {
-					if (iconBytes != null) {
+					if (iconBytes != null && iconBytes.length > 0) {
 						setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
 					} else {
 						Cursor iconCursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.ICON}, null, null, null);
 						
 						if (iconCursor.moveToFirst()) {
-							byte[] iconBytes = iconCursor.getBlob(1);
+							iconBytes = iconCursor.getBlob(1);
 							
-							setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+							if (iconBytes != null && iconBytes.length > 0) {
+								setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+							}
 						}
 						iconCursor.close();
 					}
