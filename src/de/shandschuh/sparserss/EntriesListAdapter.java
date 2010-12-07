@@ -45,6 +45,8 @@ import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntriesListAdapter extends ResourceCursorAdapter {
+	private static DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	
 	private int titleColumnPosition;
 	
 	private int dateColumn;
@@ -56,6 +58,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private int idColumn;
 	
 	private int feedIconColumn;
+	
+	private int feedNameColumn;
 	
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
@@ -82,6 +86,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		this.showFeedInfo = showFeedInfo;
 		if (showFeedInfo) {
 			feedIconColumn = getCursor().getColumnIndex(FeedData.FeedColumns.ICON);
+			feedNameColumn = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
 		}
 	}
 
@@ -122,15 +127,15 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
 			
 			if (iconBytes != null && iconBytes.length > 0) {
-				dateTextView.setText(" "+DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn)))); // bad style
+				dateTextView.setText(" "+dateFormat.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null,  null);
 			} else {
-				dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+				dateTextView.setText(dateFormat.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn));
 			}
 			
 		} else {
 			textView.setText(cursor.getString(titleColumnPosition));
-			dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+			dateTextView.setText(dateFormat.format(new Date(cursor.getLong(dateColumn))));
 		}
 	}
 

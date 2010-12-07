@@ -72,6 +72,8 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	public void bindView(View view, Context context, Cursor cursor) {
 		TextView textView = ((TextView) view.findViewById(android.R.id.text1));
 		
+		textView.setSingleLine();
+		
 		Cursor countCursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI(cursor.getString(idPosition)), new String[] {COUNT}, null, null, null);
 		
 		countCursor.moveToFirst();
