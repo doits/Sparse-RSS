@@ -45,7 +45,7 @@ import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntriesListAdapter extends ResourceCursorAdapter {
-	private static DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+	public static DateFormat DATEFORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	
 	private int titleColumnPosition;
 	
@@ -127,15 +127,16 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
 			
 			if (iconBytes != null && iconBytes.length > 0) {
-				dateTextView.setText(" "+dateFormat.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
+				dateTextView.setText(" "+DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null,  null);
 			} else {
-				dateTextView.setText(dateFormat.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn));
+				dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+				dateTextView.setText(DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn));
 			}
 			
 		} else {
 			textView.setText(cursor.getString(titleColumnPosition));
-			dateTextView.setText(dateFormat.format(new Date(cursor.getLong(dateColumn))));
+			dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
 		}
 	}
 

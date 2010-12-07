@@ -25,7 +25,6 @@
 
 package de.shandschuh.sparserss;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 import android.app.Activity;
@@ -58,6 +57,8 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	
 	private int iconPosition;
 	
+	
+	
 	public RSSOverviewListAdapter(Activity context) {
 		super(context, R.layout.listitem, context.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
 		nameColumnPosition = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
@@ -87,7 +88,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));;
 		
 		if (cursor.isNull(errorPosition)) {
-			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(date == 0 ? context.getString(R.string.never) : new StringBuilder(DateFormat.getDateTimeInstance().format(new Date(date))).append(COMMA).append(unreadCount).append(' ').append(context.getString(R.string.unread))));
+			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(date == 0 ? context.getString(R.string.never) : new StringBuilder(EntriesListAdapter.DATEFORMAT.format(new Date(date))).append(COMMA).append(unreadCount).append(' ').append(context.getString(R.string.unread))));
 		} else {
 			updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
 		}
@@ -108,6 +109,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null, null);
 			view.setTag(iconBytes);
 		} else {
+			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 			textView.setText(cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition));
 		}
 	}
