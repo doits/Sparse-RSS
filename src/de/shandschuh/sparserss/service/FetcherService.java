@@ -99,7 +99,7 @@ public class FetcherService extends Service {
 		
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		
-		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) {
+		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED && intent != null) {
 			new Thread() {
 				public void run() {
 					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID));

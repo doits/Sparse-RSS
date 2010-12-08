@@ -95,13 +95,13 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 				try {
 					byte[] iconBytes = cursor.getBlob(2);
 					
-					views.setBitmap(ICON_IDS[k], "setImageBitmap", BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length));
 					if (iconBytes != null && iconBytes.length > 0) {
+						views.setBitmap(ICON_IDS[k], "setImageBitmap", BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length));
 						views.setTextViewText(IDS[k], " "+cursor.getString(0)); // bad style
 					} else {
 						views.setTextViewText(IDS[k], cursor.getString(0));
 					}
-				} catch (Exception e) {
+				} catch (Throwable e) {
 					views.setTextViewText(IDS[k], cursor.getString(0));
 				}
 			} else {

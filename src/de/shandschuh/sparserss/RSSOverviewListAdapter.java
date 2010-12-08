@@ -57,8 +57,6 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	
 	private int iconPosition;
 	
-	
-	
 	public RSSOverviewListAdapter(Activity context) {
 		super(context, R.layout.listitem, context.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
 		nameColumnPosition = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
