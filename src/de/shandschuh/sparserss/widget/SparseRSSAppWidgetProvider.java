@@ -34,6 +34,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.view.View;
 import android.widget.RemoteViews;
 import de.shandschuh.sparserss.MainTabActivity;
 import de.shandschuh.sparserss.R;
@@ -96,15 +97,19 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 					byte[] iconBytes = cursor.getBlob(2);
 					
 					if (iconBytes != null && iconBytes.length > 0) {
+						views.setViewVisibility(ICON_IDS[k], View.VISIBLE);
 						views.setBitmap(ICON_IDS[k], "setImageBitmap", BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length));
 						views.setTextViewText(IDS[k], " "+cursor.getString(0)); // bad style
 					} else {
+						views.setViewVisibility(ICON_IDS[k], View.GONE);
 						views.setTextViewText(IDS[k], cursor.getString(0));
 					}
 				} catch (Throwable e) {
+					views.setViewVisibility(ICON_IDS[k], View.GONE);
 					views.setTextViewText(IDS[k], cursor.getString(0));
 				}
 			} else {
+				views.setViewVisibility(ICON_IDS[k], View.GONE);
 				views.setTextViewText(IDS[k], cursor.getString(0));
 			}
         	views.setOnClickPendingIntent(IDS[k++], PendingIntent.getActivity(context, 0, new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.ENTRY_CONTENT_URI(cursor.getString(1))), PendingIntent.FLAG_CANCEL_CURRENT));
