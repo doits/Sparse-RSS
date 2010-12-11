@@ -70,6 +70,6 @@ public final class Strings {
 
 	public static final String PROTOCOL_SEPARATOR = "://";
 
-	public static final String FILE_FAVICON = "/favicon.icon";
+	public static final String FILE_FAVICON = "/favicon.ico";
 
 }
