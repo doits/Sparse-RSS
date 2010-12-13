@@ -326,6 +326,7 @@ public class FetcherService extends Service {
 				}
 				
 				switch (fetchMode) {
+					default:
 					case FETCHMODE_DIRECT: {
 						if (contentType != null) {
 							int index = contentType.indexOf(CHARSET);

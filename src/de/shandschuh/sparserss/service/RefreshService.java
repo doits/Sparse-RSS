@@ -91,6 +91,8 @@ public class RefreshService extends Service {
 	private void restartTimer() {
 		if (timerIntent == null) {
 			timerIntent = PendingIntent.getBroadcast(this, 0, refreshBroadcastIntent, 0);
+		} else {
+			alarmManager.cancel(timerIntent);
 		}
 		
 		int time = 3600000;
@@ -105,10 +107,10 @@ public class RefreshService extends Service {
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
 		if (timerIntent != null) {
 			alarmManager.cancel(timerIntent);
 		}
 		preferences.unregisterOnSharedPreferenceChangeListener(listener);
+		super.onDestroy();
 	}
 }

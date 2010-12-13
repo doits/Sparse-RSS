@@ -35,7 +35,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
 import de.shandschuh.sparserss.MainTabActivity;
@@ -99,13 +98,11 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 					byte[] iconBytes = cursor.getBlob(2);
 					
 					if (iconBytes != null && iconBytes.length > 0) {
-						Log.d("Length", ""+iconBytes.length);
-						views.setViewVisibility(ICON_IDS[k], View.VISIBLE);
-						
 						Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 						
 						if (bitmap != null) {
 							views.setBitmap(ICON_IDS[k], "setImageBitmap", bitmap);
+							views.setViewVisibility(ICON_IDS[k], View.VISIBLE);
 							views.setTextViewText(IDS[k], " "+cursor.getString(0)); // bad style
 						} else {
 							views.setViewVisibility(ICON_IDS[k], View.GONE);

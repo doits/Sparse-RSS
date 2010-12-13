@@ -33,16 +33,13 @@ import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.NotificationManager;
 import android.app.AlertDialog.Builder;
-import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -100,19 +97,8 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
-	private boolean serviceConnected = false;
 	
 	static NotificationManager notificationManager; // package scope
-	
-	private ServiceConnection serviceConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			serviceConnected = true;
-		}
-
-		public void onServiceDisconnected(ComponentName name) {
-			serviceConnected = false;
-		}
-	};
 	
     /** Called when the activity is first created. */
     @Override
@@ -132,10 +118,8 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread);
 			}
         });
-        if (!serviceConnected && PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
+        if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
         	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
-        	bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
-        	serviceConnected = true;
         } 
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
         	sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
@@ -157,15 +141,6 @@ public class RSSOverview extends ListActivity {
 	protected void onResume() {
 		super.onResume();
 		notificationManager.cancel(0);
-	}
-
-	@Override
-	protected void onDestroy() {
-		if (serviceConnected) {
-			unbindService(serviceConnection);
-			serviceConnected = false;
-		}
-		super.onDestroy();
 	}
 
 	@Override
@@ -307,26 +282,6 @@ public class RSSOverview extends ListActivity {
 		
 		values.put(FeedData.EntryColumns.READDATE, System.currentTimeMillis());
 		return values;
-	}
-	
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-		if (resultCode == RESULT_OK) {
-			switch (requestCode) {
-				case ACTIVITY_APPLICATIONPREFERENCES_ID: {
-					if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
-						if (!serviceConnected) {
-							bindService(new Intent(this, RefreshService.class), serviceConnection, BIND_AUTO_CREATE);
-							serviceConnected = true;
-						}
-					} else if (serviceConnected) {
-						unbindService(serviceConnection);
-						serviceConnected = false;
-					}	
-					break;
-				}
-			}
-		}
 	}
 
 	@Override
