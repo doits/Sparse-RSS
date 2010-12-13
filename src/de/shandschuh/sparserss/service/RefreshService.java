@@ -96,7 +96,7 @@ public class RefreshService extends Service {
 		int time = 3600000;
 		
 		try {
-			time = Math.max(900000, Integer.parseInt(preferences.getString(Strings.SETTINGS_REFRESHINTERVAL, SIXTYMINUTES)));
+			time = Math.max(60000, Integer.parseInt(preferences.getString(Strings.SETTINGS_REFRESHINTERVAL, SIXTYMINUTES)));
 		} catch (Exception exception) {
 
 		}
