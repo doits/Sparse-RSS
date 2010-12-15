@@ -92,9 +92,21 @@ public class FetcherService extends Service {
 	}
 	
 	@Override
-	public void onStart(final Intent intent, int startId) {
-		super.onStart(intent, startId);
+	public void onStart(Intent intent, int startId) {
+		handleIntent(intent);
+	}
 
+	@Override
+	public void onLowMemory() {
+		stopSelf();
+	}
+
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		handleIntent(intent);
+		return START_STICKY;
+	}
+	
+	private void handleIntent(final Intent intent) {
 		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -151,7 +163,7 @@ public class FetcherService extends Service {
 			stopSelf();
 		}
 	}
-
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -163,7 +175,7 @@ public class FetcherService extends Service {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
-	private static synchronized int refreshFeedsStatic(Context context, String feedId) {
+	private static int refreshFeedsStatic(Context context, String feedId) {
 		Cursor cursor = context.getContentResolver().query(feedId == null ? FeedData.FeedColumns.CONTENT_URI : FeedData.FeedColumns.CONTENT_URI(feedId), null, null, null, null); // no managed query here
 		
 		int urlPosition = cursor.getColumnIndex(FeedData.FeedColumns.URL);
