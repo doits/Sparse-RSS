@@ -79,17 +79,30 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String PLUS200 = "+0200";
 	
+	private static final String EST = "EST";
+	
+	private static final String MINUS500 = "-0500";
+	
 	private static long KEEP_TIME = 172800000l; // 2 days
 	
-	private static final DateFormat UPDATE_DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 	
-	private static final DateFormat UPDATE_DATEFORMAT_SLOPPY = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+	private static final DateFormat[] PUBDATE_DATEFORMATS = {
+		new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
+		new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US),
+		new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'z", Locale.US),
+		
+	};
+
+	private static final int PUBDATEFORMAT_COUNT = 3;
 	
-	private static final DateFormat UPDATE_DATEFORMAT_SLOPPY2 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US);
+	private static final DateFormat[] UPDATE_DATEFORMATS = {
+		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
+		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"),
+		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US),
+		
+	};
 	
-	private static final DateFormat PUBDATE_DATEFORMAT = new SimpleDateFormat("EEE', 'd' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
-	
-	private static final DateFormat PUBDATE_DATEFORMAT_2 = new SimpleDateFormat("d' 'MMM' 'yyyy' 'HH:mm:ss' 'Z", Locale.US);
+	private static final int DATEFORMAT_COUNT = 3;
 	
 	private static final StringBuilder DB_FAVORITE = new StringBuilder(" AND (").append(FeedData.EntryColumns.FAVORITE).append(Strings.DB_ISNULL).append(" OR ").append(FeedData.EntryColumns.FAVORITE).append('=').append("0)");
 
@@ -160,7 +173,7 @@ public class RSSHandler extends DefaultHandler {
 				ContentValues values = new ContentValues();
 					
 				if (feedTitle == null && title != null && title.length() > 0) {
-					values.put(FeedData.FeedColumns.NAME, title.toString());
+					values.put(FeedData.FeedColumns.NAME, title.toString().trim());
 				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
 				values.put(FeedData.FeedColumns.LASTUPDATE, /*entryDate != null ? entryDate.getTime() : */System.currentTimeMillis() - 1000);
@@ -233,48 +246,32 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_UPDATED.equals(localName)) {
 			String dateString = dateStringBuilder.toString();
 
-			try {
-				entryDate = UPDATE_DATEFORMAT.parse(dateString);
-			} catch (ParseException e) {
+			for (int n = 0; n < DATEFORMAT_COUNT; n++) {
 				try {
-					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateString);
-				} catch (ParseException e2) {
-					try {
-						entryDate = UPDATE_DATEFORMAT_SLOPPY2.parse(dateString);
-					} catch (ParseException e3) {
-
-					}
-				}
+					entryDate = UPDATE_DATEFORMATS[n].parse(dateString);
+					break;
+				} catch (ParseException e) { } // just do nothing
 			}
+
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
-			String dateString = dateStringBuilder.toString().replace(MEST, PLUS200);
+			String dateString = dateStringBuilder.toString().replace(MEST, PLUS200).replace(EST, MINUS500).replace(Strings.TWOSPACE, Strings.SPACE);// replace is needed because mest is no supported timezone
 			
-			try {
-				entryDate = PUBDATE_DATEFORMAT.parse(dateString); // replace is needed because mest is no supported timezone
-			} catch (ParseException e) {
+			for (int n = 0; n < PUBDATEFORMAT_COUNT; n++) {
 				try {
-					entryDate = PUBDATE_DATEFORMAT_2.parse(dateString);
-				} catch (ParseException pe) {
-					
-				}
+					entryDate = PUBDATE_DATEFORMATS[n].parse(dateString);
+					break;
+				} catch (ParseException e) { } // just do nothing
 			}
 			pubDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
 			String dateString = dateStringBuilder.toString();
 			
-			try {
-				entryDate = UPDATE_DATEFORMAT.parse(dateString);
-			} catch (ParseException e) {
+			for (int n = 0; n < DATEFORMAT_COUNT; n++) {
 				try {
-					entryDate = UPDATE_DATEFORMAT_SLOPPY.parse(dateString);
-				} catch (ParseException e2) {
-					try {
-						entryDate = UPDATE_DATEFORMAT_SLOPPY2.parse(dateString);
-					} catch (ParseException e3) {
-						
-					}
-				}
+					entryDate = UPDATE_DATEFORMATS[n].parse(dateString);
+					break;
+				} catch (ParseException e) { } // just do nothing
 			}
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
@@ -285,7 +282,7 @@ public class RSSHandler extends DefaultHandler {
 					values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
 					values.putNull(FeedData.EntryColumns.READDATE);
 				}
-				values.put(FeedData.EntryColumns.TITLE, title.toString().replace(AMP_SG, AMP));
+				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP));
 				if (description != null) {
 					values.put(FeedData.EntryColumns.ABSTRACT, description.toString().trim()); // maybe better use regex, but this will do it for now
 					description = null;
