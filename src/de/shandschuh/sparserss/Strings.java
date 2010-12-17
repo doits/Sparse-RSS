@@ -26,7 +26,7 @@
 package de.shandschuh.sparserss;
 
 public final class Strings {
-	public static final String PACKAGE = Strings.class.getPackage().getName();
+	public static final String PACKAGE = "de.shandschuh.sparserss";
 	
 	public static final String SETTINGS_REFRESHINTERVAL = "refresh.interval";
 	
