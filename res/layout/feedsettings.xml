@@ -2,5 +2,5 @@
 <TextView android:text="@string/feed_title" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
 <EditText android:hint="@string/optional" android:id="@+id/feed_title" android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
 <TextView android:text="@string/feed_url" android:layout_width="wrap_content" android:layout_height="wrap_content"></TextView>
-<EditText android:hint="@string/websiteorfeed" android:singleLine="true" android:text="@+id/EditText02" android:id="@+id/feed_url" android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
+<EditText android:inputType="textUri" android:hint="@string/websiteorfeed" android:singleLine="true" android:text="@+id/EditText02" android:id="@+id/feed_url" android:layout_width="fill_parent" android:layout_height="wrap_content"></EditText>
 </LinearLayout>
