@@ -85,6 +85,8 @@ public class FetcherService extends Service {
 	
 	private static final String ENCODING = "encoding=\"";
 	
+	boolean running = false;
+	
 	private NotificationManager notificationManager;
 	
 	static {
@@ -107,6 +109,10 @@ public class FetcherService extends Service {
 	}
 	
 	private void handleIntent(final Intent intent) {
+		if (running) {
+			return;
+		}
+		running = true;
 		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -143,6 +149,7 @@ public class FetcherService extends Service {
 							if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSVIBRATE, false)) {
 								notification.defaults |= Notification.DEFAULT_VIBRATE;
 							}
+							notification.defaults |= Notification.DEFAULT_LIGHTS;
 							
 							String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
 							
@@ -155,14 +162,17 @@ public class FetcherService extends Service {
 							notificationManager.cancel(0);
 						}
 					}
-					
+					running = false;
 					stopSelf();
 				}
 			}.start();
 		} else {
+			running = false;
 			stopSelf();
 		}
 	}
+	
+	
 	
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -172,6 +182,7 @@ public class FetcherService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		running = false;
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
