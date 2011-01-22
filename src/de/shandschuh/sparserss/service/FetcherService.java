@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -351,14 +351,20 @@ public class FetcherService extends Service {
 				switch (fetchMode) {
 					default:
 					case FETCHMODE_DIRECT: {
+						
 						if (contentType != null) {
 							int index = contentType.indexOf(CHARSET);
 							
 							int index2 = contentType.indexOf(';', index);
+							InputStream inputStream = connection.getInputStream();
 							
-							Xml.parse(connection.getInputStream(), Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
+							handler.setInputStream(inputStream);
+							Xml.parse(inputStream, Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
 						} else {
-							Xml.parse(new InputStreamReader(connection.getInputStream()), handler);
+							InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+							
+							handler.setReader(reader);
+							Xml.parse(reader, handler);
 						}
 						break;
 					}
@@ -392,12 +398,18 @@ public class FetcherService extends Service {
 									int index2 = contentType.indexOf(';', index);
 									
 									try {
-										Xml.parse(new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8))), handler);
+										StringReader reader = new StringReader(new String(ouputStream.toByteArray(), index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)));
+										
+										handler.setReader(reader);
+										Xml.parse(reader, handler);
 									} catch (Exception e) {
 
 									}
 								} else {
-									Xml.parse(new StringReader(new String(ouputStream.toByteArray())), handler);
+									StringReader reader = new StringReader(new String(ouputStream.toByteArray()));
+									
+									handler.setReader(reader);
+									Xml.parse(reader, handler);
 								}
 							}
 						}

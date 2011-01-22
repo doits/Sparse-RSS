@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,9 @@
 
 package de.shandschuh.sparserss.handler;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -145,6 +148,10 @@ public class RSSHandler extends DefaultHandler {
 	private boolean done;
 	
 	private Date keepDateBorder;
+	
+	private InputStream inputStream;
+	
+	private Reader reader;
 	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
@@ -282,7 +289,7 @@ public class RSSHandler extends DefaultHandler {
 					values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
 					values.putNull(FeedData.EntryColumns.READDATE);
 				}
-				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP));
+				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP).replaceAll(Strings.HTML_TAG_REGEX, ""));
 				if (description != null) {
 					values.put(FeedData.EntryColumns.ABSTRACT, description.toString().trim()); // maybe better use regex, but this will do it for now
 					description = null;
@@ -299,7 +306,9 @@ public class RSSHandler extends DefaultHandler {
 					}
 					context.getContentResolver().insert(feedEntiresUri, values);
 					newCount++;
-				}
+				} 
+			} else {
+				cancel();
 			}
 			title = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
@@ -313,6 +322,32 @@ public class RSSHandler extends DefaultHandler {
 	
 	public boolean isDone() {
 		return done;
+	}
+	
+	public void setInputStream(InputStream inputStream) {
+		this.inputStream = inputStream;
+	}
+	
+	public void setReader(Reader reader) {
+		this.reader = reader;
+	}
+	
+	private void cancel() {
+		if (inputStream != null) {
+			try {
+				done = true;
+				inputStream.close(); // stops all parsing
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+		} else if (reader != null) {
+			try {
+				done = true;
+				reader.close(); // stops all parsing
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+		}
 	}
 	
 }
