@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -74,7 +74,7 @@ public class OPML {
 			builder.append(OUTLINE_TITLE);
 			builder.append(cursor.isNull(1) ? Strings.EMPTY : cursor.getString(1));
 			builder.append(OUTLINE_XMLURL);
-			builder.append(cursor.getString(2));
+			builder.append(cursor.getString(2).replace(Strings.AND_CHAR, Strings.AND_HTML));
 			builder.append(OUTLINE_CLOSING);
 		}
 		cursor.close();

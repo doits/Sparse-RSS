@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -75,5 +75,11 @@ public final class Strings {
 	public static final String SPACE = " ";
 	
 	public static final String TWOSPACE = "  ";
+	
+	public static final String HTML_TAG_REGEX = "<(.|\n)*?>";
+	
+	public static final String AND_CHAR = "&";
+	
+	public static final String AND_HTML = "&amp;";
 
 }
