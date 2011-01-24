@@ -25,14 +25,20 @@
 
 package de.shandschuh.sparserss.handler;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -44,6 +50,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
+import de.shandschuh.sparserss.provider.FeedDataContentProvider;
+import de.shandschuh.sparserss.service.FetcherService;
 
 public class RSSHandler extends DefaultHandler {
 	public static final String AMP_SG = "&amp;";
@@ -78,13 +86,12 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String ATTRIBUTE_HREF = "href";
 	
-	private static final String MEST = "MEST";
+	private static final String[] TIMEZONES = {"MEST", "EST", "PST"};
 	
-	private static final String PLUS200 = "+0200";
-	
-	private static final String EST = "EST";
-	
-	private static final String MINUS500 = "-0500";
+	private static final String[] TIMEZONES_REPLACE = {"+0200", "-0500", "-0800"};
+
+	private static final int TIMEZONES_COUNT = 3;
+
 	
 	private static long KEEP_TIME = 172800000l; // 2 days
 	
@@ -109,6 +116,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final StringBuilder DB_FAVORITE = new StringBuilder(" AND (").append(FeedData.EntryColumns.FAVORITE).append(Strings.DB_ISNULL).append(" OR ").append(FeedData.EntryColumns.FAVORITE).append('=').append("0)");
 
+	private static Pattern imgPattern = Pattern.compile("<img src=\\s*['\"]([^'\"]+)['\"][^>]*>"); // middle () is group 1; s* is important for non-whitespaces; ' also usable
+	
 	private Context context;
 	
 	private Date lastUpdateDate;
@@ -152,6 +161,8 @@ public class RSSHandler extends DefaultHandler {
 	private InputStream inputStream;
 	
 	private Reader reader;
+
+	private boolean fetchImages;
 	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
@@ -262,8 +273,11 @@ public class RSSHandler extends DefaultHandler {
 
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
-			String dateString = dateStringBuilder.toString().replace(MEST, PLUS200).replace(EST, MINUS500).replace(Strings.TWOSPACE, Strings.SPACE);// replace is needed because mest is no supported timezone
+			String dateString = dateStringBuilder.toString().replace(Strings.TWOSPACE, Strings.SPACE);
 			
+			for (int n = 0; n < TIMEZONES_COUNT; n++) {
+				dateString = dateString.replace(TIMEZONES[n], TIMEZONES_REPLACE[n]);
+			}
 			for (int n = 0; n < PUBDATEFORMAT_COUNT; n++) {
 				try {
 					entryDate = PUBDATE_DATEFORMATS[n].parse(dateString);
@@ -290,8 +304,21 @@ public class RSSHandler extends DefaultHandler {
 					values.putNull(FeedData.EntryColumns.READDATE);
 				}
 				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP).replaceAll(Strings.HTML_TAG_REGEX, ""));
+				
+				Vector<String> images = new Vector<String>(4);
+				
 				if (description != null) {
-					values.put(FeedData.EntryColumns.ABSTRACT, description.toString().trim()); // maybe better use regex, but this will do it for now
+					Matcher matcher = imgPattern.matcher(description);
+					
+					String descriptionString = description.toString().trim();
+					
+					while (matcher.find()) {
+						String match = matcher.group(1);
+						
+						images.add(match);
+						descriptionString = descriptionString.replace(match, "file://"+FeedDataContentProvider.FOLDER+"images/##ID##"+match.substring(match.lastIndexOf('/')+1));
+					}
+					values.put(FeedData.EntryColumns.ABSTRACT, descriptionString); 
 					description = null;
 				}
 				
@@ -304,7 +331,25 @@ public class RSSHandler extends DefaultHandler {
 					} else {
 						values.remove(FeedData.EntryColumns.READDATE);
 					}
-					context.getContentResolver().insert(feedEntiresUri, values);
+					
+					String id = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
+					
+					new File(FeedDataContentProvider.FOLDER+"images").mkdir();
+					for (int n = 0, i = images != null ? images.size() : 0; n < i; n++) {
+						try {
+							String match = images.get(n);
+							
+							byte[] data = FetcherService.getBytes(new URL(images.get(n)).openStream());
+							
+							FileOutputStream fos = new FileOutputStream(FeedDataContentProvider.FOLDER+"images/"+id+"__"+match.substring(match.lastIndexOf('/')+1));
+							
+							fos.write(data);
+							fos.close();
+						} catch (Exception e) {
+
+						}
+					}
+					
 					newCount++;
 				} 
 			} else {
@@ -349,5 +394,11 @@ public class RSSHandler extends DefaultHandler {
 			} 
 		}
 	}
+
+	public void setFetchImages(boolean fetchImages) {
+		this.fetchImages = fetchImages;
+	}
+	
+	
 	
 }

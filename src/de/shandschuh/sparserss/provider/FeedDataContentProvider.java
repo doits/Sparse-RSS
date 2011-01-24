@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -46,7 +46,7 @@ import de.shandschuh.sparserss.Strings;
 public class FeedDataContentProvider extends ContentProvider {
 	public static boolean USE_SDCARD;
 	
-	private static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
+	public static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
@@ -268,22 +268,22 @@ public class FeedDataContentProvider extends ContentProvider {
 
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
-		long newId = 0;
+		long newId = -1;
 		
 		int option = URI_MATCHER.match(uri);
 		
 		switch (option) {
 			case URI_FEEDS : {
-				database.insert(TABLE_FEEDS, null, values);
+				newId = database.insert(TABLE_FEEDS, null, values);
 				break;
 			}
 			case URI_ENTRIES : {
 				values.put(FeedData.EntryColumns.FEED_ID, uri.getPathSegments().get(1));
-				database.insert(TABLE_ENTRIES, null, values);
+				newId = database.insert(TABLE_ENTRIES, null, values);
 				break;
 			}
 			case URI_ALLENTRIES : {
-				database.insert(TABLE_ENTRIES, null, values);
+				newId = database.insert(TABLE_ENTRIES, null, values);
 				break;
 			}
 			default : throw new IllegalArgumentException("Illegal insert");

@@ -25,19 +25,22 @@
 
 package de.shandschuh.sparserss;
 
-import de.shandschuh.sparserss.service.RefreshService;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
+import de.shandschuh.sparserss.service.RefreshService;
 
 public class SDMountBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (!intent.getBooleanExtra("read-only", false)) {
-			android.os.Process.killProcess(android.os.Process.myPid());
+			ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+			
+			manager.restartPackage(Strings.PACKAGE);
 			
 			try {
 				if (PreferenceManager.getDefaultSharedPreferences(context.createPackageContext(Strings.PACKAGE, 0)).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {

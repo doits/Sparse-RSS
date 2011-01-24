@@ -319,22 +319,7 @@ public class FetcherService extends Service {
 					URL faviconURL = new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString());
 
 					try {
-						InputStream input = faviconURL.openStream();
-						
-						ByteArrayOutputStream output = new ByteArrayOutputStream();
-						
-						byte[] buffer = new byte[4096];
-						  
-						int n;
-
-						while ((n = input.read(buffer)) > 0) {
-							output.write(buffer, 0, n);
-						}
-
-						iconBytes = output.toByteArray();
-						
-						output.close();
-						input.close();
+						iconBytes = getBytes(faviconURL.openStream());
 						
 						ContentValues values = new ContentValues();
 						
@@ -448,5 +433,23 @@ public class FetcherService extends Service {
 		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
 		connection.connect();
 		return connection;
+	}
+	
+	public static byte[] getBytes(InputStream inputStream) throws IOException {
+		ByteArrayOutputStream output = new ByteArrayOutputStream();
+		
+		byte[] buffer = new byte[4096];
+		  
+		int n;
+
+		while ((n = inputStream.read(buffer)) > 0) {
+			output.write(buffer, 0, n);
+		}
+
+		byte[] result  = output.toByteArray();
+		
+		output.close();
+		inputStream.close();
+		return result;
 	}
 }
