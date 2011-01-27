@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -62,6 +62,8 @@ public class RSSOverview extends ListActivity {
 	private static final String EXTENSION_OPML = ".opml";
 	
 	private static final String EXTENSION_XML = ".xml";
+	
+	private static final String EXTENSION_PHP = ".php";
 	
 	private static final int DIALOG_ADDFEED_ID = 1;
 	
@@ -244,7 +246,7 @@ public class RSSOverview extends ListActivity {
 				try {
 					final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
 						public boolean accept(File dir, String filename) {
-							return filename.endsWith(EXTENSION_OPML) || filename.endsWith(EXTENSION_XML);
+							return filename.endsWith(EXTENSION_OPML) || filename.endsWith(EXTENSION_XML) || filename.endsWith(EXTENSION_PHP);
 						}
 					});
 					builder.setItems(fileNames, new DialogInterface.OnClickListener()  {
