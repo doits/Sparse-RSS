@@ -114,6 +114,13 @@ public class FetcherService extends Service {
 		if (running) {
 			return;
 		}
+		if (preferences == null) {
+			try {
+				preferences = PreferenceManager.getDefaultSharedPreferences(createPackageContext(Strings.PACKAGE, 0));
+			} catch (NameNotFoundException e) {
+				preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
+			}
+		}
 		running = true;
 		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		
@@ -125,13 +132,6 @@ public class FetcherService extends Service {
 					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID));
 					
 					if (newCount > 0) {
-						if (preferences == null) {
-							try {
-								preferences = PreferenceManager.getDefaultSharedPreferences(createPackageContext(Strings.PACKAGE, 0));
-							} catch (NameNotFoundException e) {
-								preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
-							}
-						}
 						
 						if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
 							Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);

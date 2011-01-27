@@ -323,8 +323,6 @@ public class RSSHandler extends DefaultHandler {
 				Vector<String> images = null;
 				
 				if (description != null) {
-					
-					
 					String descriptionString = description.toString().trim();
 					
 					if (fetchImages) {
@@ -421,7 +419,5 @@ public class RSSHandler extends DefaultHandler {
 	public void setFetchImages(boolean fetchImages) {
 		this.fetchImages = fetchImages;
 	}
-	
-	
 	
 }
