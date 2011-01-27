@@ -62,6 +62,11 @@ android:numeric="integer"
 android:defaultValue="2"
 android:entries="@array/settings_keeptimes"
 android:entryValues="@array/settings_keeptimevalues" />
+<CheckBoxPreference
+android:title="@string/settings_fetchpictures"
+android:defaultValue="false"
+android:summary="@string/settings_fetchpictures_description"
+android:key="pictures.fetch" />
 </PreferenceCategory>
 
 

@@ -41,6 +41,8 @@
 <string name="settings_prioritize_description">Priorizar canales sin leer sobre los leídos</string>
 <string name="settings_keeptime">Tiempo que se mantendrán las entradas</string>
 <string name="settings_keeptime_description">Las entradas anteriores a la fecha indicada serán eliminadas</string>
+<string name="settings_fetchpictures">Descargar imágenes</string>
+<string name="settings_fetchpictures_description">Descargar todas las imágenes y guardar en local</string>
 
 <string name="settings_refreshonopen">Al abrir actualizar canales</string>
 <string name="settings_refreshonopen_description">Al abrir actualizar todos los canales</string>

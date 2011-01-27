@@ -38,7 +38,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -189,8 +188,8 @@ public class EntryActivity extends Activity {
 					}
 				});
 				// loadData does not recognize the encoding without correct html-header
-				abstractText = abstractText.replace("##ID##", uri.getLastPathSegment()+"__");
-				Log.d("Text", abstractText);
+				abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
+
 				((WebView) findViewById(R.id.entry_abstract)).loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? abstractText : abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
 				
 				final String link = entryCursor.getString(linkPosition);

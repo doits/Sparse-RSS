@@ -65,6 +65,8 @@ THE SOFTWARE.
 <string name="settings_prioritize_description">Show unread feed entries above read entries</string>
 <string name="settings_keeptime">Time that the entries will be kept</string>
 <string name="settings_keeptime_description">The entries that are older than the given date will be deleted</string>
+<string name="settings_fetchpictures">Download pictures</string>
+<string name="settings_fetchpictures_description">Download all pictures and store them locally</string>
 
 <string name="settings_refreshonopen">Refresh feeds on open</string>
 <string name="settings_refreshonopen_description">Refreshes all feeds after opening the application</string>

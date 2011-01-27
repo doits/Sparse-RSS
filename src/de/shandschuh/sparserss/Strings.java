@@ -83,5 +83,11 @@ public final class Strings {
 	public static final String AND_CHAR = "&";
 	
 	public static final String AND_HTML = "&amp;";
+	
+	public static final String FILEURL = "file://";
+	
+	public static final String IMAGEFILE_IDSEPARATOR = "__";
+	
+	public static final String IMAGEID_REPLACEMENT = "##ID##";
 
 }

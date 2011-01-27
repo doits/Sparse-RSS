@@ -89,6 +89,8 @@ public class FetcherService extends Service {
 	
 	private NotificationManager notificationManager;
 	
+	private static SharedPreferences preferences = null;
+	
 	static {
 		HttpURLConnection.setFollowRedirects(true);
 	}
@@ -123,13 +125,14 @@ public class FetcherService extends Service {
 					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID));
 					
 					if (newCount > 0) {
-						SharedPreferences preferences = null;
-
-						try {
-							preferences = PreferenceManager.getDefaultSharedPreferences(createPackageContext(Strings.PACKAGE, 0));
-						} catch (NameNotFoundException e) {
-							preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
+						if (preferences == null) {
+							try {
+								preferences = PreferenceManager.getDefaultSharedPreferences(createPackageContext(Strings.PACKAGE, 0));
+							} catch (NameNotFoundException e) {
+								preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
+							}
 						}
+						
 						if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
 							Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);
 							
@@ -204,11 +207,13 @@ public class FetcherService extends Service {
 //		HttpURLConnection.setFollowRedirects(false);
 		
 		int result = 0;
+		
+		RSSHandler handler = new RSSHandler(context);
+		
+		handler.setFetchImages(preferences.getBoolean(Strings.SETTINGS_FETCHPICTURES, false));
 				
 		while(cursor.moveToNext()) {
 			String id = cursor.getString(idPosition);
-			
-			RSSHandler handler = new RSSHandler(context);
 			
 			try {
 				HttpURLConnection connection = setupConnection(cursor.getString(urlPosition));

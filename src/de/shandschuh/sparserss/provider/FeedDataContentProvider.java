@@ -77,6 +77,8 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final String ADD = " ADD ";
 	
 	private static final String EQUALS_ONE = "=1";
+
+	public static final String IMAGEFOLDER = Environment.getExternalStorageDirectory()+"/sparserss/images/"; // faster than FOLDER+"images/"
 	
 	private static UriMatcher URI_MATCHER;
 	

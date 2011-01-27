@@ -166,15 +166,30 @@ public class RSSHandler extends DefaultHandler {
 	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
-		keepDateBorder = new Date(System.currentTimeMillis()-KEEP_TIME);
 		this.context = context;
 	}
 	
 	public void init(Date lastUpdateDate, String id, String title) {
+		final long keepDateBorderTime = System.currentTimeMillis()-KEEP_TIME;
+		
+		keepDateBorder = new Date(keepDateBorderTime);
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
 		feedEntiresUri = FeedData.EntryColumns.CONTENT_URI(id);
-		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(System.currentTimeMillis()-KEEP_TIME).append(DB_FAVORITE).toString(), null);
+		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(keepDateBorderTime).append(DB_FAVORITE).toString(), null);
+		if (fetchImages) {
+			new Thread() { // delete images
+				public void run() {
+					File[] files = new File(FeedDataContentProvider.IMAGEFOLDER).listFiles();
+					
+					for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
+						if (files[n].lastModified() < keepDateBorderTime) {
+							files[n].delete();
+						}
+					}
+				}
+			}.start();
+		}
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;
@@ -305,19 +320,26 @@ public class RSSHandler extends DefaultHandler {
 				}
 				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP).replaceAll(Strings.HTML_TAG_REGEX, ""));
 				
-				Vector<String> images = new Vector<String>(4);
+				Vector<String> images = null;
 				
 				if (description != null) {
-					Matcher matcher = imgPattern.matcher(description);
+					
 					
 					String descriptionString = description.toString().trim();
 					
-					while (matcher.find()) {
-						String match = matcher.group(1);
+					if (fetchImages) {
+						images = new Vector<String>(4);
+						 
+						Matcher matcher = imgPattern.matcher(description);
 						
-						images.add(match);
-						descriptionString = descriptionString.replace(match, "file://"+FeedDataContentProvider.FOLDER+"images/##ID##"+match.substring(match.lastIndexOf('/')+1));
+						while (matcher.find()) {
+							String match = matcher.group(1);
+							
+							images.add(match);
+							descriptionString = descriptionString.replace(match, new StringBuilder(Strings.FILEURL).append(FeedDataContentProvider.IMAGEFOLDER).append(Strings.IMAGEID_REPLACEMENT).append(match.substring(match.lastIndexOf('/')+1)).toString());
+						}
 					}
+					
 					values.put(FeedData.EntryColumns.ABSTRACT, descriptionString); 
 					description = null;
 				}
@@ -334,22 +356,23 @@ public class RSSHandler extends DefaultHandler {
 					
 					String id = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
 					
-					new File(FeedDataContentProvider.FOLDER+"images").mkdir();
-					for (int n = 0, i = images != null ? images.size() : 0; n < i; n++) {
-						try {
-							String match = images.get(n);
-							
-							byte[] data = FetcherService.getBytes(new URL(images.get(n)).openStream());
-							
-							FileOutputStream fos = new FileOutputStream(FeedDataContentProvider.FOLDER+"images/"+id+"__"+match.substring(match.lastIndexOf('/')+1));
-							
-							fos.write(data);
-							fos.close();
-						} catch (Exception e) {
+					if (fetchImages) {
+						new File(FeedDataContentProvider.IMAGEFOLDER).mkdir(); // create images dir
+						for (int n = 0, i = images != null ? images.size() : 0; n < i; n++) {
+							try {
+								String match = images.get(n);
+								
+								byte[] data = FetcherService.getBytes(new URL(images.get(n)).openStream());
+								
+								FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGEFOLDER).append(id).append(Strings.IMAGEFILE_IDSEPARATOR).append(match.substring(match.lastIndexOf('/')+1)).toString());
+								
+								fos.write(data);
+								fos.close();
+							} catch (Exception e) {
 
+							}
 						}
 					}
-					
 					newCount++;
 				} 
 			} else {
