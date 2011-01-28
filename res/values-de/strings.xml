@@ -42,6 +42,8 @@
 <string name="settings_prioritize_description">Zeige ungelesene Feedeinträge über gelesenen Einträgen</string>
 <string name="settings_keeptime">Zeit für die die Einträge aufbewahrt werden</string>
 <string name="settings_keeptime_description">Die Einträge, die älter sind, werden automatisch gelöscht</string>
+<string name="settings_fetchpictures">Bilder herunterladen</string>
+<string name="settings_fetchpictures_description">Alle Bilder herunterladen und local speichern</string>
 
 <string name="settings_refreshonopen">Aktualisiere bei Start</string>
 <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>

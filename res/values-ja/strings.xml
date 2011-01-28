@@ -42,6 +42,9 @@
 <string name="settings_prioritize_description">未既読記事を既読記事の上に表示する</string>
 <string name="settings_keeptime">記事の保存期間</string>
 <string name="settings_keeptime_description">過去の記事を自動的に消去する</string>
+<string name="settings_fetchpictures">画像をダウンロード</string>
+<string name="settings_fetchpictures_description">全ての画像をダウンロードし、保存する</string>
+
 
 <string name="settings_refreshonopen">スタート時に更新する</string>
 <string name="settings_refreshonopen_description">プログラム開始時に全てのフィードを更新する</string>
