@@ -436,6 +436,8 @@ public class FetcherService extends Service {
 		connection.setDoInput(true);
 		connection.setDoOutput(false);
 		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
+		connection.setConnectTimeout(30000);
+		connection.setReadTimeout(30000);
 		connection.connect();
 		return connection;
 	}
