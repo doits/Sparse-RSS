@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,9 @@ import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class RSSOverviewListAdapter extends ResourceCursorAdapter {
-	private static final String COUNT = "COUNT(*) - COUNT(readdate)";
+	private static final String COUNT_UNREAD = "COUNT(*) - COUNT(readdate)";
+	
+	private static final String COUNT = "COUNT(*)";
 	
 	private static final String COLON = ": ";
 	
@@ -73,11 +75,13 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		
 		textView.setSingleLine();
 		
-		Cursor countCursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI(cursor.getString(idPosition)), new String[] {COUNT}, null, null, null);
+		Cursor countCursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI(cursor.getString(idPosition)), new String[] {COUNT_UNREAD, COUNT}, null, null, null);
 		
 		countCursor.moveToFirst();
 		
 		int unreadCount = countCursor.getInt(0);
+		
+		int count = countCursor.getInt(1);
 		
 		countCursor.close();
 		
@@ -86,7 +90,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));;
 		
 		if (cursor.isNull(errorPosition)) {
-			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(date == 0 ? context.getString(R.string.never) : new StringBuilder(EntriesListAdapter.DATEFORMAT.format(new Date(date))).append(COMMA).append(unreadCount).append(' ').append(context.getString(R.string.unread))));
+			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(date == 0 ? context.getString(R.string.never) : new StringBuilder(EntriesListAdapter.DATEFORMAT.format(new Date(date))).append(COMMA).append(unreadCount).append('/').append(count).append(' ').append(context.getString(R.string.unread))));
 		} else {
 			updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
 		}
