@@ -24,13 +24,12 @@
 <string name="menu_about">Info</string>
 
 <string name="settings_category_refresh">Automatische Aktualisierung</string>
-<string name="settings_refreshenabled">Aktiviert</string>
+<string name="settings_enabled">Aktiviert</string>
 <string name="settings_refreshenabled_description">Diese Einstellung kontrolliert die Aktualisierung aller Feeds</string>
 <string name="settings_refreshinterval">Aktualisierungsintervall</string>
 <string name="settings_refreshinterval_description">Intervall zwischen zwei Aktualisierungen</string>
 
 <string name="settings_category_notofications">Benachrichtigungen</string>
-<string name="settings_notificationsenabled">Aktiviert</string>
 <string name="settings_notificationsenabled_description">Kontrolliert das Vorhandensein von Benachrichtigungen</string>
 <string name="settings_notificationsringtone">Klingelton</string>
 <string name="settings_notificationsringtone_description">Auswahl eines Klingeltones, der bei neuem Inhalt abgespielt wird</string>

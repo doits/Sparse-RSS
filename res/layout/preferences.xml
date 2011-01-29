@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 <PreferenceCategory android:title="@string/settings_category_refresh">
 <CheckBoxPreference
-android:title="@string/settings_refreshenabled"
+android:title="@string/settings_enabled"
 android:defaultValue="false"
 android:summary="@string/settings_refreshenabled_description"
 android:key="refresh.enabled" />
@@ -25,7 +25,7 @@ android:key="refreshonopen.enabled" />
 
 <PreferenceCategory android:title="@string/settings_category_notofications">
 <CheckBoxPreference
-android:title="@string/settings_notificationsenabled"
+android:title="@string/settings_enabled"
 android:defaultValue="false"
 android:summary="@string/settings_notificationsenabled_description"
 android:key="notifications.enabled" />
@@ -68,6 +68,25 @@ android:defaultValue="false"
 android:summary="@string/settings_fetchpictures_description"
 android:key="pictures.fetch" />
 </PreferenceCategory>
-
+<PreferenceCategory android:title="@string/settings_category_network">
+<PreferenceScreen android:title="Proxy">
+    <CheckBoxPreference
+        android:key="proxy.enabled"
+        android:title="@string/settings_enabled" />
+    <CheckBoxPreference
+        android:key="proxy.wifionly"
+        android:title="@string/settings_proxy_wifionly"
+        android:dependency="proxy.enabled" />
+    <EditTextPreference
+    	android:key="proxy.host"
+    	android:title="@string/settings_proxy_host"
+    	android:dependency="proxy.enabled"/>
+    <EditTextPreference
+    	android:key="proxy.port"
+    	android:title="@string/settings_proxy_port"
+    	android:inputType="number"
+    	android:dependency="proxy.enabled"/>		
+</PreferenceScreen>
+</PreferenceCategory>
 
 </PreferenceScreen>

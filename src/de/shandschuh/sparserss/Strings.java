@@ -46,6 +46,14 @@ public final class Strings {
 	
 	public static final String SETTINGS_FETCHPICTURES = "pictures.fetch";
 	
+	public static final String SETTINGS_PROXYENABLED = "proxy.enabled";
+	
+	public static final String SETTINGS_PROXYPORT = "proxy.port";
+	
+	public static final String SETTINGS_PROXYHOST = "proxy.host";
+	
+	public static final String SETTINGS_PROXYWIFIONLY = "proxy.wifionly";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";
@@ -89,5 +97,6 @@ public final class Strings {
 	public static final String IMAGEFILE_IDSEPARATOR = "__";
 	
 	public static final String IMAGEID_REPLACEMENT = "##ID##";
+
 
 }

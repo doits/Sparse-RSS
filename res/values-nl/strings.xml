@@ -23,13 +23,12 @@
 <string name="license_intro">De software wordt verspreid onder de MIT open source licentie en de broncode is beschikbaar via http://sparserss.googlecode.com\n</string>
 
 <string name="settings_category_refresh">Automatisch vernieuwen</string>
-<string name="settings_refreshenabled">Aan</string>
+<string name="settings_enabled">Aan</string>
 <string name="settings_refreshenabled_description">Deze instelling past het automatisch vernieuwen van feeds aan</string>
 <string name="settings_refreshinterval">Interval voor vernieuwen</string>
 <string name="settings_refreshinterval_description">Interval tussen twee keer automatisch vernieuwen</string>
 
 <string name="settings_category_notofications">Notificaties</string>
-<string name="settings_notificationsenabled">Aan</string>
 <string name="settings_notificationsenabled_description">Deze instelling bepaalt hoe u notificaties wilt ontvangen</string>
 <string name="settings_notificationsringtone">Beltoon</string>
 <string name="settings_notificationsringtone_description">Selecteer een beltoon bij het ontvangen van nieuwe artikelen</string>

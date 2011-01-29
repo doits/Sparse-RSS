@@ -47,13 +47,12 @@ THE SOFTWARE.
 <string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://sparserss.googlecode.com\n</string>
 
 <string name="settings_category_refresh">Automated refresh</string>
-<string name="settings_refreshenabled">Enabled</string>
+<string name="settings_enabled">Enabled</string>
 <string name="settings_refreshenabled_description">This setting controls the automatic refresh of all feeds</string>
 <string name="settings_refreshinterval">Refresh interval</string>
 <string name="settings_refreshinterval_description">Interval between two automated refreshs</string>
 
 <string name="settings_category_notofications">Notifications</string>
-<string name="settings_notificationsenabled">Enabled</string>
 <string name="settings_notificationsenabled_description">Controls the appearance of notifications in case of new feed content</string>
 <string name="settings_notificationsringtone">Ringtone</string>
 <string name="settings_notificationsringtone_description">Select a ringtone that will be played on new feed content</string>
@@ -77,6 +76,12 @@ THE SOFTWARE.
 <string name="settings_visiblefeeds">Visible feeds</string>
 <string name="settings_showtabs">Show tabs</string>
 <string name="settings_showtabs_description">Additional tabs for favorite and all feed-entries</string>
+
+<string name="settings_category_network">Network</string>
+<string name="settings_proxy_wifionly">Wifi only</string>
+<string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
+<string name="settings_proxy_host">Host</string>
+<string name="settings_proxy_port">Port</string>
 
 <string name="never">never</string>
 <string name="update">Update</string>

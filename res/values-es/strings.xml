@@ -23,13 +23,12 @@
 <string name="license_intro">Este software se distribuye bajo licencia de código abierto MIT y el código fuente está disponible en http://sparserss.googlecode.com\n</string>
 
 <string name="settings_category_refresh">Ajustes de actualizaciones</string>
-<string name="settings_refreshenabled">Habilitar</string>
+<string name="settings_enabled">Habilitar</string>
 <string name="settings_refreshenabled_description">Este control activa las actualizaciones automáticas de todos los canales</string>
 <string name="settings_refreshinterval">Intervalo de actualización</string>
 <string name="settings_refreshinterval_description">Intervalo entre actualizaciones</string>
 
 <string name="settings_category_notofications">Notificaciones</string>
-<string name="settings_notificationsenabled">Habilitar</string>
 <string name="settings_notificationsenabled_description">Ajustar la configuración de notificaciones para nuevos contenidos</string>
 <string name="settings_notificationsringtone">Melodía</string>
 <string name="settings_notificationsringtone_description">Seleccione un tono de aviso al recibir nuevos contenidos</string>

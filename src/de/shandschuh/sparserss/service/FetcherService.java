@@ -33,6 +33,8 @@ import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.URL;
 import java.util.Date;
 
@@ -91,6 +93,8 @@ public class FetcherService extends Service {
 	
 	private static SharedPreferences preferences = null;
 	
+	private static Proxy proxy;
+	
 	static {
 		HttpURLConnection.setFollowRedirects(true);
 	}
@@ -121,12 +125,20 @@ public class FetcherService extends Service {
 				preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
 			}
 		}
+		
+		
+		
 		running = true;
 		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		
 		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED && intent != null) {
+			if (preferences.getBoolean(Strings.SETTINGS_PROXYENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || preferences.getBoolean(Strings.SETTINGS_PROXYWIFIONLY, false))) {
+				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(preferences.getString(Strings.SETTINGS_PROXYHOST, ""), preferences.getInt(Strings.SETTINGS_PROXYPORT, 8080)));
+			} else {
+				proxy = null;
+			}
 			new Thread() {
 				public void run() {
 					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID));
@@ -431,7 +443,7 @@ public class FetcherService extends Service {
 	}
 	
 	private static final HttpURLConnection setupConnection(URL url) throws IOException {
-		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
 		connection.setDoInput(true);
 		connection.setDoOutput(false);
