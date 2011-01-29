@@ -134,8 +134,8 @@ public class FetcherService extends Service {
 		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		
 		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED && intent != null) {
-			if (preferences.getBoolean(Strings.SETTINGS_PROXYENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || preferences.getBoolean(Strings.SETTINGS_PROXYWIFIONLY, false))) {
-				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(preferences.getString(Strings.SETTINGS_PROXYHOST, ""), preferences.getInt(Strings.SETTINGS_PROXYPORT, 8080)));
+			if (preferences.getBoolean(Strings.SETTINGS_PROXYENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !preferences.getBoolean(Strings.SETTINGS_PROXYWIFIONLY, false))) {
+				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(preferences.getString(Strings.SETTINGS_PROXYHOST, Strings.EMPTY), preferences.getInt(Strings.SETTINGS_PROXYPORT, 8080)));
 			} else {
 				proxy = null;
 			}
