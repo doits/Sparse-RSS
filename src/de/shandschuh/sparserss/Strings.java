@@ -98,5 +98,7 @@ public final class Strings {
 	
 	public static final String IMAGEID_REPLACEMENT = "##ID##";
 
+	public static final String DEFAULTPROXYPORT = "8080";
+
 
 }

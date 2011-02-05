@@ -135,7 +135,11 @@ public class FetcherService extends Service {
 		
 		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED && intent != null) {
 			if (preferences.getBoolean(Strings.SETTINGS_PROXYENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !preferences.getBoolean(Strings.SETTINGS_PROXYWIFIONLY, false))) {
-				proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(preferences.getString(Strings.SETTINGS_PROXYHOST, Strings.EMPTY), preferences.getInt(Strings.SETTINGS_PROXYPORT, 8080)));
+				try {
+					proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(preferences.getString(Strings.SETTINGS_PROXYHOST, Strings.EMPTY), Integer.parseInt(preferences.getString(Strings.SETTINGS_PROXYPORT, Strings.DEFAULTPROXYPORT))));
+				} catch (Exception e) {
+					proxy = null;
+				}
 			} else {
 				proxy = null;
 			}
@@ -333,10 +337,10 @@ public class FetcherService extends Service {
 				byte[] iconBytes = cursor.getBlob(iconPosition);
 				
 				if (iconBytes == null) {
-					URL faviconURL = new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString());
-
+					HttpURLConnection iconURLConnection = setupConnection(new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString()));
+					
 					try {
-						iconBytes = getBytes(faviconURL.openStream());
+						iconBytes = getBytes(iconURLConnection.getInputStream());
 						
 						ContentValues values = new ContentValues();
 						
