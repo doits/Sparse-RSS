@@ -54,6 +54,10 @@
 <string name="settings_showtabs">Zeige Tabs</string>
 <string name="settings_showtabs_description">Zusätzliche Tabs für Favoriten und alle Einträge</string>
 
+<string name="settings_category_network">Netzwerk</string>
+<string name="settings_proxy_wifionly">Nur WLan</string>
+<string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
+
 <string name="update">Aktualisiert</string>
 <string name="never">nie</string>
 <string name="unread">ungelesen</string>

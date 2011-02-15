@@ -41,8 +41,6 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -139,7 +137,6 @@ public class RSSOverview extends ListActivity {
             });
         	button.setVisibility(View.VISIBLE);
         }
-        Log.d("proxy", Settings.System.getString(getContentResolver(), Settings.System.HTTP_PROXY)+"");
     }
     
 	@Override

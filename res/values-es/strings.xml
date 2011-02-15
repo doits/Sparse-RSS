@@ -52,6 +52,11 @@
 <string name="settings_visiblefeeds">Ver canales</string>
 <string name="settings_showtabs">Visualizar pestañas</string>
 <string name="settings_showtabs_description">Añadir pestañas para favoritos y todos los canales</string>
+<string name="settings_category_network">Red</string>
+<string name="settings_proxy_wifionly">Solo Wi-Fi</string>
+<string name="settings_proxy_wifionly_description">Utilizar proxy solo para Wi-Fi</string>
+<string name="settings_proxy_host">Host</string>
+<string name="settings_proxy_port">Puerto</string>
 
 <string name="never">nunca</string>
 <string name="update">Actualizado</string>
