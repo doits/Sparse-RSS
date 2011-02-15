@@ -425,7 +425,7 @@ public class FetcherService extends Service {
 				result += handler.getNewCount();
 				
 			} catch (Throwable e) {
-				if (!handler.isDone()) {
+				if (!handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
 					
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later

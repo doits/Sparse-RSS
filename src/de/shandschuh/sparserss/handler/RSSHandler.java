@@ -164,6 +164,8 @@ public class RSSHandler extends DefaultHandler {
 
 	private boolean fetchImages;
 	
+	private boolean cancelled;
+	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
 		this.context = context;
@@ -194,6 +196,7 @@ public class RSSHandler extends DefaultHandler {
 		feedRefreshed = false;
 		feedTitle = title;
 		done = false;
+		cancelled = false;
 	}
 
 	@Override
@@ -390,6 +393,10 @@ public class RSSHandler extends DefaultHandler {
 		return done;
 	}
 	
+	public boolean isCancelled() {
+		return cancelled;
+	}
+	
 	public void setInputStream(InputStream inputStream) {
 		this.inputStream = inputStream;
 	}
@@ -399,19 +406,19 @@ public class RSSHandler extends DefaultHandler {
 	}
 	
 	private void cancel() {
+		cancelled = true;
+		done = true;
 		if (inputStream != null) {
 			try {
-				done = true;
 				inputStream.close(); // stops all parsing
 			} catch (IOException e) {
-				e.printStackTrace();
+
 			} 
 		} else if (reader != null) {
 			try {
-				done = true;
 				reader.close(); // stops all parsing
 			} catch (IOException e) {
-				e.printStackTrace();
+				
 			} 
 		}
 	}
