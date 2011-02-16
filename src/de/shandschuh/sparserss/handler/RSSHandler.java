@@ -195,6 +195,13 @@ public class RSSHandler extends DefaultHandler {
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;
+		this.title = null;
+		this.dateStringBuilder = null;
+		this.entryLink = null;
+		this.description = null;
+		inputStream = null;
+		reader = null;
+		
 		done = false;
 		cancelled = false;
 	}
@@ -375,7 +382,9 @@ public class RSSHandler extends DefaultHandler {
 						}
 					}
 					newCount++;
-				} 
+				} else {
+					cancel(); // this prevents the updates to be fetched
+				}
 			} else {
 				cancel();
 			}
@@ -399,10 +408,12 @@ public class RSSHandler extends DefaultHandler {
 	
 	public void setInputStream(InputStream inputStream) {
 		this.inputStream = inputStream;
+		reader = null;
 	}
 	
 	public void setReader(Reader reader) {
 		this.reader = reader;
+		inputStream = null;
 	}
 	
 	private void cancel() {

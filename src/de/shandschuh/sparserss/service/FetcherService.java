@@ -235,11 +235,10 @@ public class FetcherService extends Service {
 				HttpURLConnection connection = setupConnection(cursor.getString(urlPosition));
 				
 				String contentType = connection.getContentType();
-				
+
 				int fetchMode = cursor.getInt(fetchmodePosition);
 				
 				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
-				
 				if (fetchMode == 0) {
 					if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -282,7 +281,9 @@ public class FetcherService extends Service {
 						}
 						if (connection == null) { // this indicates a badly configured feed
 							connection = setupConnection(cursor.getString(urlPosition));
+							contentType = connection.getContentType();
 						}
+						
 					}
 					
 					if (contentType != null) {
@@ -341,7 +342,7 @@ public class FetcherService extends Service {
 					
 					try {
 						iconBytes = getBytes(iconURLConnection.getInputStream());
-						
+						iconURLConnection.disconnect();
 						ContentValues values = new ContentValues();
 						
 						values.put(FeedData.FeedColumns.ICON, iconBytes); 
@@ -352,8 +353,8 @@ public class FetcherService extends Service {
 						values.put(FeedData.FeedColumns.ICON, new byte[0]); // no icon found or error
 						context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 					}
+					
 				}
-				
 				switch (fetchMode) {
 					default:
 					case FETCHMODE_DIRECT: {
@@ -416,6 +417,7 @@ public class FetcherService extends Service {
 									
 									handler.setReader(reader);
 									Xml.parse(reader, handler);
+									
 								}
 							}
 						}
@@ -454,7 +456,20 @@ public class FetcherService extends Service {
 		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
+		connection.setUseCaches(false);
 		connection.connect();
+		if (connection.getResponseCode() == -1) {  // retry only once
+			connection.disconnect();
+			connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
+			
+			connection.setDoInput(true);
+			connection.setDoOutput(false);
+			connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
+			connection.setConnectTimeout(30000);
+			connection.setReadTimeout(30000);
+			connection.setUseCaches(false);
+			connection.connect();
+		}
 		return connection;
 	}
 	
