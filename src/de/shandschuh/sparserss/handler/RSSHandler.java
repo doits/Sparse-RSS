@@ -204,6 +204,13 @@ public class RSSHandler extends DefaultHandler {
 		
 		done = false;
 		cancelled = false;
+		
+		titleTagEntered = false;
+		updatedTagEntered = false;
+		linkTagEntered = false;
+		descriptionTagEntered = false;
+		pubDateTagEntered = false;
+		dateTagEntered = false;
 	}
 
 	@Override
