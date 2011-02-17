@@ -28,6 +28,7 @@ package de.shandschuh.sparserss;
 import java.text.DateFormat;
 import java.util.Date;
 
+import android.R.color;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.ContentValues;
@@ -61,6 +62,10 @@ public class EntryActivity extends Activity {
 	private static final String ASC = "date asc limit 1";
 	
 	private static final String DESC = "date desc limit 1";
+	
+	private static final String FONT_START = "<font color=\"ffffff\">";
+	
+	private static final String FONT_END = "</font>";
 	
 	private int titlePosition;
 	
@@ -190,7 +195,10 @@ public class EntryActivity extends Activity {
 				// loadData does not recognize the encoding without correct html-header
 				abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
 
-				((WebView) findViewById(R.id.entry_abstract)).loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? abstractText : abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
+				WebView webView = (WebView) findViewById(R.id.entry_abstract);
+				
+				webView.loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? new StringBuilder(FONT_START).append(abstractText).append(FONT_END).toString() : new StringBuilder(FONT_START).append(abstractText.replace(NEWLINE, BR)).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
+				webView.setBackgroundColor(color.black);
 				
 				final String link = entryCursor.getString(linkPosition);
 				

@@ -14,13 +14,13 @@
   android:layout_height="wrap_content" 
   android:id="@android:id/icon"/>
   </LinearLayout>
+  <View android:background="@android:drawable/title_bar" android:layout_width="fill_parent" android:layout_height="1dp" />
   <LinearLayout 
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
 		android:id="@+id/linear_wrapper"
-		android:background="@android:drawable/editbox_background"
-		android:padding="4dip"
+		android:padding="1dip"
 		android:layout_gravity="fill"
 		android:layout_weight="1">
 		<WebView android:layout_height="wrap_content" android:id="@+id/entry_abstract" android:layout_width="wrap_content" />

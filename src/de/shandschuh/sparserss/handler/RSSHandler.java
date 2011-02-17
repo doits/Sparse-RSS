@@ -201,6 +201,7 @@ public class RSSHandler extends DefaultHandler {
 		this.description = null;
 		inputStream = null;
 		reader = null;
+		entryDate = null;
 		
 		done = false;
 		cancelled = false;
