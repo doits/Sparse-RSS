@@ -100,5 +100,7 @@ public final class Strings {
 
 	public static final String DEFAULTPROXYPORT = "8080";
 
+	public static final String URL_SPACE = "%20";
+
 
 }

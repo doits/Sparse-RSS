@@ -55,6 +55,10 @@
 <string name="settings_showtabs">タブを表示する</string>
 <string name="settings_showtabs_description">お気に入りと全ての記事のためのタブを追加</string>
 
+<string name="settings_category_network">ネットワーク</string>
+<string name="settings_proxy_wifionly">ワイヤレスのみ</string>
+<string name="settings_proxy_wifionly_description">ワイヤレスの場合はProxyを使用する</string>
+
 <string name="update">更新</string>
 <string name="never">決してしない</string>
 <string name="unread">未既読</string>

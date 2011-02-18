@@ -424,8 +424,6 @@ public class FetcherService extends Service {
 						break;
 					}
 				}
-				result += handler.getNewCount();
-				
 			} catch (Throwable e) {
 				if (!handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
@@ -435,6 +433,7 @@ public class FetcherService extends Service {
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				}
 			}
+			result += handler.getNewCount();
 		}
 		cursor.close();
 		

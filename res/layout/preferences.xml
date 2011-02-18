@@ -76,6 +76,7 @@ android:key="pictures.fetch" />
     <CheckBoxPreference
         android:key="proxy.wifionly"
         android:title="@string/settings_proxy_wifionly"
+        android:summary="@string/settings_proxy_wifionly_description"
         android:dependency="proxy.enabled" />
     <EditTextPreference
     	android:key="proxy.host"

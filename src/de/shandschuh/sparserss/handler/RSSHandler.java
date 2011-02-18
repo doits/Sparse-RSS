@@ -349,7 +349,7 @@ public class RSSHandler extends DefaultHandler {
 						Matcher matcher = imgPattern.matcher(description);
 						
 						while (matcher.find()) {
-							String match = matcher.group(1);
+							String match = matcher.group(1).replace(Strings.SPACE, Strings.URL_SPACE);
 							
 							images.add(match);
 							descriptionString = descriptionString.replace(match, new StringBuilder(Strings.FILEURL).append(FeedDataContentProvider.IMAGEFOLDER).append(Strings.IMAGEID_REPLACEMENT).append(match.substring(match.lastIndexOf('/')+1)).toString());
@@ -390,8 +390,6 @@ public class RSSHandler extends DefaultHandler {
 						}
 					}
 					newCount++;
-				} else {
-					cancel(); // this prevents the updates to be fetched
 				}
 			} else {
 				cancel();
