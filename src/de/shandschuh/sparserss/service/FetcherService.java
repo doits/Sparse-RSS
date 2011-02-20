@@ -54,8 +54,8 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Xml;
+import de.shandschuh.sparserss.MainTabActivity;
 import de.shandschuh.sparserss.R;
-import de.shandschuh.sparserss.RSSOverview;
 import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.handler.RSSHandler;
 import de.shandschuh.sparserss.provider.FeedData;
@@ -160,7 +160,7 @@ public class FetcherService extends Service {
 							
 							Notification notification = new Notification(R.drawable.ic_statusbar_rss, text, System.currentTimeMillis());
 							
-							Intent notificationIntent = new Intent(FetcherService.this, RSSOverview.class);
+							Intent notificationIntent = new Intent(FetcherService.this, MainTabActivity.class);
 							
 							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
