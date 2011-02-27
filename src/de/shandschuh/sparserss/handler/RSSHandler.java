@@ -227,7 +227,8 @@ public class RSSHandler extends DefaultHandler {
 					values.put(FeedData.FeedColumns.NAME, title.toString().trim());
 				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
-				values.put(FeedData.FeedColumns.LASTUPDATE, /*entryDate != null ? entryDate.getTime() : */System.currentTimeMillis() - 1000);
+				values.put(FeedData.FeedColumns.LASTUPDATE, System.currentTimeMillis() - 1000);
+				values.put(FeedData.FeedColumns.REALLASTUPDATE, entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000);
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				title = null;
 				feedRefreshed = true;
@@ -390,6 +391,8 @@ public class RSSHandler extends DefaultHandler {
 						}
 					}
 					newCount++;
+				} else if (entryDate == null) {
+					cancel();
 				}
 			} else {
 				cancel();

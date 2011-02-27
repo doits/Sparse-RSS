@@ -212,7 +212,7 @@ public class FetcherService extends Service {
 		
 		int idPosition = cursor.getColumnIndex(FeedData.FeedColumns._ID);
 		
-		int lastUpdatePosition = cursor.getColumnIndex(FeedData.FeedColumns.LASTUPDATE);
+		int lastUpdatePosition = cursor.getColumnIndex(FeedData.FeedColumns.REALLASTUPDATE);
 		
 		int titlePosition = cursor.getColumnIndex(FeedData.FeedColumns.NAME);
 		
