@@ -231,8 +231,10 @@ public class FetcherService extends Service {
 		while(cursor.moveToNext()) {
 			String id = cursor.getString(idPosition);
 			
+			HttpURLConnection connection = null;
+			
 			try {
-				HttpURLConnection connection = setupConnection(cursor.getString(urlPosition));
+				connection = setupConnection(cursor.getString(urlPosition));
 				
 				String contentType = connection.getContentType();
 
@@ -245,10 +247,10 @@ public class FetcherService extends Service {
 						
 						String line = null;
 						
-						int pos = -1;
+						int pos = -1, posStart = -1;
 						
 						while ((line = reader.readLine()) != null) {
-							connection = null;
+							
 							if (line.indexOf(HTML_BODY) > -1) {
 								break;
 							} else {
@@ -258,7 +260,7 @@ public class FetcherService extends Service {
 									pos = line.indexOf(LINK_RSS_SLOPPY);
 								}
 								if (pos > -1) {
-									int posStart = line.indexOf(HREF, pos);
+									posStart = line.indexOf(HREF, pos);
 
 									if (posStart > -1) {
 										String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(RSSHandler.AMP_SG, RSSHandler.AMP);
@@ -272,6 +274,7 @@ public class FetcherService extends Service {
 										}
 										values.put(FeedData.FeedColumns.URL, url);
 										context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+										connection.disconnect();
 										connection = setupConnection(url);
 										contentType = connection.getContentType();
 										break;
@@ -279,7 +282,8 @@ public class FetcherService extends Service {
 								}
 							}
 						}
-						if (connection == null) { // this indicates a badly configured feed
+						if (posStart == -1) { // this indicates a badly configured feed
+							connection.disconnect();
 							connection = setupConnection(cursor.getString(urlPosition));
 							contentType = connection.getContentType();
 						}
@@ -424,6 +428,7 @@ public class FetcherService extends Service {
 						break;
 					}
 				}
+				connection.disconnect();
 			} catch (Throwable e) {
 				if (!handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
@@ -431,6 +436,8 @@ public class FetcherService extends Service {
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
 					values.put(FeedData.FeedColumns.ERROR, e.getMessage());
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+				} else if (connection != null) {
+					connection.disconnect();
 				}
 			}
 			result += handler.getNewCount();

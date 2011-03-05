@@ -84,6 +84,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_DATE = "date";
 	
+	private static final String TAG_LASTBUILDDATE = "lastBuildDate";
+	
 	private static final String ATTRIBUTE_HREF = "href";
 	
 	private static final String[] TIMEZONES = {"MEST", "EST", "PST"};
@@ -136,6 +138,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private boolean dateTagEntered;
 	
+	private boolean lastUpdateDateTagEntered;
+	
 	private StringBuilder title;
 	
 	private StringBuilder dateStringBuilder;
@@ -165,6 +169,8 @@ public class RSSHandler extends DefaultHandler {
 	private boolean fetchImages;
 	
 	private boolean cancelled;
+	
+	private Date lastBuildDate;
 	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
@@ -202,6 +208,7 @@ public class RSSHandler extends DefaultHandler {
 		inputStream = null;
 		reader = null;
 		entryDate = null;
+		lastBuildDate = null;
 		
 		done = false;
 		cancelled = false;
@@ -212,6 +219,7 @@ public class RSSHandler extends DefaultHandler {
 		descriptionTagEntered = false;
 		pubDateTagEntered = false;
 		dateTagEntered = false;
+		lastUpdateDateTagEntered = false;
 	}
 
 	@Override
@@ -228,7 +236,11 @@ public class RSSHandler extends DefaultHandler {
 				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
 				values.put(FeedData.FeedColumns.LASTUPDATE, System.currentTimeMillis() - 1000);
-				values.put(FeedData.FeedColumns.REALLASTUPDATE, entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000);
+				if (lastBuildDate != null) {
+					values.put(FeedData.FeedColumns.REALLASTUPDATE, entryDate != null && entryDate.before(lastBuildDate) ? entryDate.getTime() : lastBuildDate.getTime());
+				} else {
+					values.put(FeedData.FeedColumns.REALLASTUPDATE, entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000);
+				}
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				title = null;
 				feedRefreshed = true;
@@ -267,6 +279,9 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_DATE.equals(localName)) {
 			dateTagEntered = true;
 			dateStringBuilder = new StringBuilder();
+		} else if (TAG_LASTBUILDDATE.equals(localName)) {
+			lastUpdateDateTagEntered = true;
+			dateStringBuilder = new StringBuilder();
 		}
 	}
 
@@ -284,6 +299,8 @@ public class RSSHandler extends DefaultHandler {
 			dateStringBuilder.append(ch, start, length);
 		} else if (dateTagEntered) {
 			dateStringBuilder.append(ch, start, length);
+		} else if (lastUpdateDateTagEntered) {
+			dateStringBuilder.append(ch, start, length);
 		}
 	}
 	
@@ -296,38 +313,16 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;
 		} else if (TAG_UPDATED.equals(localName)) {
-			String dateString = dateStringBuilder.toString();
-
-			for (int n = 0; n < DATEFORMAT_COUNT; n++) {
-				try {
-					entryDate = UPDATE_DATEFORMATS[n].parse(dateString);
-					break;
-				} catch (ParseException e) { } // just do nothing
-			}
-
+			entryDate = parseUpdateDate(dateStringBuilder.toString());
 			updatedTagEntered = false;
 		} else if (TAG_PUBDATE.equals(localName)) {
-			String dateString = dateStringBuilder.toString().replace(Strings.TWOSPACE, Strings.SPACE);
-			
-			for (int n = 0; n < TIMEZONES_COUNT; n++) {
-				dateString = dateString.replace(TIMEZONES[n], TIMEZONES_REPLACE[n]);
-			}
-			for (int n = 0; n < PUBDATEFORMAT_COUNT; n++) {
-				try {
-					entryDate = PUBDATE_DATEFORMATS[n].parse(dateString);
-					break;
-				} catch (ParseException e) { } // just do nothing
-			}
+			entryDate = parsePubdateDate(dateStringBuilder.toString().replace(Strings.TWOSPACE, Strings.SPACE));
 			pubDateTagEntered = false;
+		} else if (TAG_LASTBUILDDATE.equals(localName)) {
+			lastBuildDate = parsePubdateDate(dateStringBuilder.toString().replace(Strings.TWOSPACE, Strings.SPACE));
+			lastUpdateDateTagEntered = false;
 		} else if (TAG_DATE.equals(localName)) {
-			String dateString = dateStringBuilder.toString();
-			
-			for (int n = 0; n < DATEFORMAT_COUNT; n++) {
-				try {
-					entryDate = UPDATE_DATEFORMATS[n].parse(dateString);
-					break;
-				} catch (ParseException e) { } // just do nothing
-			}
+			entryDate = parseUpdateDate(dateStringBuilder.toString());
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
 			if (title != null && (entryDate == null || (entryDate.after(lastUpdateDate) && entryDate.after(keepDateBorder)))) {
@@ -445,6 +440,27 @@ public class RSSHandler extends DefaultHandler {
 
 	public void setFetchImages(boolean fetchImages) {
 		this.fetchImages = fetchImages;
+	}
+	
+	private static Date parseUpdateDate(String string) {
+		for (int n = 0; n < DATEFORMAT_COUNT; n++) {
+			try {
+				return UPDATE_DATEFORMATS[n].parse(string);
+			} catch (ParseException e) { } // just do nothing
+		}
+		return null;
+	}
+	
+	private static Date parsePubdateDate(String string) {
+		for (int n = 0; n < TIMEZONES_COUNT; n++) {
+			string = string.replace(TIMEZONES[n], TIMEZONES_REPLACE[n]);
+		}
+		for (int n = 0; n < PUBDATEFORMAT_COUNT; n++) {
+			try {
+				return PUBDATE_DATEFORMATS[n].parse(string);
+			} catch (ParseException e) { } // just do nothing
+		}
+		return null;
 	}
 	
 }
