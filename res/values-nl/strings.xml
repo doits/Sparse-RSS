@@ -72,7 +72,7 @@
 <string name="optional">(optioneel)</string>
 <string name="websiteorfeed">(website of feed)</string>
 <string name="feed_title">Titel</string>
-<string name="select_file">Selecteer een bestand</string>
+<string name="select_file">Selecteer een bestand (SD-Root)</string>
 
 <string name="question_deletefeed">Wilt u deze feed en alle bijbehorende artikelen echt verwijderen?</string>
 

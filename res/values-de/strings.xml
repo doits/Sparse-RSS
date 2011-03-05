@@ -76,7 +76,7 @@
 <string name="error_invalidimportfile">Die ausgewählte Datei ist für den Import nicht gültig.</string>
 
 <string name="feed_title">Titel</string>
-<string name="select_file">Datei auswählen</string>
+<string name="select_file">Datei auswählen (SD-Wurzel)</string>
 
 <string name="websiteorfeed">(Webseite oder Feed)</string>
 

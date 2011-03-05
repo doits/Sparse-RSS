@@ -104,7 +104,7 @@ THE SOFTWARE.
 <string name="optional">(optional)</string>
 <string name="websiteorfeed">(website or feed)</string>
 <string name="feed_title">Title</string>
-<string name="select_file">Select file</string>
+<string name="select_file">Select file (SD-root)</string>
 
 <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 

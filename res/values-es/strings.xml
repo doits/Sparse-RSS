@@ -79,7 +79,7 @@
 <string name="optional">(opcional)</string>
 <string name="websiteorfeed">(página web o canal)</string>
 <string name="feed_title">Título</string>
-<string name="select_file">Seleccionar archivo</string>
+<string name="select_file">Seleccionar archivo (SD-raíz)</string>
 
 <string name="question_deletefeed">Realmente quieres eliminar este canal y todas sus entradas?</string>
 
