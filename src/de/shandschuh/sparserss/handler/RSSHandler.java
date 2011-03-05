@@ -332,12 +332,12 @@ public class RSSHandler extends DefaultHandler {
 					values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
 					values.putNull(FeedData.EntryColumns.READDATE);
 				}
-				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP).replaceAll(Strings.HTML_TAG_REGEX, ""));
+				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP).replaceAll(Strings.HTML_TAG_REGEX, Strings.EMPTY));
 				
 				Vector<String> images = null;
 				
 				if (description != null) {
-					String descriptionString = description.toString().trim();
+					String descriptionString = description.toString().trim().replaceAll(Strings.HTML_SPAN_REGEX, Strings.EMPTY);
 					
 					if (fetchImages) {
 						images = new Vector<String>(4);
