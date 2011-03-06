@@ -43,6 +43,8 @@
 <string name="settings_keeptime_description">Die Einträge, die älter sind, werden automatisch gelöscht</string>
 <string name="settings_fetchpictures">Bilder herunterladen</string>
 <string name="settings_fetchpictures_description">Alle Bilder herunterladen und local speichern</string>
+<string name="settings_blacktextwhite">Schwarzer Text auf weißem Hintergrund</string>
+<string name="settings_blacktextwhite_description">Präsentiere rss-Einträge mit schwarzem Text auf weißem Hintergrund</string>
 
 <string name="settings_refreshonopen">Aktualisiere bei Start</string>
 <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>

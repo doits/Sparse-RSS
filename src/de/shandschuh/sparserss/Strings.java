@@ -54,6 +54,10 @@ public final class Strings {
 	
 	public static final String SETTINGS_PROXYWIFIONLY = "proxy.wifionly";
 	
+	public static final String SETTINGS_KEEPTIME = "keeptime";
+	
+	public static final String SETTINGS_BLACKTEXTONWHITE = "blacktextonwhite";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";
@@ -72,8 +76,6 @@ public final class Strings {
 	
 	public static final String EMPTY = "";
 
-	public static final String SETTINGS_KEEPTIME = "keeptime";
-	
 	public static final String HTTP = "http://";
 	
 	public static final String HTTPS = "https://";

@@ -39,6 +39,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -197,8 +198,13 @@ public class EntryActivity extends Activity {
 
 				WebView webView = (WebView) findViewById(R.id.entry_abstract);
 				
-				webView.loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? new StringBuilder(FONT_START).append(abstractText).append(FONT_END).toString() : new StringBuilder(FONT_START).append(abstractText.replace(NEWLINE, BR)).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
-				webView.setBackgroundColor(color.black);
+				if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_BLACKTEXTONWHITE, false)) {
+					webView.loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? abstractText : abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
+				} else {
+					webView.loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? new StringBuilder(FONT_START).append(abstractText).append(FONT_END).toString() : new StringBuilder(FONT_START).append(abstractText.replace(NEWLINE, BR)).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
+					webView.setBackgroundColor(color.black);
+				}
+				
 				
 				final String link = entryCursor.getString(linkPosition);
 				
