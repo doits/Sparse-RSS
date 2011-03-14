@@ -346,7 +346,6 @@ public class FetcherService extends Service {
 					
 					try {
 						iconBytes = getBytes(iconURLConnection.getInputStream());
-						iconURLConnection.disconnect();
 						ContentValues values = new ContentValues();
 						
 						values.put(FeedData.FeedColumns.ICON, iconBytes); 
@@ -356,6 +355,8 @@ public class FetcherService extends Service {
 						
 						values.put(FeedData.FeedColumns.ICON, new byte[0]); // no icon found or error
 						context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+					} finally {
+						iconURLConnection.disconnect();
 					}
 					
 				}
@@ -436,7 +437,9 @@ public class FetcherService extends Service {
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
 					values.put(FeedData.FeedColumns.ERROR, e.getMessage());
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-				} else if (connection != null) {
+				} 
+			} finally {
+				if (connection != null) {
 					connection.disconnect();
 				}
 			}
@@ -455,6 +458,10 @@ public class FetcherService extends Service {
 	}
 	
 	private static final HttpURLConnection setupConnection(URL url) throws IOException {
+		return setupConnection(url, 5); // 5 retries 
+	}
+	
+	private static final HttpURLConnection setupConnection(URL url, int level) throws IOException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
 		connection.setDoInput(true);
@@ -463,20 +470,12 @@ public class FetcherService extends Service {
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
-		connection.connect();
-		if (connection.getResponseCode() == -1) {  // retry only once
+		if (connection.getResponseCode() == -1 && level > 0) { // getResponseCode() calls connect()
 			connection.disconnect();
-			connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
-			
-			connection.setDoInput(true);
-			connection.setDoOutput(false);
-			connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
-			connection.setConnectTimeout(30000);
-			connection.setReadTimeout(30000);
-			connection.setUseCaches(false);
-			connection.connect();
+			return setupConnection(url, level-1);
+		} else {
+			return connection;
 		}
-		return connection;
 	}
 	
 	public static byte[] getBytes(InputStream inputStream) throws IOException {
