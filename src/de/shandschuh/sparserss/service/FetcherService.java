@@ -458,10 +458,6 @@ public class FetcherService extends Service {
 	}
 	
 	private static final HttpURLConnection setupConnection(URL url) throws IOException {
-		return setupConnection(url, 5); // 5 retries 
-	}
-	
-	private static final HttpURLConnection setupConnection(URL url, int level) throws IOException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
 		connection.setDoInput(true);
@@ -470,12 +466,11 @@ public class FetcherService extends Service {
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
-		if (connection.getResponseCode() == -1 && level > 0) { // getResponseCode() calls connect()
-			connection.disconnect();
-			return setupConnection(url, level-1);
-		} else {
-			return connection;
+		connection.connect();
+		for (int n = 0; n < 10 && connection.getResponseCode() == -1; n++) {
+			
 		}
+		return connection;
 	}
 	
 	public static byte[] getBytes(InputStream inputStream) throws IOException {
