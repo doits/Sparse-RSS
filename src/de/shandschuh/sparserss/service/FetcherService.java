@@ -468,9 +468,6 @@ public class FetcherService extends Service {
 		connection.setUseCaches(false);
 		connection.setRequestProperty("connection", "close"); // Workaround for issue android issue 7786
 		connection.connect();
-		for (int n = 0; n < 5 && connection.getResponseCode() == -1; n++) {
-			
-		}
 		return connection;
 	}
 	
