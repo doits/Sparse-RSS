@@ -64,9 +64,9 @@ public class EntryActivity extends Activity {
 	
 	private static final String DESC = "date desc limit 1";
 	
-	private static final String FONT_START = "<font color=\"#D0D0D0\">";
+	private static final String FONT_START = "<body link=\"#97ACE5\"><font color=\"#D0D0D0\">";
 	
-	private static final String FONT_END = "</font>";
+	private static final String FONT_END = "</font></body>";
 	
 	private int titlePosition;
 	
