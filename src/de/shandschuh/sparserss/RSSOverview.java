@@ -353,7 +353,12 @@ public class RSSOverview extends ListActivity {
 		}
 		if (url != null) { // indicates an edit
 			urlEditText.setText(url);
-			urlEditText.setSelection(url.length()-1);
+			
+			int urlLength = url.length();
+			
+			if (urlLength > 0) {
+				urlEditText.setSelection(urlLength-1);
+			}
 			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					String url = urlEditText.getText().toString();
