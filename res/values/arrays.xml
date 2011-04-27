@@ -16,4 +16,10 @@
 <item>14</item>
 <item>30</item>
 </string-array>
+<string-array name="settings_fontsizevalues">
+<item>0</item>
+<item>1</item>
+<item>2</item>
+<item>3</item>
+</string-array>
 </resources>

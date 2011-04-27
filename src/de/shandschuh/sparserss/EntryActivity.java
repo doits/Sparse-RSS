@@ -34,6 +34,7 @@ import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -65,6 +66,14 @@ public class EntryActivity extends Activity {
 	private static final String DESC = "date desc limit 1";
 	
 	private static final String FONT_START = "<body link=\"#97ACE5\"><font color=\"#D0D0D0\">";
+	
+	private static final String FONT_FONTSIZE_START = "<body link=\"#97ACE5\"><font color=\"#D0D0D0\" size=\"+";
+	
+	private static final String FONTSIZE_START = "<font size=\"+";
+	
+	private static final String FONTSIZE_MIDDLE = "\">";
+	
+	private static final String FONTSIZE_END = "</font>";
 	
 	private static final String FONT_END = "</font></body>";
 	
@@ -198,10 +207,26 @@ public class EntryActivity extends Activity {
 
 				WebView webView = (WebView) findViewById(R.id.entry_abstract);
 				
-				if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_BLACKTEXTONWHITE, false)) {
-					webView.loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? abstractText : abstractText.replace(NEWLINE, BR), TEXT_HTML, UTF8, null);
+				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+				
+				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
+				
+				if (abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1) {
+					abstractText = abstractText.replace(NEWLINE, BR);
+				}
+				
+				if (preferences.getBoolean(Strings.SETTINGS_BLACKTEXTONWHITE, false)) {
+					if (fontsize > 0) {
+						webView.loadDataWithBaseURL(null, new StringBuilder(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONTSIZE_END).toString(), TEXT_HTML, UTF8, null);
+					} else {
+						webView.loadDataWithBaseURL(null, abstractText, TEXT_HTML, UTF8, null);
+					}
 				} else {
-					webView.loadDataWithBaseURL(null, abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1 ? new StringBuilder(FONT_START).append(abstractText).append(FONT_END).toString() : new StringBuilder(FONT_START).append(abstractText.replace(NEWLINE, BR)).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
+					if (fontsize > 0) {
+						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
+					} else {
+						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_START).append(abstractText).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
+					}
 					webView.setBackgroundColor(color.black);
 				}
 				

@@ -108,4 +108,12 @@
 <item>2 semanas</item>
 <item>1 mes</item>
 </string-array>
+
+<string-array name="settings_fontsizes">
+<item>Estándar</item>
+<item>+1</item>
+<item>+2</item>
+<item>+3</item>
+</string-array>
+
 </resources>

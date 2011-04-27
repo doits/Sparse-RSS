@@ -58,6 +58,8 @@ public final class Strings {
 	
 	public static final String SETTINGS_BLACKTEXTONWHITE = "blacktextonwhite";
 	
+	public static final String SETTINGS_FONTSIZE = "fontsize";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";
@@ -105,6 +107,8 @@ public final class Strings {
 	public static final String URL_SPACE = "%20";
 
 	public static final String HTML_SPAN_REGEX = "<[/]?[ ]?span(.|\n)*?>";
+
+	public static final String ONE = "1";
 
 
 }

@@ -68,6 +68,8 @@ THE SOFTWARE.
 <string name="settings_fetchpictures_description">Download all pictures and store them locally</string>
 <string name="settings_blacktextwhite">Black text on white background</string>
 <string name="settings_blacktextwhite_description">Present rss entries in black text on white background</string>
+<string name="settings_fontsize">Font size</string>
+<string name="settings_fontsize_description">Font size for single entries</string>
 
 <string name="settings_refreshonopen">Refresh feeds on open</string>
 <string name="settings_refreshonopen_description">Refreshes all feeds after opening the application</string>
@@ -132,5 +134,12 @@ THE SOFTWARE.
 <item>1 week</item>
 <item>2 weeks</item>
 <item>1 month</item>
+</string-array>
+
+<string-array name="settings_fontsizes">
+<item>Standard</item>
+<item>+1</item>
+<item>+2</item>
+<item>+3</item>
 </string-array>
 </resources>

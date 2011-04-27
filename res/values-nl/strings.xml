@@ -40,6 +40,8 @@
 <string name="settings_prioritize_description">Toon ongelezen artikelen boven de gelezen artikelen</string>
 <string name="settings_keeptime">Tijd dat de artikelen bewaard worden</string>
 <string name="settings_keeptime_description">Artikelen verwijderen na</string>
+<string name="settings_fontsize">Lettergrootte</string>
+<string name="settings_fontsize_description">Lettergrootte voor enkele artikelen</string>
 
 <string name="settings_refreshonopen">Artikelen vernieuwen bij openen</string>
 <string name="settings_refreshonopen_description">Alle feeds vernieuwen na het openen van de applicatie</string>
@@ -98,5 +100,12 @@
 <item>1 week</item>
 <item>2 weken</item>
 <item>1 maand</item>
+</string-array>
+
+<string-array name="settings_fontsizes">
+<item>Standaard</item>
+<item>+1</item>
+<item>+2</item>
+<item>+3</item>
 </string-array>
 </resources>
