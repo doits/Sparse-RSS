@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -49,6 +49,7 @@ public class SDMountBroadcastReceiver extends BroadcastReceiver {
 			} catch (NameNotFoundException e) {
 				
 			}
+			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
 	}
 
