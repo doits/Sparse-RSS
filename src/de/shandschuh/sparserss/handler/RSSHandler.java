@@ -78,6 +78,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_CONTENT = "content";
 	
+	private static final String TAG_ENCODEDCONTENT = "encoded";
+	
 	private static final String TAG_SUMMARY = "summary";
 	
 	private static final String TAG_PUBDATE = "pubDate";
@@ -224,6 +226,7 @@ public class RSSHandler extends DefaultHandler {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+		//Log.d("Test", qName+":"+localName);
 		if (TAG_UPDATED.equals(localName)) {
 			updatedTagEntered = true;
 			dateStringBuilder = new StringBuilder();
@@ -271,8 +274,10 @@ public class RSSHandler extends DefaultHandler {
 				linkTagEntered = true;
 			}
 		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName) || TAG_CONTENT.equals(localName)) {
-			descriptionTagEntered = true;
-			description = new StringBuilder();
+			if (description == null) { // this happens, if there is no encoded description
+				descriptionTagEntered = true;
+				description = new StringBuilder();
+			}
 		} else if (TAG_PUBDATE.equals(localName)) {
 			pubDateTagEntered = true;
 			dateStringBuilder = new StringBuilder();
@@ -282,6 +287,9 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_LASTBUILDDATE.equals(localName)) {
 			lastUpdateDateTagEntered = true;
 			dateStringBuilder = new StringBuilder();
+		} else if (TAG_ENCODEDCONTENT.equals(localName)) {
+			descriptionTagEntered = true;
+			description = new StringBuilder();
 		}
 	}
 
@@ -301,14 +309,14 @@ public class RSSHandler extends DefaultHandler {
 			dateStringBuilder.append(ch, start, length);
 		} else if (lastUpdateDateTagEntered) {
 			dateStringBuilder.append(ch, start, length);
-		}
+		} 
 	}
 	
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (TAG_TITLE.equals(localName)) {
 			titleTagEntered = false;
-		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName) || TAG_CONTENT.equals(localName)) {
+		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName) || TAG_CONTENT.equals(localName) || TAG_ENCODEDCONTENT.equals(localName)) {
 			descriptionTagEntered = false;
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;

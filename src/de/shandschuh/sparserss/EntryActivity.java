@@ -51,9 +51,11 @@ import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntryActivity extends Activity {
+	/*
 	private static final String NEWLINE = "\n";
 	
 	private static final String BR = "<br/>";
+	*/
 	
 	private static final String TEXT_HTML = "text/html";
 	
@@ -211,9 +213,11 @@ public class EntryActivity extends Activity {
 				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
 				
+				/*
 				if (abstractText.indexOf('<') > -1 && abstractText.indexOf('>') > -1) {
 					abstractText = abstractText.replace(NEWLINE, BR);
 				}
+				*/
 				
 				if (preferences.getBoolean(Strings.SETTINGS_BLACKTEXTONWHITE, false)) {
 					if (fontsize > 0) {
