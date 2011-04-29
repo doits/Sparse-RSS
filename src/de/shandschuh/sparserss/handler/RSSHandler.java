@@ -231,6 +231,7 @@ public class RSSHandler extends DefaultHandler {
 			updatedTagEntered = true;
 			dateStringBuilder = new StringBuilder();
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
+			description = null;
 			if (!feedRefreshed) {
 				ContentValues values = new ContentValues();
 					
