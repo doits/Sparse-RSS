@@ -34,6 +34,8 @@
 <string name="settings_notificationsringtone_description">Seleccione un tono de aviso al recibir nuevos contenidos</string>
 <string name="settings_notificationsvibrate">Vibrar</string>
 <string name="settings_notificationsvibrate_description">Activar vibración para aviso de nuevos contenidos</string>
+<string name="settings_fontsize">Tamaño de fuente</string>
+<string name="settings_fontsize_description">Tamaño de texto en las entradas</string>
 
 <string name="settings_category_contentpresentation">Opciones de presentación</string>
 <string name="settings_prioritize">Dar prioridad a no leídos</string>
