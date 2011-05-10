@@ -61,11 +61,15 @@ public class EntryActivity extends Activity {
 	
 	private static final String UTF8 = "utf-8";
 	
-	private static final String AND_DATE = " and date ";
+	private static final String OR_DATE = " or date ";
 	
-	private static final String ASC = "date asc limit 1";
+	private static final String AND_DATE = " and ((date=";
 	
-	private static final String DESC = "date desc limit 1";
+	private static final String AND_ID = " and _id";
+	
+	private static final String ASC = "date asc, _id desc limit 1";
+	
+	private static final String DESC = "date desc, _id asc limit 1";
 	
 	private static final String FONT_START = "<body link=\"#97ACE5\"><font color=\"#D0D0D0\">";
 	
@@ -92,6 +96,8 @@ public class EntryActivity extends Activity {
 	private int favoritePosition;
 	
 	private int readDatePosition;
+	
+	private String _id;
 	
 	private Uri uri;
 	
@@ -145,6 +151,8 @@ public class EntryActivity extends Activity {
 	}
 
 	private void reload() {
+		_id = uri.getLastPathSegment();
+		
 		ContentValues values = new ContentValues();
 		
 		values.put(FeedData.EntryColumns.READDATE, System.currentTimeMillis());
@@ -259,12 +267,12 @@ public class EntryActivity extends Activity {
 	}
 	
 	private void setupButton(int buttonId, boolean successor, long date) {
-		StringBuilder queryString = new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(successor ? '<' : '>').append(date);
+		StringBuilder queryString = new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(date).append(AND_ID).append(successor ? '>' : '<').append(_id).append(')').append(OR_DATE).append(successor ? '<' : '>').append(date).append(')');
 		
 		if (!showRead) {
 			queryString.append(Strings.DB_AND).append(EntriesListAdapter.READDATEISNULL);
 		}
-		
+
 		Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns._ID}, queryString.toString() , null, successor ? DESC : ASC);
 		
 		Button button = (Button) findViewById(buttonId);
