@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +25,14 @@
 
 package de.shandschuh.sparserss;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -64,6 +70,35 @@ public class ApplicationPreferencesActivity extends PreferenceActivity {
 					
 				}
 				return true;
+			}
+		});
+		
+		final CheckBoxPreference acceptInvalidSSLCertificatesPreference = (CheckBoxPreference) findPreference(Strings.SETTINGS_ACCEPTINVALIDSSL);
+		
+		acceptInvalidSSLCertificatesPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				if (Boolean.TRUE.equals(newValue)) {
+					Builder builder = new AlertDialog.Builder(ApplicationPreferencesActivity.this);
+					
+					builder.setIcon(android.R.drawable.ic_dialog_alert);
+					builder.setTitle(android.R.string.dialog_alert_title);
+					builder.setMessage(R.string.hint_invalidsslcerts);
+					builder.setPositiveButton(android.R.string.yes, new OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							Editor editor = acceptInvalidSSLCertificatesPreference.getEditor();
+							
+							editor.putBoolean(Strings.SETTINGS_ACCEPTINVALIDSSL, true);
+							editor.commit();
+							acceptInvalidSSLCertificatesPreference.setChecked(true);
+						}
+					});
+					builder.setNegativeButton(android.R.string.no, null);
+					builder.show();
+					
+					return false;
+				} else {
+					return true;
+				}
 			}
 		});
 		

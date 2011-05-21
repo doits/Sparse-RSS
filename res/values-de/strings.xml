@@ -61,6 +61,10 @@
 <string name="settings_category_network">Netzwerk</string>
 <string name="settings_proxy_wifionly">Nur WLan</string>
 <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
+<string name="settings_acceptinvalidssl">Ungültige SSL-Zertifikate akzeptieren</string>
+<string name="settings_acceptinvalidssl_description">Die Validität von SSL-Zertifikaten wird nicht mehr überprüft</string>
+
+<string name="hint_invalidsslcerts">Mit dem Akzeptieren von ungültigen SSL-Zertifikaten sind die Feeds angreifbar durch einen Mann-in-der-Mitte Angriff. Akzeptieren Sie das nur, wenn Sie wissen, was Sie machen.</string>
 
 <string name="update">Aktualisiert</string>
 <string name="never">nie</string>

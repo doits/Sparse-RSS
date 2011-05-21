@@ -102,6 +102,11 @@ android:key="blacktextonwhite" />
     	android:inputType="number"
     	android:dependency="proxy.enabled"/>		
 </PreferenceScreen>
+<CheckBoxPreference
+android:title="@string/settings_acceptinvalidssl"
+android:defaultValue="false"
+android:summary="@string/settings_acceptinvalidssl_description"
+android:key="acceptinvalidssl" />
 </PreferenceCategory>
 
 </PreferenceScreen>

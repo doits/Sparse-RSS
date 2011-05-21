@@ -36,7 +36,17 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.Date;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -87,6 +97,8 @@ public class FetcherService extends Service {
 	
 	private static final String ENCODING = "encoding=\"";
 	
+	private static final String HTTPS = "https";
+	
 	boolean running = false;
 	
 	private NotificationManager notificationManager;
@@ -94,6 +106,12 @@ public class FetcherService extends Service {
 	private static SharedPreferences preferences = null;
 	
 	private static Proxy proxy;
+	
+	private static HostnameVerifier hostnameVerifier;
+	
+	private static TrustManager[] trustManagers;
+	
+	private static SSLSocketFactory sslSocketFactory;
 	
 	static {
 		HttpURLConnection.setFollowRedirects(true);
@@ -460,6 +478,9 @@ public class FetcherService extends Service {
 	private static final HttpURLConnection setupConnection(URL url) throws IOException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
+		if (url.getProtocol().equals(HTTPS) && preferences.getBoolean(Strings.SETTINGS_ACCEPTINVALIDSSL, false)) {
+			acceptInvalidSSLCertificates((HttpsURLConnection) connection);
+		}
 		connection.setDoInput(true);
 		connection.setDoOutput(false);
 		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
@@ -469,6 +490,49 @@ public class FetcherService extends Service {
 		connection.setRequestProperty("connection", "close"); // Workaround for issue android issue 7786
 		connection.connect();
 		return connection;
+	}
+	
+	public static void acceptInvalidSSLCertificates(HttpsURLConnection connection) {
+		if (sslSocketFactory == null) {
+			if (hostnameVerifier == null) {
+				hostnameVerifier = new HostnameVerifier() {
+					public boolean verify(String hostname, javax.net.ssl.SSLSession session) {
+						return true;
+					}
+				};
+			}
+			connection.setHostnameVerifier(hostnameVerifier);
+			
+			if (trustManagers == null) {
+				trustManagers = new TrustManager[] {new X509TrustManager() {
+					private X509Certificate[] issuers = new X509Certificate[0];
+					
+					public void checkClientTrusted(X509Certificate[] chain,
+							String authType) throws CertificateException {
+						
+					}
+
+					public void checkServerTrusted(X509Certificate[] chain,
+							String authType) throws CertificateException {
+					}
+
+					public X509Certificate[] getAcceptedIssuers() {
+						return issuers;
+					}
+				}};
+			}
+			
+			try {
+				SSLContext context = SSLContext.getInstance("TLS");
+				
+				context.init(null, trustManagers, new SecureRandom());
+				
+				sslSocketFactory = context.getSocketFactory();
+			} catch (Exception exception) {
+				
+			}
+		}
+		connection.setSSLSocketFactory(sslSocketFactory);
 	}
 	
 	public static byte[] getBytes(InputStream inputStream) throws IOException {
