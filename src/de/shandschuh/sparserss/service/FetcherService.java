@@ -44,6 +44,7 @@ import java.util.Date;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -496,7 +497,7 @@ public class FetcherService extends Service {
 		if (sslSocketFactory == null) {
 			if (hostnameVerifier == null) {
 				hostnameVerifier = new HostnameVerifier() {
-					public boolean verify(String hostname, javax.net.ssl.SSLSession session) {
+					public boolean verify(String hostname, SSLSession session) {
 						return true;
 					}
 				};
