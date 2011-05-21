@@ -174,6 +174,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private Date lastBuildDate;
 	
+	private long realLastUpdate;
+	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
 		this.context = context;
@@ -211,6 +213,7 @@ public class RSSHandler extends DefaultHandler {
 		reader = null;
 		entryDate = null;
 		lastBuildDate = null;
+		realLastUpdate = 0;
 		
 		done = false;
 		cancelled = false;
@@ -240,11 +243,13 @@ public class RSSHandler extends DefaultHandler {
 				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
 				values.put(FeedData.FeedColumns.LASTUPDATE, System.currentTimeMillis() - 1000);
+				
 				if (lastBuildDate != null) {
-					values.put(FeedData.FeedColumns.REALLASTUPDATE, entryDate != null && entryDate.before(lastBuildDate) ? entryDate.getTime() : lastBuildDate.getTime());
+					realLastUpdate = entryDate != null && entryDate.before(lastBuildDate) ? entryDate.getTime() : lastBuildDate.getTime();
 				} else {
-					values.put(FeedData.FeedColumns.REALLASTUPDATE, entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000);
+					realLastUpdate = entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000;
 				}
+				values.put(FeedData.FeedColumns.REALLASTUPDATE, realLastUpdate);
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				title = null;
 				feedRefreshed = true;
@@ -336,6 +341,14 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
 			if (title != null && (entryDate == null || (entryDate.after(lastUpdateDate) && entryDate.after(keepDateBorder)))) {
 				ContentValues values = new ContentValues();
+				
+				if (entryDate != null && entryDate.getTime() > realLastUpdate) {
+					realLastUpdate = entryDate.getTime();
+					
+					values.put(FeedData.FeedColumns.REALLASTUPDATE, realLastUpdate);
+					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+					values.clear();
+				}
 				
 				if (entryDate != null) {
 					values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
