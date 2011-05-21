@@ -213,8 +213,8 @@ public class RSSHandler extends DefaultHandler {
 		reader = null;
 		entryDate = null;
 		lastBuildDate = null;
-		realLastUpdate = 0;
-		
+		realLastUpdate = lastUpdateDate.getTime();
+
 		done = false;
 		cancelled = false;
 		
@@ -229,7 +229,6 @@ public class RSSHandler extends DefaultHandler {
 
 	@Override
 	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		//Log.d("Test", qName+":"+localName);
 		if (TAG_UPDATED.equals(localName)) {
 			updatedTagEntered = true;
 			dateStringBuilder = new StringBuilder();
@@ -243,11 +242,10 @@ public class RSSHandler extends DefaultHandler {
 				}
 				values.put(FeedData.FeedColumns.ERROR, (String) null);
 				values.put(FeedData.FeedColumns.LASTUPDATE, System.currentTimeMillis() - 1000);
-				
 				if (lastBuildDate != null) {
-					realLastUpdate = entryDate != null && entryDate.before(lastBuildDate) ? entryDate.getTime() : lastBuildDate.getTime();
+					realLastUpdate = Math.max(entryDate != null && entryDate.after(lastBuildDate) ? entryDate.getTime() : lastBuildDate.getTime(), realLastUpdate);
 				} else {
-					realLastUpdate = entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000;
+					realLastUpdate = Math.max(entryDate != null ? entryDate.getTime() : System.currentTimeMillis() - 1000, realLastUpdate);
 				}
 				values.put(FeedData.FeedColumns.REALLASTUPDATE, realLastUpdate);
 				context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
