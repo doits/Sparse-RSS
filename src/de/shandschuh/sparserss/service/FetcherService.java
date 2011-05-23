@@ -497,11 +497,11 @@ public class FetcherService extends Service {
 
 			if (trustManagers == null) {
 				trustManagers = new TrustManager[] {new X509TrustManager() {
-					public void checkClientTrusted(X509Certificate[] certs, String client) {
+					public void checkClientTrusted(X509Certificate[] certs, String auth) {
 	
 	                }
 	
-	                public void checkServerTrusted(X509Certificate[] certs, String server) {
+	                public void checkServerTrusted(X509Certificate[] certs, String auth) {
 	
 	                }
 	 
