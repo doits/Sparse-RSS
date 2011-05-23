@@ -36,15 +36,13 @@ import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.util.Date;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -107,8 +105,6 @@ public class FetcherService extends Service {
 	private static SharedPreferences preferences = null;
 	
 	private static Proxy proxy;
-	
-	private static HostnameVerifier hostnameVerifier;
 	
 	private static TrustManager[] trustManagers;
 	
@@ -472,11 +468,11 @@ public class FetcherService extends Service {
 		return result;
 	}
 	
-	private static final HttpURLConnection setupConnection(String url) throws IOException {
+	private static final HttpURLConnection setupConnection(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		return setupConnection(new URL(url));
 	}
 	
-	private static final HttpURLConnection setupConnection(URL url) throws IOException {
+	private static final HttpURLConnection setupConnection(URL url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
 		if (url.getProtocol().equals(HTTPS) && preferences.getBoolean(Strings.SETTINGS_ACCEPTINVALIDSSL, false)) {
@@ -493,45 +489,29 @@ public class FetcherService extends Service {
 		return connection;
 	}
 	
-	public static void acceptInvalidSSLCertificates(HttpsURLConnection connection) {
+	public static void acceptInvalidSSLCertificates(HttpsURLConnection connection) throws NoSuchAlgorithmException, KeyManagementException {
+		connection.setHostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+
 		if (sslSocketFactory == null) {
-			if (hostnameVerifier == null) {
-				hostnameVerifier = new HostnameVerifier() {
-					public boolean verify(String hostname, SSLSession session) {
-						return true;
-					}
-				};
-			}
-			connection.setHostnameVerifier(hostnameVerifier);
-			
+			SSLContext context = SSLContext.getInstance("TLS");
+
 			if (trustManagers == null) {
 				trustManagers = new TrustManager[] {new X509TrustManager() {
-					private X509Certificate[] issuers = new X509Certificate[0];
-					
-					public void checkClientTrusted(X509Certificate[] chain,
-							String authType) throws CertificateException {
-						
-					}
-
-					public void checkServerTrusted(X509Certificate[] chain,
-							String authType) throws CertificateException {
-					}
-
-					public X509Certificate[] getAcceptedIssuers() {
-						return issuers;
-					}
-				}};
+					public void checkClientTrusted(X509Certificate[] certs, String client) {
+	
+	                }
+	
+	                public void checkServerTrusted(X509Certificate[] certs, String server) {
+	
+	                }
+	 
+	                public X509Certificate[] getAcceptedIssuers() {
+	                    return null;
+	                }
+	            }};
 			}
-			
-			try {
-				SSLContext context = SSLContext.getInstance("TLS");
-				
-				context.init(null, trustManagers, new SecureRandom());
-				
-				sslSocketFactory = context.getSocketFactory();
-			} catch (Exception exception) {
-				
-			}
+			context.init(null, trustManagers, null);
+			sslSocketFactory = context.getSocketFactory();
 		}
 		connection.setSSLSocketFactory(sslSocketFactory);
 	}

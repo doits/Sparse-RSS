@@ -61,6 +61,11 @@
 <string name="settings_proxy_wifionly_description">Utilizar proxy solo para Wi-Fi</string>
 <string name="settings_proxy_host">Host</string>
 <string name="settings_proxy_port">Puerto</string>
+<string name="settings_acceptinvalidssl">Aceptar certificados SSL no válidos</string>
+<string name="settings_acceptinvalidssl_description">No comprobar la validez de los certificados SSL</string>
+
+<string name="hint_invalidsslcerts">Con la aceptación de certificados SSL no válidos, los canales serán fácilmente vulnerables a un ataque de intermediario.
+Sólo acepta esto, si usted sabe lo que está haciendo.</string>
 
 <string name="never">nunca</string>
 <string name="update">Actualizado</string>
