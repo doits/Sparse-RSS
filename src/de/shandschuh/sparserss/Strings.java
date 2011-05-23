@@ -60,8 +60,6 @@ public final class Strings {
 	
 	public static final String SETTINGS_FONTSIZE = "fontsize";
 	
-	public static final String SETTINGS_ACCEPTINVALIDSSL = "acceptinvalidssl";
-	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";

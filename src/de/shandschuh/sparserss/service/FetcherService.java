@@ -38,14 +38,7 @@ import java.net.Proxy;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.X509Certificate;
 import java.util.Date;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -96,8 +89,6 @@ public class FetcherService extends Service {
 	
 	private static final String ENCODING = "encoding=\"";
 	
-	private static final String HTTPS = "https";
-	
 	boolean running = false;
 	
 	private NotificationManager notificationManager;
@@ -105,10 +96,6 @@ public class FetcherService extends Service {
 	private static SharedPreferences preferences = null;
 	
 	private static Proxy proxy;
-	
-	private static TrustManager[] trustManagers;
-	
-	private static SSLSocketFactory sslSocketFactory;
 	
 	static {
 		HttpURLConnection.setFollowRedirects(true);
@@ -475,9 +462,6 @@ public class FetcherService extends Service {
 	private static final HttpURLConnection setupConnection(URL url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
-		if (url.getProtocol().equals(HTTPS) && preferences.getBoolean(Strings.SETTINGS_ACCEPTINVALIDSSL, false)) {
-			acceptInvalidSSLCertificates((HttpsURLConnection) connection);
-		}
 		connection.setDoInput(true);
 		connection.setDoOutput(false);
 		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
@@ -488,34 +472,7 @@ public class FetcherService extends Service {
 		connection.connect();
 		return connection;
 	}
-	
-	public static void acceptInvalidSSLCertificates(HttpsURLConnection connection) throws NoSuchAlgorithmException, KeyManagementException {
-		connection.setHostnameVerifier(org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
 
-		if (sslSocketFactory == null) {
-			SSLContext context = SSLContext.getInstance("TLS");
-
-			if (trustManagers == null) {
-				trustManagers = new TrustManager[] {new X509TrustManager() {
-					public void checkClientTrusted(X509Certificate[] certs, String auth) {
-	
-	                }
-	
-	                public void checkServerTrusted(X509Certificate[] certs, String auth) {
-	
-	                }
-	 
-	                public X509Certificate[] getAcceptedIssuers() {
-	                    return null;
-	                }
-	            }};
-			}
-			context.init(null, trustManagers, null);
-			sslSocketFactory = context.getSocketFactory();
-		}
-		connection.setSSLSocketFactory(sslSocketFactory);
-	}
-	
 	public static byte[] getBytes(InputStream inputStream) throws IOException {
 		ByteArrayOutputStream output = new ByteArrayOutputStream();
 		

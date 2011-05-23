@@ -86,10 +86,6 @@ THE SOFTWARE.
 <string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
 <string name="settings_proxy_host">Host</string>
 <string name="settings_proxy_port">Port</string>
-<string name="settings_acceptinvalidssl">Accept invalid SSL certificates</string>
-<string name="settings_acceptinvalidssl_description">Do not check the validity of SSL certificates</string>
-
-<string name="hint_invalidsslcerts">With accepting invalid SSL certificates, the feeds are easily vulnerable by a man-in-the-middle attack. Only accept this, if you know what you are doing.</string>
 
 <string name="never">never</string>
 <string name="update">Update</string>
