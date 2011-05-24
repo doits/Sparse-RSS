@@ -43,11 +43,11 @@ import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
-	private static final String LIMIT = " limit 7";
+	private static final String LIMIT = " limit 10";
 	
-	private static final int[] IDS = {R.id.news_1, R.id.news_2, R.id.news_3, R.id.news_4, R.id.news_5, R.id.news_6, R.id.news_7};
+	private static final int[] IDS = {R.id.news_1, R.id.news_2, R.id.news_3, R.id.news_4, R.id.news_5, R.id.news_6, R.id.news_7, R.id.news_8, R.id.news_9, R.id.news_10};
 	
-	private static final int[] ICON_IDS = {R.id.news_icon_1, R.id.news_icon_2, R.id.news_icon_3, R.id.news_icon_4, R.id.news_icon_5, R.id.news_icon_6, R.id.news_icon_7};
+	private static final int[] ICON_IDS = {R.id.news_icon_1, R.id.news_icon_2, R.id.news_icon_3, R.id.news_icon_4, R.id.news_icon_5, R.id.news_icon_6, R.id.news_icon_7, R.id.news_icon_8, R.id.news_icon_9, R.id.news_icon_10};
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {

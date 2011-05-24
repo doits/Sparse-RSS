@@ -2,18 +2,19 @@
 	android:background="@drawable/widget_frame" 
 	android:orientation="vertical" 
 	android:layout_width="fill_parent" 
-	android:layout_height="158sp" 
+	android:layout_height="fill_parent" 
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:paddingLeft="14dp"
-	android:gravity="center"
-	android:paddingBottom="5dp"
+	android:paddingTop="12dip"
+	android:paddingBottom="19px"
 >
 <RelativeLayout
-	android:gravity="left|center_vertical"
+	android:gravity="left|top"
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical"
-	android:paddingRight="13dp">
+	android:paddingRight="13dp"
+	>
 
 <ImageView android:layout_width="16dip" android:layout_height="16dip" android:id="@+id/news_icon_1"/>
 <TextView android:layout_toRightOf="@id/news_icon_1" android:paddingRight="10dp" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_1" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
@@ -29,6 +30,12 @@
 <TextView android:layout_toRightOf="@id/news_icon_6" android:layout_below="@id/news_5" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_6" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 <ImageView android:layout_below="@id/news_6" android:layout_width="16dip" android:layout_height="16dip" android:id="@+id/news_icon_7"/>
 <TextView android:layout_toRightOf="@id/news_icon_7" android:layout_below="@id/news_6" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_7" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_below="@id/news_7" android:layout_width="16dip" android:layout_height="16dip" android:id="@+id/news_icon_8"/>
+<TextView android:layout_toRightOf="@id/news_icon_8" android:layout_below="@id/news_7" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_8" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_below="@id/news_8" android:layout_width="16dip" android:layout_height="16dip" android:id="@+id/news_icon_9"/>
+<TextView android:layout_toRightOf="@id/news_icon_9" android:layout_below="@id/news_8" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_9" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+<ImageView android:layout_below="@id/news_9" android:layout_width="16dip" android:layout_height="16dip" android:id="@+id/news_icon_10"/>
+<TextView android:layout_toRightOf="@id/news_icon_10" android:layout_below="@id/news_9" android:textColor="@xml/widgettext" android:singleLine="true" android:text="" android:id="@+id/news_10" android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 </RelativeLayout>
 <ImageView android:layout_alignParentTop="true" android:layout_alignParentRight="true" android:src="@xml/widgeticon" android:id="@+id/feed_icon" android:layout_width="wrap_content" android:layout_height="wrap_content" />
 </RelativeLayout>
