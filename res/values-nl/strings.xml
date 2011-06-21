@@ -20,7 +20,7 @@
 <string name="menu_import">Importeer uit OPML</string>
 <string name="menu_export">Exporteer naar OPML</string>
 <string name="menu_about">Over</string>
-<string name="license_intro">De software wordt verspreid onder de MIT open source licentie en de broncode is beschikbaar via http://sparserss.googlecode.com\n</string>
+<string name="license_intro">De software wordt verspreid onder de MIT open source licentie en de broncode is beschikbaar via http://code.google.com/p/sparserss</string>
 
 <string name="settings_category_refresh">Automatisch vernieuwen</string>
 <string name="settings_enabled">Aan</string>

@@ -44,7 +44,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 </string>
-<string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://sparserss.googlecode.com\n</string>
+<string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://code.google.com/p/sparserss</string>
 
 <string name="settings_category_refresh">Automated refresh</string>
 <string name="settings_enabled">Enabled</string>
@@ -113,8 +113,12 @@ THE SOFTWARE.
 <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 
 <string name="button_usesdcard">Use SD-card (if present) - this will close the application. Please restart it manually.</string>
-
+<string name="button_accept">Accept</string>
+<string name="button_decline">Decline</string>
+    
 <string name="message_exportedto">Exported into %s.</string>
+
+<string name="dialog_licenseagreement">License</string>
 
 <string-array name="settings_intervals">
 <item>1 minute</item>

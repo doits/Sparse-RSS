@@ -9,7 +9,7 @@
 <string name="goto_url">Link aufrufen</string>
 <string name="favorites">Favoriten</string>
 
-<string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://sparserss.googlecode.com\n</string>
+<string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://code.google.com/p/sparserss</string>
 
 <string name="editfeed_title">Feed bearbeiten</string>
 <string name="contextmenu_edit">Bearbeiten</string>
@@ -87,8 +87,13 @@
 <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
 
 <string name="button_usesdcard">Benutze SD-Karte (wenn vorhanden) - das schließt das Programm. Bitte starten Sie es manuell neu.</string>
-
+<string name="button_accept">Akzeptieren</string>
+<string name="button_decline">Ablehnen</string>
+    
 <string name="message_exportedto">In Datei %s exportiert.</string>
+
+<string name="dialog_licenseagreement">Lizenz</string>
+
 <string-array name="settings_intervals">
 <item>1 Minute</item>
 <item>5 Minuten</item>

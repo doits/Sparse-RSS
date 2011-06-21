@@ -75,6 +75,8 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int DIALOG_ERROR_INVALIDIMPORTFILE = 5;
 	
+	private static final int DIALOG_ABOUT = 6;
+	
 	private static final int MENU_ADDFEED_ID = 1;
 	
 	private static final int MENU_REFRESH_ID = 2;
@@ -106,7 +108,8 @@ public class RSSOverview extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (notificationManager == null) {
+
+    	if (notificationManager == null) {
         	notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         setContentView(R.layout.main);
@@ -235,7 +238,7 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case MENU_ABOUT_ID: {
-				startActivity(new Intent(this, AboutActivity.class));
+				showDialog(DIALOG_ABOUT);
 				break;
 			}
 			case MENU_IMPORT_ID: {
@@ -319,6 +322,19 @@ public class RSSOverview extends ListActivity {
 			case DIALOG_ERROR_INVALIDIMPORTFILE: {
 				dialog = createErrorDialog(R.string.error_invalidimportfile);
 				break;
+			}
+			case DIALOG_ABOUT: {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				
+				builder.setIcon(android.R.drawable.ic_dialog_info);		
+				builder.setTitle(R.string.menu_about);
+				MainTabActivity.INSTANCE.setupLicenseText(builder);			
+				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.cancel();
+					}
+				});
+				return builder.create();
 			}
 			default: dialog = null;
 		}
@@ -427,5 +443,6 @@ public class RSSOverview extends ListActivity {
 		builder.setPositiveButton(android.R.string.ok, null);
 		return builder.create();
 	}
+	
     
 }

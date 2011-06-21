@@ -110,5 +110,9 @@ public final class Strings {
 
 	public static final String ONE = "1";
 
+	public static final Object THREENEWLINES = "\n\n\n";
+
+	public static final String PREFERENCE_LICENSEACCEPTED = "license.accepted";
+
 
 }

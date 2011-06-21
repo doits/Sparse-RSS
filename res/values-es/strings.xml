@@ -20,7 +20,7 @@
 <string name="menu_import">Importar desde OPML</string>
 <string name="menu_export">Exportar a OPML</string>
 <string name="menu_about">Acerca de</string>
-<string name="license_intro">Este software se distribuye bajo licencia de código abierto MIT y el código fuente está disponible en http://sparserss.googlecode.com\n</string>
+<string name="license_intro">Este software se distribuye bajo licencia de código abierto MIT y el código fuente está disponible en http://code.google.com/p/sparserss</string>
 
 <string name="settings_category_refresh">Ajustes de actualizaciones</string>
 <string name="settings_enabled">Habilitar</string>

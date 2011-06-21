@@ -19,7 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".RSSOverview" android:launchMode="singleTask" />
-        <activity android:name=".AboutActivity" android:launchMode="singleTask" />
 		<activity android:name=".EntriesListActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
