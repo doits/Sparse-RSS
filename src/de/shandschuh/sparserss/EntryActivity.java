@@ -242,6 +242,7 @@ public class EntryActivity extends Activity {
 					webView.setBackgroundColor(color.black);
 				}
 				
+				webView.scrollTo(0, 0); // resets the scrolling
 				
 				final String link = entryCursor.getString(linkPosition);
 				
