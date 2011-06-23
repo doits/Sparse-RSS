@@ -71,9 +71,9 @@ public class EntryActivity extends Activity {
 	
 	private static final String DESC = "date desc, _id asc limit 1";
 	
-	private static final String FONT_START = "<body link=\"#97ACE5\"><font color=\"#D0D0D0\">";
+	private static final String FONT_START = "<body link=\"#97ACE5\" text=\"#D0D0D0\">";
 	
-	private static final String FONT_FONTSIZE_START = "<body link=\"#97ACE5\"><font color=\"#D0D0D0\" size=\"+";
+	private static final String FONT_FONTSIZE_START = "<body link=\"#97ACE5\" text=\"#D0D0D0\"><font size=\"+";
 	
 	private static final String FONTSIZE_START = "<font size=\"+";
 	
@@ -82,6 +82,8 @@ public class EntryActivity extends Activity {
 	private static final String FONTSIZE_END = "</font>";
 	
 	private static final String FONT_END = "</font></body>";
+	
+	private static final String BODY_END = "</body>";
 	
 	private int titlePosition;
 	
@@ -237,7 +239,7 @@ public class EntryActivity extends Activity {
 					if (fontsize > 0) {
 						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
 					} else {
-						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_START).append(abstractText).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
+						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_START).append(abstractText).append(BODY_END).toString(), TEXT_HTML, UTF8, null);
 					}
 					webView.setBackgroundColor(color.black);
 				}
