@@ -32,6 +32,7 @@ public class MainTabActivity extends TabActivity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 	    super.onCreate(savedInstanceState);
+	    setContentView(R.layout.tabs);
 	    INSTANCE = this;
         if (getPreferences(MODE_PRIVATE).getBoolean(Strings.PREFERENCE_LICENSEACCEPTED, false)) {
         	setContent();
@@ -79,8 +80,6 @@ public class MainTabActivity extends TabActivity {
 	}
 	
 	private void setContent() {
-		setContentView(R.layout.tabs);
-
 	    TabHost tabHost = getTabHost();  
 
 	    tabHost.addTab(tabHost.newTabSpec(TAG_NORMAL).setIndicator(getString(R.string.overview)).setContent(new Intent().setClass(this, RSSOverview.class)));
