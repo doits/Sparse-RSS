@@ -167,11 +167,12 @@ public class FetcherService extends Service {
 							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 							if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSVIBRATE, false)) {
-								notification.defaults = Notification.DEFAULT_VIBRATE | Notification.DEFAULT_LIGHTS;
-							} else {
-								notification.defaults = Notification.DEFAULT_LIGHTS;
-							}
-							notification.flags = Notification.FLAG_AUTO_CANCEL;
+								notification.defaults = Notification.DEFAULT_VIBRATE;
+							} 
+							notification.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+							notification.ledARGB = 0xffffffff;
+							notification.ledOnMS = 300;
+							notification.ledOffMS = 1000;
 							
 							String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
 							
