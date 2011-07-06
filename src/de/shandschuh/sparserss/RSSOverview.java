@@ -89,15 +89,17 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int CONTEXTMENU_MARKASREAD_ID = 6;
 	
-	private static final int MENU_SETTINGS_ID = 7;
+	private static final int CONTEXTMENU_MARKASUNREAD_ID = 7;
 	
-	private static final int MENU_ALLREAD = 8;
+	private static final int MENU_SETTINGS_ID = 8;
 	
-	private static final int MENU_ABOUT_ID = 9;
+	private static final int MENU_ALLREAD = 9;
 	
-	private static final int MENU_IMPORT_ID = 10;
+	private static final int MENU_ABOUT_ID = 10;
 	
-	private static final int MENU_EXPORT_ID = 11;
+	private static final int MENU_IMPORT_ID = 11;
+	
+	private static final int MENU_EXPORT_ID = 12;
 	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
@@ -121,6 +123,7 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_REFRESH_ID, Menu.NONE, R.string.contextmenu_refresh);
 				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete);
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread);
+				menu.add(0, CONTEXTMENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread);
 			}
         });
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
@@ -223,6 +226,14 @@ public class RSSOverview extends ListActivity {
 				}.start();
 				break;
 			}
+			case CONTEXTMENU_MARKASUNREAD_ID: {
+				new Thread() {
+					public void run() {
+						getContentResolver().update(FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), getUnreadContentValues(), null, null);
+					}
+				}.start();
+				break;
+			}
 			case MENU_SETTINGS_ID: {
 				startActivityForResult(new Intent(this, ApplicationPreferencesActivity.class), ACTIVITY_APPLICATIONPREFERENCES_ID);
 				break;
@@ -286,6 +297,13 @@ public class RSSOverview extends ListActivity {
 		ContentValues values = new ContentValues();
 		
 		values.put(FeedData.EntryColumns.READDATE, System.currentTimeMillis());
+		return values;
+	}
+	
+	public static final ContentValues getUnreadContentValues() {
+		ContentValues values = new ContentValues();
+		
+		values.putNull(FeedData.EntryColumns.READDATE);
 		return values;
 	}
 

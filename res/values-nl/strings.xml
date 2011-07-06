@@ -14,6 +14,7 @@
 <string name="contextmenu_refresh">Vernieuwen</string>
 <string name="menu_settings">Instellingen</string>
 <string name="contextmenu_markasread">Markeer als gelezen</string>
+<string name="contextmenu_markasunread">Markeer als ongelezen</string>
 <string name="contextmenu_hideread">Verberg gelezen artikelen</string>
 <string name="contextmenu_showread">Toon gelezen artikelen</string>
 <string name="menu_allread">Alles als gelezen markeren</string>

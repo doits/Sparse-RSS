@@ -16,6 +16,7 @@
 <string name="contextmenu_refresh">更新</string>
 <string name="menu_settings">設定</string>
 <string name="contextmenu_markasread">既読済みの印をつける</string>
+<string name="contextmenu_markasunread">未読済みの印をつける</string>
 <string name="contextmenu_hideread">既読済みの記事を表示しない</string>
 <string name="contextmenu_showread">既読済みの記事を表示</string>
 <string name="menu_allread">全て既読済み</string>

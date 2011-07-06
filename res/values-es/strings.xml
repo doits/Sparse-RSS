@@ -14,6 +14,7 @@
 <string name="contextmenu_refresh">Actualizar</string>
 <string name="menu_settings">Ajustes</string>
 <string name="contextmenu_markasread">Marcar como leído</string>
+<string name="contextmenu_markasunread">Marcar como no leído</string>
 <string name="contextmenu_hideread">Ocultar entradas leídas</string>
 <string name="contextmenu_showread">Visualizar entradas leídas</string>
 <string name="menu_allread">Marcar todos como leídos</string>
