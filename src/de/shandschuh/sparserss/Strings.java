@@ -113,6 +113,14 @@ public final class Strings {
 	public static final Object THREENEWLINES = "\n\n\n";
 
 	public static final String PREFERENCE_LICENSEACCEPTED = "license.accepted";
+	
+	public static final String HTML_LT = "&lt;";
+	
+	public static final String HTML_GT = "&gt;";
+	
+	public static final String LT = "<";
+	
+	public static final String GT = ">";
 
 
 }
