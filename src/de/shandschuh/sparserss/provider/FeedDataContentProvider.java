@@ -48,6 +48,8 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	public static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
 	
+	public static final String IGNORE_SDCARD = FOLDER+"ignore";
+	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
 	private static final int DATABASE_VERSION = 5;
@@ -100,7 +102,9 @@ public class FeedDataContentProvider extends ContentProvider {
 		public DatabaseHelper(Context context, String name, int version) {
 			File file = new File(FOLDER);
 			
-			if ((file.exists() && file.isDirectory() || file.mkdir()) && file.canWrite()) {
+			File ignoreFile = new File(IGNORE_SDCARD);
+			
+			if (((file.exists() && file.isDirectory() || file.mkdir()) && file.canWrite()) && !ignoreFile.exists()) {
 				try {
 					database = SQLiteDatabase.openDatabase(FOLDER+name, null, SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY);
 					
@@ -137,7 +141,7 @@ public class FeedDataContentProvider extends ContentProvider {
 						DatabaseHelper.this.onUpgrade(db, oldVersion, newVersion);
 					}
 				}.getWritableDatabase();
-				USE_SDCARD = false;
+				USE_SDCARD = ignoreFile.exists();
 			}
 			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
