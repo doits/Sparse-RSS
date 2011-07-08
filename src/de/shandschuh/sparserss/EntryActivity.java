@@ -112,6 +112,12 @@ public class EntryActivity extends Activity {
 	private boolean canShowIcon;
 	
 	private byte[] iconBytes;
+	
+	private WebView webView;
+	
+	int scrollX;
+	
+	int scrollY;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +142,12 @@ public class EntryActivity extends Activity {
 		if (RSSOverview.notificationManager == null) {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
+		webView = (WebView) findViewById(R.id.entry_abstract);
+		scrollX = 0;
+		scrollY = 0;
 	}
-	
+
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -217,7 +227,7 @@ public class EntryActivity extends Activity {
 				// loadData does not recognize the encoding without correct html-header
 				abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
 
-				WebView webView = (WebView) findViewById(R.id.entry_abstract);
+				
 				
 				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 				
@@ -244,7 +254,7 @@ public class EntryActivity extends Activity {
 					webView.setBackgroundColor(color.black);
 				}
 				
-				webView.scrollTo(0, 0); // resets the scrolling
+				webView.scrollTo(scrollX, scrollY); // resets the scrolling
 				
 				final String link = entryCursor.getString(linkPosition);
 				
@@ -289,6 +299,8 @@ public class EntryActivity extends Activity {
 				public void onClick(View arg0) {
 					uri = FeedData.EntryColumns.ENTRY_CONTENT_URI(id);
 					getIntent().setData(uri);
+					scrollX = 0;
+					scrollY = 0;
 					reload();
 				}
 			});
@@ -297,4 +309,14 @@ public class EntryActivity extends Activity {
 		}
 		cursor.close();
 	}
+
+	
+	@Override
+	protected void onPause() {
+		super.onPause();
+		scrollX = webView.getScrollX();
+		scrollY = webView.getScrollY();
+	}
+
+	
 }
