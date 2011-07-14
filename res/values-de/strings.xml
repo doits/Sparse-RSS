@@ -1,117 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sparse rss</string>
-<string name="menu_addfeed">Hinzufügen</string>
-<string name="norssfeeds">Keine RSS Feeds</string>
-<string name="noentries">Keine Einträge</string>
-<string name="menu_refresh">Aktualisieren</string>
-<string name="contextmenu_delete">Löschen</string>
-<string name="goto_url">Link aufrufen</string>
-<string name="favorites">Favoriten</string>
+    <string name="menu_addfeed">Hinzufügen</string>
+    <string name="norssfeeds">Keine RSS Feeds</string>
+    <string name="noentries">Keine Einträge</string>
+    <string name="menu_refresh">Aktualisieren</string>
+    <string name="contextmenu_delete">Löschen</string>
+    <string name="goto_url">Link aufrufen</string>
+    <string name="favorites">Favoriten</string>
 
-<string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://code.google.com/p/sparserss</string>
+    <string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://code.google.com/p/sparserss</string>
 
-<string name="editfeed_title">Feed bearbeiten</string>
-<string name="contextmenu_edit">Bearbeiten</string>
-<string name="contextmenu_refresh">Aktualisieren</string>
-<string name="menu_settings">Einstellungen</string>
-<string name="contextmenu_markasread">Als gelesen markieren</string>
-<string name="contextmenu_markasunread">Als ungelesen markieren</string>
-<string name="contextmenu_hideread">Verstecke gelesene Einträge</string>
-<string name="contextmenu_showread">Zeige gelesene Einträge</string>
-<string name="menu_allread">Alle gelesen</string>
-<string name="menu_import">Importiere von OPML</string>
-<string name="menu_export">Exportiere nach OPML</string>
-<string name="menu_about">Info</string>
+    <string name="editfeed_title">Feed bearbeiten</string>
+    <string name="contextmenu_edit">Bearbeiten</string>
+    <string name="contextmenu_refresh">Aktualisieren</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="contextmenu_markasread">Als gelesen markieren</string>
+    <string name="contextmenu_markasunread">Als ungelesen markieren</string>
+    <string name="contextmenu_hideread">Verstecke gelesene Einträge</string>
+    <string name="contextmenu_showread">Zeige gelesene Einträge</string>
+    <string name="menu_allread">Alle gelesen</string>
+    <string name="menu_import">Importiere von OPML</string>
+    <string name="menu_export">Exportiere nach OPML</string>
+    <string name="menu_about">Info</string>
 
-<string name="settings_category_refresh">Automatische Aktualisierung</string>
-<string name="settings_enabled">Aktiviert</string>
-<string name="settings_refreshenabled_description">Diese Einstellung kontrolliert die Aktualisierung aller Feeds</string>
-<string name="settings_refreshinterval">Aktualisierungsintervall</string>
-<string name="settings_refreshinterval_description">Intervall zwischen zwei Aktualisierungen</string>
+    <string name="settings_category_refresh">Automatische Aktualisierung</string>
+    <string name="settings_enabled">Aktiviert</string>
+    <string name="settings_refreshenabled_description">Diese Einstellung kontrolliert die Aktualisierung aller Feeds</string>
+    <string name="settings_refreshinterval">Aktualisierungsintervall</string>
+    <string name="settings_refreshinterval_description">Intervall zwischen zwei Aktualisierungen</string>
 
-<string name="settings_category_notofications">Benachrichtigungen</string>
-<string name="settings_notificationsenabled_description">Kontrolliert das Vorhandensein von Benachrichtigungen</string>
-<string name="settings_notificationsringtone">Klingelton</string>
-<string name="settings_notificationsringtone_description">Auswahl eines Klingeltones, der bei neuem Inhalt abgespielt wird</string>
-<string name="settings_notificationsvibrate">Vibration</string>
-<string name="settings_notificationsvibrate_description">Kontrolliert die Vibration bei neuem Inhalt</string>
+    <string name="settings_category_notofications">Benachrichtigungen</string>
+    <string name="settings_notificationsenabled_description">Kontrolliert das Vorhandensein von Benachrichtigungen</string>
+    <string name="settings_notificationsringtone">Klingelton</string>
+    <string name="settings_notificationsringtone_description">Auswahl eines Klingeltones, der bei neuem Inhalt abgespielt wird</string>
+    <string name="settings_notificationsvibrate">Vibration</string>
+    <string name="settings_notificationsvibrate_description">Kontrolliert die Vibration bei neuem Inhalt</string>
 
-<string name="settings_category_contentpresentation">Inhaltsanzeige</string>
-<string name="settings_prioritize">Bevorzuge ungelesenen Inhalt</string>
-<string name="settings_prioritize_description">Zeige ungelesene Feedeinträge über gelesenen Einträgen</string>
-<string name="settings_keeptime">Zeit für die die Einträge aufbewahrt werden</string>
-<string name="settings_keeptime_description">Die Einträge, die älter sind, werden automatisch gelöscht</string>
-<string name="settings_fetchpictures">Bilder herunterladen</string>
-<string name="settings_fetchpictures_description">Alle Bilder herunterladen und local speichern</string>
-<string name="settings_blacktextwhite">Schwarzer Text auf weißem Hintergrund</string>
-<string name="settings_blacktextwhite_description">Präsentiere rss-Einträge mit schwarzem Text auf weißem Hintergrund</string>
-<string name="settings_fontsize">Schriftgröße</string>
-<string name="settings_fontsize_description">Schriftgröße für einzelne Einträge</string>
+    <string name="settings_category_contentpresentation">Inhaltsanzeige</string>
+    <string name="settings_prioritize">Bevorzuge ungelesenen Inhalt</string>
+    <string name="settings_prioritize_description">Zeige ungelesene Feedeinträge über gelesenen Einträgen</string>
+    <string name="settings_keeptime">Zeit für die die Einträge aufbewahrt werden</string>
+    <string name="settings_keeptime_description">Die Einträge, die älter sind, werden automatisch gelöscht</string>
+    <string name="settings_fetchpictures">Bilder herunterladen</string>
+    <string name="settings_fetchpictures_description">Alle Bilder herunterladen und local speichern</string>
+    <string name="settings_blacktextwhite">Schwarzer Text auf weißem Hintergrund</string>
+    <string name="settings_blacktextwhite_description">Präsentiere rss-Einträge mit schwarzem Text auf weißem Hintergrund</string>
+    <string name="settings_fontsize">Schriftgröße</string>
+    <string name="settings_fontsize_description">Schriftgröße für einzelne Einträge</string>
 
-<string name="settings_refreshonopen">Aktualisiere bei Start</string>
-<string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
+    <string name="settings_refreshonopen">Aktualisiere bei Start</string>
+    <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
 
-<string name="settings_hideread">Verstecke gelesene Einträge</string>
-<string name="settings_hideread_description">Verstecke Einträge, wenn sie gelesen wurden</string>
-<string name="settings_entrysettings">Einträgeeinstellungen</string>
-<string name="settings_visiblefeeds">Sichtbare Feeds</string>
-<string name="settings_showtabs">Zeige Tabs</string>
-<string name="settings_showtabs_description">Zusätzliche Tabs für Favoriten und alle Einträge</string>
+    <string name="settings_hideread">Verstecke gelesene Einträge</string>
+    <string name="settings_hideread_description">Verstecke Einträge, wenn sie gelesen wurden</string>
+    <string name="settings_entrysettings">Einträgeeinstellungen</string>
+    <string name="settings_visiblefeeds">Sichtbare Feeds</string>
+    <string name="settings_showtabs">Zeige Tabs</string>
+    <string name="settings_showtabs_description">Zusätzliche Tabs für Favoriten und alle Einträge</string>
 
-<string name="settings_category_network">Netzwerk</string>
-<string name="settings_proxy_wifionly">Nur WLan</string>
-<string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
+    <string name="settings_category_network">Netzwerk</string>
+    <string name="settings_proxy_wifionly">Nur WLan</string>
+    <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
 
-<string name="update">Aktualisiert</string>
-<string name="never">nie</string>
-<string name="unread">ungelesen</string>
-<string name="newentries">neue Einträge</string>
-<string name="rss_feeds">RSS Feeds</string>
-<string name="error">Fehler</string>
-<string name="priority">Priorität</string>
-<string name="select_feeds">Feeds auswählen</string>
-<string name="all_feeds">Alle Feeds (inkl. zukünftige)</string>
-<string name="all">Alle</string>
-<string name="overview">Überblick</string>
+    <string name="update">Aktualisiert</string>
+    <string name="never">nie</string>
+    <string name="unread">ungelesen</string>
+    <string name="newentries">neue Einträge</string>
+    <string name="rss_feeds">RSS Feeds</string>
+    <string name="error">Fehler</string>
+    <string name="priority">Priorität</string>
+    <string name="select_feeds">Feeds auswählen</string>
+    <string name="all_feeds">Alle Feeds (inkl. zukünftige)</string>
+    <string name="all">Alle</string>
+    <string name="overview">Überblick</string>
 
-<string name="error_feedurlexists">Die URL existiert bereits.</string>
-<string name="error_feedimport">Die ausgewählte Datei konnte nicht importiert werden.</string>
-<string name="error_feedexport">Der Export ist fehlgeschlagen. Bitte gehen Sie sicher, dass Sie eine schreibbare SD-Karte eingehängt haben.</string>
-<string name="error_invalidimportfile">Die ausgewählte Datei ist für den Import nicht gültig.</string>
+    <string name="error_feedurlexists">Die URL existiert bereits.</string>
+    <string name="error_feedimport">Die ausgewählte Datei konnte nicht importiert werden.</string>
+    <string name="error_feedexport">Der Export ist fehlgeschlagen. Bitte gehen Sie sicher, dass Sie eine schreibbare SD-Karte eingehängt haben.</string>
+    <string name="error_invalidimportfile">Die ausgewählte Datei ist für den Import nicht gültig.</string>
 
-<string name="feed_title">Titel</string>
-<string name="select_file">Datei auswählen (SD-Wurzel)</string>
+    <string name="feed_title">Titel</string>
+    <string name="select_file">Datei auswählen (SD-Wurzel)</string>
 
-<string name="websiteorfeed">(Webseite oder Feed)</string>
+    <string name="websiteorfeed">(Webseite oder Feed)</string>
 
-<string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
+    <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
 
-<string name="button_usesdcard">Benutze SD-Karte (wenn vorhanden) - das schließt das Programm. Bitte starten Sie es manuell neu.</string>
-<string name="button_accept">Akzeptieren</string>
-<string name="button_decline">Ablehnen</string>
+    <string name="button_usesdcard">Benutze SD-Karte (wenn vorhanden) - das schließt das Programm. Bitte starten Sie es manuell neu.</string>
+    <string name="button_accept">Akzeptieren</string>
+    <string name="button_decline">Ablehnen</string>
     
-<string name="message_exportedto">In Datei %s exportiert.</string>
+    <string name="message_exportedto">In Datei %s exportiert.</string>
 
-<string name="dialog_licenseagreement">Lizenz</string>
+    <string name="dialog_licenseagreement">Lizenz</string>
 
-<string-array name="settings_intervals">
-<item>1 Minute</item>
-<item>5 Minuten</item>
-<item>15 Minuten</item>
-<item>30 Minuten</item>
-<item>1 Stunde</item>
-<item>2 Stunden</item>
-<item>6 Stunden</item>
-<item>1 Tag</item>
-</string-array>
+    <string-array name="settings_intervals">
+        <item>1 Minute</item>
+        <item>5 Minuten</item>
+        <item>15 Minuten</item>
+        <item>30 Minuten</item>
+        <item>1 Stunde</item>
+        <item>2 Stunden</item>
+        <item>6 Stunden</item>
+        <item>1 Tag</item>
+    </string-array>
 
-<string-array name="settings_keeptimes">
-<item>1 Tag</item>
-<item>2 Tage</item>
-<item>4 Tage</item>
-<item>1 Woche</item>
-<item>2 Wochen</item>
-<item>1 Monat</item>
-</string-array>
+    <string-array name="settings_keeptimes">
+        <item>1 Tag</item>
+        <item>2 Tage</item>
+        <item>4 Tage</item>
+        <item>1 Woche</item>
+        <item>2 Wochen</item>
+        <item>1 Monat</item>
+    </string-array>
 </resources>

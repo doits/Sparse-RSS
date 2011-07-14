@@ -1,150 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Sparse rss</string>
-<string name="menu_addfeed">Add feed</string>
-<string name="norssfeeds">No RSS feeds</string>
-<string name="noentries">No entries</string>
-<string name="menu_refresh">Refresh</string>
-<string name="contextmenu_delete">Delete</string>
-<string name="goto_url">Goto link</string>
-<string name="favorites">Favorites</string>
+    <string name="menu_addfeed">Add feed</string>
+    <string name="norssfeeds">No RSS feeds</string>
+    <string name="noentries">No entries</string>
+    <string name="menu_refresh">Refresh</string>
+    <string name="contextmenu_delete">Delete</string>
+    <string name="goto_url">Goto link</string>
+    <string name="favorites">Favorites</string>
 
-<string name="editfeed_title">Edit feed</string>
-<string name="contextmenu_edit">Edit</string>
-<string name="contextmenu_refresh">Refresh</string>
-<string name="menu_settings">Settings</string>
-<string name="contextmenu_markasread">Mark as read</string>
-<string name="contextmenu_markasunread">Mark as unread</string>
-<string name="contextmenu_hideread">Hide read entries</string>
-<string name="contextmenu_showread">Show read entries</string>
-<string name="menu_allread">Mark all as read</string>
-<string name="menu_import">Import from OPML</string>
-<string name="menu_export">Export to OPML</string>
-<string name="menu_about">About</string>
+    <string name="editfeed_title">Edit feed</string>
+    <string name="contextmenu_edit">Edit</string>
+    <string name="contextmenu_refresh">Refresh</string>
+    <string name="menu_settings">Settings</string>
+    <string name="contextmenu_markasread">Mark as read</string>
+    <string name="contextmenu_markasunread">Mark as unread</string>
+    <string name="contextmenu_hideread">Hide read entries</string>
+    <string name="contextmenu_showread">Show read entries</string>
+    <string name="menu_allread">Mark all as read</string>
+    <string name="menu_import">Import from OPML</string>
+    <string name="menu_export">Export to OPML</string>
+    <string name="menu_about">About</string>
 
-<!-- For translators: you don't need to translate or include the following string -->
-<string name="license">Copyright (c) 2010, 2011 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\n
-Translators\n
- - Dutch: Eelko Berkenpies\n
- - Spanish: Sergio Martín
- \n\nPermission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-\n\n
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-\n\n
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-</string>
-<string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://code.google.com/p/sparserss</string>
+    <!-- For translators: you don't need to translate or include the following string -->
+    <string name="license">Copyright (c) 2010, 2011 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\n
+        Translators\n
+         - Dutch: Eelko Berkenpies\n
+         - Spanish: Sergio Martín\n
+         - French: &lt;unnamed&gt;\n
+         - Turkish: &lt;unnamed&gt;
+         \n\nPermission is hereby granted, free of charge, to any person obtaining a copy
+        of this software and associated documentation files (the "Software"), to deal
+        in the Software without restriction, including without limitation the rights
+        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        copies of the Software, and to permit persons to whom the Software is
+        furnished to do so, subject to the following conditions:
+        \n\n
+        The above copyright notice and this permission notice shall be included in
+        all copies or substantial portions of the Software.
+        \n\n
+        THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+        THE SOFTWARE.
+    </string>
+    <string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://code.google.com/p/sparserss</string>
 
-<string name="settings_category_refresh">Automated refresh</string>
-<string name="settings_enabled">Enabled</string>
-<string name="settings_refreshenabled_description">This setting controls the automatic refresh of all feeds</string>
-<string name="settings_refreshinterval">Refresh interval</string>
-<string name="settings_refreshinterval_description">Interval between two automated refreshs</string>
+    <string name="settings_category_refresh">Automated refresh</string>
+    <string name="settings_enabled">Enabled</string>
+    <string name="settings_refreshenabled_description">This setting controls the automatic refresh of all feeds</string>
+    <string name="settings_refreshinterval">Refresh interval</string>
+    <string name="settings_refreshinterval_description">Interval between two automated refreshs</string>
 
-<string name="settings_category_notofications">Notifications</string>
-<string name="settings_notificationsenabled_description">Controls the appearance of notifications in case of new feed content</string>
-<string name="settings_notificationsringtone">Ringtone</string>
-<string name="settings_notificationsringtone_description">Select a ringtone that will be played on new feed content</string>
-<string name="settings_notificationsvibrate">Vibrate</string>
-<string name="settings_notificationsvibrate_description">Controls if there will be vibration on new feed content</string>
+    <string name="settings_category_notofications">Notifications</string>
+    <string name="settings_notificationsenabled_description">Controls the appearance of notifications in case of new feed content</string>
+    <string name="settings_notificationsringtone">Ringtone</string>
+    <string name="settings_notificationsringtone_description">Select a ringtone that will be played on new feed content</string>
+    <string name="settings_notificationsvibrate">Vibrate</string>
+    <string name="settings_notificationsvibrate_description">Controls if there will be vibration on new feed content</string>
 
-<string name="settings_category_contentpresentation">Content presentation</string>
-<string name="settings_prioritize">Prioritize unread content</string>
-<string name="settings_prioritize_description">Show unread feed entries above read entries</string>
-<string name="settings_keeptime">Time that the entries will be kept</string>
-<string name="settings_keeptime_description">The entries that are older than the given date will be deleted</string>
-<string name="settings_fetchpictures">Download pictures</string>
-<string name="settings_fetchpictures_description">Download all pictures and store them locally</string>
-<string name="settings_blacktextwhite">Black text on white background</string>
-<string name="settings_blacktextwhite_description">Present rss entries in black text on white background</string>
-<string name="settings_fontsize">Font size</string>
-<string name="settings_fontsize_description">Font size for single entries</string>
+    <string name="settings_category_contentpresentation">Content presentation</string>
+    <string name="settings_prioritize">Prioritize unread content</string>
+    <string name="settings_prioritize_description">Show unread feed entries above read entries</string>
+    <string name="settings_keeptime">Time that the entries will be kept</string>
+    <string name="settings_keeptime_description">The entries that are older than the given date will be deleted</string>
+    <string name="settings_fetchpictures">Download pictures</string>
+    <string name="settings_fetchpictures_description">Download all pictures and store them locally</string>
+    <string name="settings_blacktextwhite">Black text on white background</string>
+    <string name="settings_blacktextwhite_description">Present rss entries in black text on white background</string>
+    <string name="settings_fontsize">Font size</string>
+    <string name="settings_fontsize_description">Font size for single entries</string>
 
-<string name="settings_refreshonopen">Refresh feeds on open</string>
-<string name="settings_refreshonopen_description">Refreshes all feeds after opening the application</string>
+    <string name="settings_refreshonopen">Refresh feeds on open</string>
+    <string name="settings_refreshonopen_description">Refreshes all feeds after opening the application</string>
 
-<string name="settings_hideread">Hide read entries</string>
-<string name="settings_hideread_description">Hide entries from the widget if they have been read</string>
-<string name="settings_entrysettings">Entry settings</string>
-<string name="settings_visiblefeeds">Visible feeds</string>
-<string name="settings_showtabs">Show tabs</string>
-<string name="settings_showtabs_description">Additional tabs for favorite and all feed-entries</string>
+    <string name="settings_hideread">Hide read entries</string>
+    <string name="settings_hideread_description">Hide entries from the widget if they have been read</string>
+    <string name="settings_entrysettings">Entry settings</string>
+    <string name="settings_visiblefeeds">Visible feeds</string>
+    <string name="settings_showtabs">Show tabs</string>
+    <string name="settings_showtabs_description">Additional tabs for favorite and all feed-entries</string>
 
-<string name="settings_category_network">Network</string>
-<string name="settings_proxy_wifionly">Wifi only</string>
-<string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
-<string name="settings_proxy_host">Host</string>
-<string name="settings_proxy_port">Port</string>
+    <string name="settings_category_network">Network</string>
+    <string name="settings_proxy_wifionly">Wifi only</string>
+    <string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
+    <string name="settings_proxy_host">Host</string>
+    <string name="settings_proxy_port">Port</string>
 
-<string name="never">never</string>
-<string name="update">Update</string>
-<string name="unread">unread</string>
-<string name="newentries">new entries</string>
-<string name="rss_feeds">RSS feeds</string>
-<string name="error">Error</string>
-<string name="priority">Priority</string>
-<string name="select_feeds">Select feeds</string>
-<string name="all_feeds">All feeds (incl. future)</string>
-<string name="all">All</string>
-<string name="overview">Overview</string>
+    <string name="never">never</string>
+    <string name="update">Update</string>
+    <string name="colon">:\u00A0</string>
+    <string name="unread">unread</string>
+    <string name="newentries">new entries</string>
+    <string name="rss_feeds">RSS feeds</string>
+    <string name="error">Error</string>
+    <string name="priority">Priority</string>
+    <string name="select_feeds">Select feeds</string>
+    <string name="all_feeds">All feeds (incl. future)</string>
+    <string name="all">All</string>
+    <string name="overview">Overview</string>
 
-<string name="error_feedurlexists">The URL already exists.</string>
-<string name="error_feedimport">The selected file could not be imported.</string>
-<string name="error_feedexport">The export has failed. Make sure you have a writable SD card mounted.</string>
-<string name="error_invalidimportfile">The selected file is not valid for import.</string>
+    <string name="error_feedurlexists">The URL already exists.</string>
+    <string name="error_feedimport">The selected file could not be imported.</string>
+    <string name="error_feedexport">The export has failed. Make sure you have a writable SD card mounted.</string>
+    <string name="error_invalidimportfile">The selected file is not valid for import.</string>
 
-<string name="feed_url">URL</string>
-<string name="optional">(optional)</string>
-<string name="websiteorfeed">(website or feed)</string>
-<string name="feed_title">Title</string>
-<string name="select_file">Select file (SD-root)</string>
+    <string name="feed_url">URL</string>
+    <string name="optional">(optional)</string>
+    <string name="websiteorfeed">(website or feed)</string>
+    <string name="feed_title">Title</string>
+    <string name="select_file">Select file (SD-root)</string>
 
-<string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
+    <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 
-<string name="button_usesdcard">Use SD-card (if present) - this will close the application. Please restart it manually.</string>
-<string name="button_accept">Accept</string>
-<string name="button_decline">Decline</string>
+    <string name="button_usesdcard">Use SD-card (if present) - this will close the application. Please restart it manually.</string>
+    <string name="button_accept">Accept</string>
+    <string name="button_decline">Decline</string>
     
-<string name="message_exportedto">Exported into %s.</string>
+    <string name="message_exportedto">Exported into %s.</string>
 
-<string name="dialog_licenseagreement">License</string>
+    <string name="dialog_licenseagreement">License</string>
 
-<string-array name="settings_intervals">
-<item>1 minute</item>
-<item>5 minutes</item>
-<item>15 minutes</item>
-<item>30 minutes</item>
-<item>1 hour</item>
-<item>2 hours</item>
-<item>6 hours</item>
-<item>1 day</item>
-</string-array>
+    <string-array name="settings_intervals">
+        <item>1 minute</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+        <item>2 hours</item>
+        <item>6 hours</item>
+        <item>1 day</item>
+    </string-array>
 
-<string-array name="settings_keeptimes">
-<item>1 day</item>
-<item>2 days</item>
-<item>4 days</item>
-<item>1 week</item>
-<item>2 weeks</item>
-<item>1 month</item>
-</string-array>
+    <string-array name="settings_keeptimes">
+        <item>1 day</item>
+        <item>2 days</item>
+        <item>4 days</item>
+        <item>1 week</item>
+        <item>2 weeks</item>
+        <item>1 month</item>
+    </string-array>
 
-<string-array name="settings_fontsizes">
-<item>Standard</item>
-<item>+1</item>
-<item>+2</item>
-<item>+3</item>
-</string-array>
+    <string-array name="settings_fontsizes">
+        <item>Standard</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
 </resources>

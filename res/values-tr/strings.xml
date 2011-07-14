@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<resources> 
+    <string name="app_name">Sparse rss</string> 
+    <string name="menu_addfeed">Besleme ekle</string> 
+    <string name="norssfeeds">Hiçbir RSS beslemesi yok</string> 
+    <string name="noentries">Hiçbir mesaj yok</string> 
+    <string name="menu_refresh">Tazele</string> 
+    <string name="contextmenu_delete">Sil</string> 
+    <string name="goto_url">Bağlantıya git</string> 
+    <string name="favorites">Favoriler</string> 
+ 
+    <string name="editfeed_title">Besleme düzenle</string> 
+    <string name="contextmenu_edit">Düzenle</string> 
+    <string name="contextmenu_refresh">Tazele</string> 
+    <string name="menu_settings">Ayarlar</string> 
+    <string name="contextmenu_markasread">Okunmuş say</string> 
+    <string name="contextmenu_markasunread">Okunmamış say</string>
+    <string name="contextmenu_hideread">Okunmuş mesajları sakla</string> 
+    <string name="contextmenu_showread">Okunmuş mesajları göster</string> 
+    <string name="menu_allread">Tümünü okunmuş say</string> 
+    <string name="menu_import">OPML dosyasından içe aktar</string> 
+    <string name="menu_export">OPML dosyası olarak dışa aktar</string> 
+    <string name="menu_about">Hakkında</string> 
+ 
+    <string name="license_intro">Bu yazılım MIT özgür yazılım lisansı kapsamında yayınlanmıştır ve kaynak kodu şu adreste mevcuttur: http://code.google.com/p/sparserss</string> 
+ 
+    <string name="settings_category_refresh">Otomatik tazeleme</string> 
+    <string name="settings_enabled">Etkin</string> 
+    <string name="settings_refreshenabled_description">Bu ayar tüm beslemelerin otomatik tazelenmesini yönetir</string> 
+    <string name="settings_refreshinterval">Tazeleme aralığı</string> 
+    <string name="settings_refreshinterval_description">Otomatik tazelemeler arasındaki süre</string> 
+ 
+    <string name="settings_category_notofications">Bildirimler</string> 
+    <string name="settings_notificationsenabled_description">Yeni besleme mesajları için bildirimlerin biçimini yönetir</string> 
+    <string name="settings_notificationsringtone">Zil</string> 
+    <string name="settings_notificationsringtone_description">Yeni besleme içerikleri için çalınacak zil sesini seç</string> 
+    <string name="settings_notificationsvibrate">Titreşim</string> 
+    <string name="settings_notificationsvibrate_description">Yeni besleme içerikleri için titreşim olup olmayacağını yönetir</string> 
+ 
+    <string name="settings_category_contentpresentation">İçerik gösterimi</string> 
+    <string name="settings_prioritize">Okunmamış içeriğe öncelik ver</string> 
+    <string name="settings_prioritize_description">Okunmamış besleme mesajlarını okunanların üstünde göster</string> 
+    <string name="settings_keeptime">Mesajların tutulma süresi</string> 
+    <string name="settings_keeptime_description">Belirtilen zamandan eski mesajlar silinecektir</string> 
+    <string name="settings_fetchpictures">Görselleri indir</string> 
+    <string name="settings_fetchpictures_description">Tüm görselleri indir ve yerel olarak tut</string> 
+    <string name="settings_blacktextwhite">Beyaz zemin üzeri siyah metin</string> 
+    <string name="settings_blacktextwhite_description">RSS mesajlarını siyah metin olarak beyaz bir zemin üzerinde göster</string> 
+    <string name="settings_fontsize">Yazı tipi boyutu</string> 
+    <string name="settings_fontsize_description">Mesajlar için yazı tipi boyutu</string> 
+ 
+    <string name="settings_refreshonopen">Açılışta beslemeleri tazele</string> 
+    <string name="settings_refreshonopen_description">Tüm beslemeleri uygulama açıldığında tazele</string> 
+ 
+    <string name="settings_hideread">Okunmuş tüm mesajları sakla</string> 
+    <string name="settings_hideread_description">Okunmuş mesajları widget\'ten sakla</string> 
+    <string name="settings_entrysettings">Mesaj ayarları</string> 
+    <string name="settings_visiblefeeds">Gösterilen beslemeler</string> 
+    <string name="settings_showtabs">Sekmeleri göster</string> 
+    <string name="settings_showtabs_description">Favori ve tüm beslemeler için ek sekmeler</string> 
+ 
+    <string name="settings_category_network">Ağ</string> 
+    <string name="settings_proxy_wifionly">Sadece Wifi</string> 
+    <string name="settings_proxy_wifionly_description">Vekil sunucusunu sadece wifi için kullan</string> 
+    <string name="settings_proxy_host">Host</string> 
+    <string name="settings_proxy_port">Port</string> 
+ 
+    <string name="never">asla</string> 
+    <string name="update">Güncelleme</string> 
+    <string name="unread">okunmamış</string> 
+    <string name="newentries">yeni mesajlar</string> 
+    <string name="rss_feeds">RSS beslemeleri</string> 
+    <string name="error">Hata</string> 
+    <string name="priority">Öncelik</string> 
+    <string name="select_feeds">Besleme seç</string> 
+    <string name="all_feeds">Tüm beslemeler (gelecektekiler de dahil)</string> 
+    <string name="all">Hepsi</string> 
+    <string name="overview">Genel bakış</string> 
+ 
+    <string name="error_feedurlexists">URL halihazırda mevcut.</string> 
+    <string name="error_feedimport">Seçilen dosya içe aktarılamadı.</string> 
+    <string name="error_feedexport">Dışa aktarım başarısız oldu. Üzerine yazılabilecek ve monte edilmiş bir SD kartınız olduğundan emin olunuz.</string> 
+    <string name="error_invalidimportfile">Seçilen dosya içe aktarım için geçerli değil.</string> 
+ 
+    <string name="feed_url">URL</string> 
+    <string name="optional">(isteğe bağlı)</string> 
+    <string name="websiteorfeed">(ağ sitesi veya besleme)</string> 
+    <string name="feed_title">Başlık</string> 
+    <string name="select_file">Dosya seç (SD kökü)</string> 
+ 
+    <string name="question_deletefeed">Bu beslemeyi ve tüm mesajlarını silmek istediğinizden emin misiniz?</string> 
+ 
+    <string name="button_usesdcard">SD kartı kullan (varsa) - bu uygulamayı kapatacaktır. Elle yeniden başlatınız.</string> 
+    <string name="button_accept">Tamam</string> 
+    <string name="button_decline">İptal</string> 
+    
+    <string name="message_exportedto">%s olarak dışa aktarıldı.</string> 
+ 
+    <string name="dialog_licenseagreement">Lisans</string> 
+ 
+    <string-array name="settings_intervals"> 
+        <item>1 dakika</item> 
+        <item>5 dakika</item> 
+        <item>15 dakika</item> 
+        <item>30 dakika</item> 
+        <item>1 saat</item> 
+        <item>2 saat</item> 
+        <item>6 saat</item> 
+    <item>1 gün</item> 
+    </string-array> 
+ 
+    <string-array name="settings_keeptimes"> 
+        <item>1 gün</item> 
+        <item>2 gün</item> 
+        <item>4 gün</item> 
+        <item>1 hafta</item> 
+        <item>2 hafta</item> 
+        <item>1 ay</item> 
+    </string-array> 
+ 
+    <string-array name="settings_fontsizes"> 
+        <item>Standart</item> 
+        <item>+1</item> 
+        <item>+2</item> 
+        <item>+3</item> 
+    </string-array> 
+</resources> 

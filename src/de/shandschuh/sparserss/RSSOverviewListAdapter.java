@@ -43,7 +43,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	
 	private static final String COUNT = "COUNT(*)";
 	
-	private static final String COLON = ": ";
+	private String COLON;
 	
 	private static final String COMMA = ", ";
 	
@@ -67,6 +67,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		linkPosition = getCursor().getColumnIndex(FeedData.FeedColumns.URL);
 		errorPosition = getCursor().getColumnIndex(FeedData.FeedColumns.ERROR);
 		iconPosition = getCursor().getColumnIndex(FeedData.FeedColumns.ICON);
+		COLON = context.getString(R.string.colon);
 	}
 
 	@Override

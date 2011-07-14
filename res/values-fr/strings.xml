@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sparse rss</string>
+    <string name="menu_addfeed">Ajouter un flux</string>
+    <string name="norssfeeds">Aucun flux RSS</string>
+    <string name="noentries">Aucun message</string>
+    <string name="menu_refresh">Actualiser</string>
+    <string name="contextmenu_delete">Effacer</string>
+    <string name="goto_url">Suivre le lien</string>
+    <string name="favorites">Favoris</string>
+
+    <string name="editfeed_title">Éditer le flux</string>
+    <string name="contextmenu_edit">Éditer</string>
+    <string name="contextmenu_refresh">Actualiser</string>
+    <string name="menu_settings">Réglages</string>
+    <string name="contextmenu_markasread">Marquer comme lu</string>
+    <string name="contextmenu_markasunread">{0,choice,0#Marquer comme non lus|1#Marquer comme non lu|1&lt;Marquer comme non lus}</string>
+    <string name="contextmenu_hideread">Cacher les messages lus</string>
+    <string name="contextmenu_showread">Montrer les messages lus</string>
+    <string name="menu_allread">Marquer tout comme lu</string>
+    <string name="menu_import">Importer depuis un fichier OPML</string>
+    <string name="menu_export">Exporter vers un fichier OPML</string>
+    <string name="menu_about">À propos</string>
+
+    <string name="license_intro">Ce logiciel est distribué sous la licence libre MIT et son code source est disponible sur http://code.google.com/p/sparserss</string>
+
+    <string name="settings_category_refresh">Actualisation automatique</string>
+    <string name="settings_enabled">Activé</string>
+    <string name="settings_refreshenabled_description">Ce réglage contrôle le rafraîchissement automatique de tous les flux</string>
+    <string name="settings_refreshinterval">Intervalle entre les actualisations</string>
+    <string name="settings_refreshinterval_description">Délai entre deux actualisations automatiques</string>
+
+    <string name="settings_category_notofications">Notifications</string>
+    <string name="settings_notificationsenabled_description">Contrôler l\'apparence des notifications pour les nouveaux contenus des flux</string>
+    <string name="settings_notificationsringtone">Sonnerie</string>
+    <string name="settings_notificationsringtone_description">Choisir une sonnerie signalant les nouveaux messages</string>
+    <string name="settings_notificationsvibrate">Vibrer</string>
+    <string name="settings_notificationsvibrate_description">Contrôler l\'activation du vibreur pour signaler les nouveaux messages</string>
+
+    <string name="settings_category_contentpresentation">Présentation du contenu</string>
+    <string name="settings_prioritize">Prioriser le contenu non lu</string>
+    <string name="settings_prioritize_description">Montrer les messages non lus au-dessus des messages lus</string>
+    <string name="settings_keeptime">Délai de conservation des messages</string>
+    <string name="settings_keeptime_description">Les messages qui seront plus anciens que le délai indiqué seront effacés</string>
+    <string name="settings_fetchpictures">Télécharger les images</string>
+    <string name="settings_fetchpictures_description">Télécharger toutes les images et les stocker localement</string>
+    <string name="settings_blacktextwhite">Texte noir sur fond blanc</string>
+    <string name="settings_blacktextwhite_description">Afficher les messages en noir sur un fond blanc</string>
+    <string name="settings_fontsize">Taille de la police</string>
+    <string name="settings_fontsize_description">Taille de la police pour les messages</string>
+
+    <string name="settings_refreshonopen">Actualiser les flux à l\'ouverture</string>
+    <string name="settings_refreshonopen_description">Actualiser tous les flux à l\'ouverture de l\'application</string>
+
+    <string name="settings_hideread">Cacher les messages lus</string>
+    <string name="settings_hideread_description">Cacher les messages du gadget s\'ils sont lus</string>
+    <string name="settings_entrysettings">Réglages des messages</string>
+    <string name="settings_visiblefeeds">Flux visibles</string>
+    <string name="settings_showtabs">Montrer les onglets</string>
+    <string name="settings_showtabs_description">Onglets additionnels pour les flux favoris et l\'ensemble des flux</string>
+
+    <string name="settings_category_network">Réseau</string>
+    <string name="settings_proxy_wifionly">Wifi seulement</string>
+    <string name="settings_proxy_wifionly_description">Utiliser le proxy pour le wifi seulement</string>
+    <string name="settings_proxy_host">Hôte</string>
+    <string name="settings_proxy_port">Port</string>
+
+    <string name="never">jamais</string>
+    <string name="update">Mise à jour</string>
+    <string name="colon">\u00A0:\u00A0</string>
+    <string name="unread">non lu</string>
+    <string name="newentries">nouveaux messages</string>
+    <string name="rss_feeds">Flux RSS</string>
+    <string name="error">Erreur</string>
+    <string name="priority">Priorité</string>
+    <string name="select_feeds">Sélectionner les flux</string>
+    <string name="all_feeds">Tous les flux (y compris ceux à venir)</string>
+    <string name="all">Tous</string>
+    <string name="overview">Panorama</string>
+
+    <string name="error_feedurlexists">L\'URL existe déjà.</string>
+    <string name="error_feedimport">Le fichier sélectionné n\'a pu être importé.</string>
+    <string name="error_feedexport">L\'export a échoué. Assurez-vous d\'avoir une carte SD montée et autorisée en écriture.</string>
+    <string name="error_invalidimportfile">Le fichier sélectionné n\'est pas valide.</string>
+
+    <string name="feed_url">URL</string>
+    <string name="optional">(optionnel)</string>
+    <string name="websiteorfeed">(site web ou flux)</string>
+    <string name="feed_title">Titre</string>
+    <string name="select_file">Sélectionner le fichier (racine SD)</string>
+
+    <string name="question_deletefeed">Voulez-vous vraiment effacer ce flux et tous ses messages ?</string>
+
+    <string name="button_usesdcard">Utiliser la carte SD (si présente) - cela fermera l\'application. Veuillez la redémarrer manuellement.</string>
+    <string name="button_accept">Accepter</string>
+    <string name="button_decline">Décliner</string>
+    
+    <string name="message_exportedto">Exporté en %s.</string>
+
+    <string name="dialog_licenseagreement">Licence</string>
+
+    <string-array name="settings_intervals">
+        <item>1 minute</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 heure</item>
+        <item>2 heures</item>
+        <item>6 heures</item>
+        <item>1 jour</item>
+    </string-array>
+
+    <string-array name="settings_keeptimes">
+        <item>1 jour</item>
+        <item>2 jours</item>
+        <item>4 jours</item>
+        <item>1 semaine</item>
+        <item>2 semaines</item>
+        <item>1 mois</item>
+    </string-array>
+</resources>
