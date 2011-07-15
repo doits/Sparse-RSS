@@ -112,6 +112,7 @@ public class EntriesListActivity extends ListActivity {
 		textView.setTypeface(Typeface.DEFAULT);
 		textView.setEnabled(false);
 		view.findViewById(android.R.id.text2).setEnabled(false);
+		entriesListAdapter.neutralizeReadState();
 		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()).putExtra(FeedData.FeedColumns.ICON, iconBytes));
 	}
 	

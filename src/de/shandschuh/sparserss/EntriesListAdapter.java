@@ -175,5 +175,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		forcedState = STATE_ALLUNREAD;
 		notifyDataSetChanged();
 	}
+	
+	public void neutralizeReadState() {
+		forcedState = STATE_NEUTRAL;
+	}
 
 }
