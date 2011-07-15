@@ -31,6 +31,7 @@ import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -106,6 +107,11 @@ public class EntriesListActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView listView, View view, int position, long id) {
+		TextView textView = (TextView) view.findViewById(android.R.id.text1);
+		
+		textView.setTypeface(Typeface.DEFAULT);
+		textView.setEnabled(false);
+		view.findViewById(android.R.id.text2).setEnabled(false);
 		startActivity(new Intent(Intent.ACTION_VIEW, ContentUris.withAppendedId(uri, id)).putExtra(EXTRA_SHOWREAD, entriesListAdapter.isShowRead()).putExtra(FeedData.FeedColumns.ICON, iconBytes));
 	}
 	
@@ -113,7 +119,7 @@ public class EntriesListActivity extends ListActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_revert);
 		menu.add(0, MENU_MARKASUNREAD_ID, Menu.NONE, MessageFormat.format(getString(R.string.contextmenu_markasunread), entriesListAdapter.getCount())).setIcon(android.R.drawable.ic_menu_set_as);
-		menu.add(0, MENU_HIDEREAD_ID, Menu.NONE, R.string.contextmenu_hideread).setCheckable(true).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(1, MENU_HIDEREAD_ID, Menu.NONE, R.string.contextmenu_hideread).setCheckable(true).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return true;
 	}
 
@@ -131,6 +137,7 @@ public class EntriesListActivity extends ListActivity {
 						getContentResolver().update(uri, RSSOverview.getReadContentValues(), null, null);
 					}
 				}.start();
+				entriesListAdapter.markAsRead();
 				break;
 			}
 			case MENU_MARKASUNREAD_ID: {
@@ -139,6 +146,7 @@ public class EntriesListActivity extends ListActivity {
 						getContentResolver().update(uri, RSSOverview.getUnreadContentValues(), null, null);
 					}
 				}.start();
+				entriesListAdapter.markAsUnread();
 				break;
 			}
 			case MENU_HIDEREAD_ID: {

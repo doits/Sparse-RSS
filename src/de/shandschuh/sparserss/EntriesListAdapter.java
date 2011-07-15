@@ -45,6 +45,12 @@ import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntriesListAdapter extends ResourceCursorAdapter {
+	private static final int STATE_NEUTRAL = 0;
+	
+	private static final int STATE_ALLREAD = 1;
+	
+	private static final int STATE_ALLUNREAD = 2;
+	
 	public static DateFormat DATEFORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	
 	private int titleColumnPosition;
@@ -73,8 +79,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private boolean showFeedInfo;
 	
+	private int forcedState;
+	
 	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo) {
-		super(context, R.layout.listitem, createManagedCursor(context, uri, true));
+		super(context, R.layout.listitem, createManagedCursor(context, uri, true), false);
 		showRead = true;
 		this.context = context;
 		this.uri = uri;
@@ -88,6 +96,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			feedIconColumn = getCursor().getColumnIndex(FeedData.FeedColumns.ICON);
 			feedNameColumn = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
 		}
+		forcedState = STATE_NEUTRAL;
 	}
 
 	@Override
@@ -114,15 +123,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 				context.getContentResolver().notifyChange(FeedData.EntryColumns.FAVORITES_CONTENT_URI, null);
 			}
 		});
-		if (cursor.isNull(readDateColumn)) {
-			textView.setTypeface(Typeface.DEFAULT_BOLD);
-			textView.setEnabled(true);
-			dateTextView.setEnabled(true);
-		} else {
-			textView.setTypeface(Typeface.DEFAULT);
-			textView.setEnabled(false);
-			dateTextView.setEnabled(false);
-		}
+		
 		if (showFeedInfo) {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
 			
@@ -137,6 +138,16 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		} else {
 			textView.setText(cursor.getString(titleColumnPosition));
 			dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+		}
+		
+		if (forcedState == STATE_ALLUNREAD || (forcedState != STATE_ALLREAD && cursor.isNull(readDateColumn))) {
+			textView.setTypeface(Typeface.DEFAULT_BOLD);
+			textView.setEnabled(true);
+			dateTextView.setEnabled(true);
+		} else {
+			textView.setTypeface(Typeface.DEFAULT);
+			textView.setEnabled(false);
+			dateTextView.setEnabled(false);
 		}
 	}
 
@@ -154,4 +165,15 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private static Cursor createManagedCursor(Activity context, Uri uri, boolean showRead) {
 		return context.managedQuery(uri, null, showRead ? null : READDATEISNULL, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
 	}
+	
+	public void markAsRead() {
+		forcedState = STATE_ALLREAD;
+		notifyDataSetChanged();
+	}
+	
+	public void markAsUnread() {
+		forcedState = STATE_ALLUNREAD;
+		notifyDataSetChanged();
+	}
+
 }
