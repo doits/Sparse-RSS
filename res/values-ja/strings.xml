@@ -15,11 +15,11 @@
     <string name="contextmenu_edit">編集</string>
     <string name="contextmenu_refresh">更新</string>
     <string name="menu_settings">設定</string>
-    <string name="contextmenu_markasread">既読済みの印をつける</string>
-    <string name="contextmenu_markasunread">未読済みの印をつける</string>
-    <string name="contextmenu_hideread">既読済みの記事を表示しない</string>
-    <string name="contextmenu_showread">既読済みの記事を表示</string>
-    <string name="menu_allread">全て既読済み</string>
+    <string name="contextmenu_markasread">既読の印をつける</string>
+    <string name="contextmenu_markasunread">未読の印をつける</string>
+    <string name="contextmenu_hideread">既読の記事を表示しない</string>
+    <string name="contextmenu_showread">既読の記事を表示</string>
+    <string name="menu_allread">全て既読</string>
     <string name="menu_import">OPMLからインポート</string>
     <string name="menu_export">OPMLへエクスポート</string>
     <string name="menu_about">インフメーション</string>
@@ -52,8 +52,8 @@
     <string name="settings_refreshonopen">スタート時に更新する</string>
     <string name="settings_refreshonopen_description">プログラム開始時に全てのフィードを更新する</string>
 
-    <string name="settings_hideread">既読済みの記事を表示しない</string>
-    <string name="settings_hideread_description">既読済みの記事を表示しない</string>
+    <string name="settings_hideread">既読の記事を表示しない</string>
+    <string name="settings_hideread_description">既読の記事を表示しない</string>
     <string name="settings_entrysettings">記事設定</string>
     <string name="settings_visiblefeeds">表示されているフィード</string>
     <string name="settings_showtabs">タブを表示する</string>
@@ -75,7 +75,7 @@
     <string name="all">全て</string>
     <string name="overview">概要</string>
 
-    <string name="error_feedurlexists">登録済みのURLです</string>
+    <string name="error_feedurlexists">登録のURLです</string>
     <string name="error_feedimport">選択されたデータは、インポートできませんでした</string>
     <string name="error_feedexport">エクスポートに失敗しました。書き込み可能なSDカードが入っているかどうか確認して下さい</string>
     <string name="error_invalidimportfile">選択されたデータはインポートが無効なデータです</string>
