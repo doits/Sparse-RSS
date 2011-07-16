@@ -60,6 +60,8 @@
     <string name="settings_showtabs_description">Zusätzliche Tabs für Favoriten und alle Einträge</string>
 
     <string name="settings_category_network">Netzwerk</string>
+    <string name="settings_standarduseragent">Standard user-agent</string>
+    <string name="settings_standarduseragent_description">Benutze den Standard-user-agent Namen</string>
     <string name="settings_proxy_wifionly">Nur WLan</string>
     <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
 

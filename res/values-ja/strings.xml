@@ -60,6 +60,8 @@
     <string name="settings_showtabs_description">お気に入りと全ての記事のためのタブを追加</string>
 
     <string name="settings_category_network">ネットワーク</string>
+    <string name="settings_standarduseragent">一般的なuser-agent</string>
+    <string name="settings_standarduseragent_description">一般的なuser-agentの名前を使う</string>
     <string name="settings_proxy_wifionly">ワイヤレスのみ</string>
     <string name="settings_proxy_wifionly_description">ワイヤレスの場合はProxyを使用する</string>
 

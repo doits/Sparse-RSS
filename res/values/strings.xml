@@ -85,6 +85,8 @@
     <string name="settings_showtabs_description">Additional tabs for favorite and all feed-entries</string>
 
     <string name="settings_category_network">Network</string>
+    <string name="settings_standarduseragent">Standard user-agent</string>
+    <string name="settings_standarduseragent_description">Use the standard user-agent name</string>
     <string name="settings_proxy_wifionly">Wifi only</string>
     <string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
     <string name="settings_proxy_host">Host</string>

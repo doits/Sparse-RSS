@@ -83,6 +83,11 @@ android:key="blacktextonwhite" />
   android:entryValues="@array/settings_fontsizevalues"/>
 </PreferenceCategory>
 <PreferenceCategory android:title="@string/settings_category_network">
+<CheckBoxPreference
+android:title="@string/settings_standarduseragent"
+android:defaultValue="false"
+android:summary="@string/settings_standarduseragent_description"
+android:key="standarduseragent" />
 <PreferenceScreen android:title="Proxy">
     <CheckBoxPreference
         android:key="proxy.enabled"

@@ -68,9 +68,9 @@ public class FetcherService extends Service {
 	
 	private static final int FETCHMODE_REENCODE = 2;
 	
-//	private static final String KEY_USERAGENT = "User-agent";
-//	
-//	private static final String VALUE_USERAGENT = "Mozilla/5.0";
+	private static final String KEY_USERAGENT = "User-agent";
+	
+	private static final String VALUE_USERAGENT = "Mozilla/5.0";
 	
 	private static final String CHARSET = "charset=";
 	
@@ -230,7 +230,7 @@ public class FetcherService extends Service {
 		
 		int iconPosition = cursor.getColumnIndex(FeedData.FeedColumns.ICON);
 		
-//		HttpURLConnection.setFollowRedirects(false);
+		boolean imposeUserAgent = !preferences.getBoolean(Strings.SETTINGS_STANDARDUSERAGENT, false);
 		
 		int result = 0;
 		
@@ -244,7 +244,7 @@ public class FetcherService extends Service {
 			HttpURLConnection connection = null;
 			
 			try {
-				connection = setupConnection(cursor.getString(urlPosition));
+				connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent);
 				
 				String contentType = connection.getContentType();
 
@@ -285,7 +285,7 @@ public class FetcherService extends Service {
 										values.put(FeedData.FeedColumns.URL, url);
 										context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 										connection.disconnect();
-										connection = setupConnection(url);
+										connection = setupConnection(url, imposeUserAgent);
 										contentType = connection.getContentType();
 										break;
 									}
@@ -294,7 +294,7 @@ public class FetcherService extends Service {
 						}
 						if (posStart == -1) { // this indicates a badly configured feed
 							connection.disconnect();
-							connection = setupConnection(cursor.getString(urlPosition));
+							connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent);
 							contentType = connection.getContentType();
 						}
 						
@@ -326,7 +326,7 @@ public class FetcherService extends Service {
 						String xmlDescription = new String(chars, 0, length);
 						
 						connection.disconnect();
-						connection = setupConnection(connection.getURL());
+						connection = setupConnection(connection.getURL(), imposeUserAgent);
 						
 						int start = xmlDescription != null ?  xmlDescription.indexOf(ENCODING) : -1;
 						
@@ -352,7 +352,7 @@ public class FetcherService extends Service {
 				byte[] iconBytes = cursor.getBlob(iconPosition);
 				
 				if (iconBytes == null) {
-					HttpURLConnection iconURLConnection = setupConnection(new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString()));
+					HttpURLConnection iconURLConnection = setupConnection(new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString()), imposeUserAgent);
 					
 					try {
 						iconBytes = getBytes(iconURLConnection.getInputStream());
@@ -463,16 +463,18 @@ public class FetcherService extends Service {
 		return result;
 	}
 	
-	private static final HttpURLConnection setupConnection(String url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
-		return setupConnection(new URL(url));
+	private static final HttpURLConnection setupConnection(String url, boolean imposeUseragent) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+		return setupConnection(new URL(url), imposeUseragent);
 	}
 	
-	private static final HttpURLConnection setupConnection(URL url) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	private static final HttpURLConnection setupConnection(URL url, boolean imposeUseragent) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
 		connection.setDoInput(true);
 		connection.setDoOutput(false);
-//		connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
+		if (imposeUseragent) {
+			connection.setRequestProperty(KEY_USERAGENT, VALUE_USERAGENT); // some feeds need this to work properly
+		}
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
