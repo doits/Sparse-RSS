@@ -41,7 +41,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -258,9 +257,6 @@ public class EntryActivity extends Activity {
 					}
 					webView.setBackgroundColor(color.black);
 				}
-				
-				Log.d("ScrollTo", scrollX+", "+scrollY);
-				
 				
 				final String link = entryCursor.getString(linkPosition);
 				
