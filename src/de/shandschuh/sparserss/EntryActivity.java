@@ -41,6 +41,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -163,6 +164,10 @@ public class EntryActivity extends Activity {
 	}
 
 	private void reload() {
+		if (_id != null && _id.equals(uri.getLastPathSegment())) {
+			return;
+		}
+		
 		_id = uri.getLastPathSegment();
 		
 		ContentValues values = new ContentValues();
@@ -254,18 +259,20 @@ public class EntryActivity extends Activity {
 					webView.setBackgroundColor(color.black);
 				}
 				
-				webView.scrollTo(scrollX, scrollY); // resets the scrolling
+				Log.d("ScrollTo", scrollX+", "+scrollY);
+				
 				
 				final String link = entryCursor.getString(linkPosition);
 				
 				((Button) findViewById(R.id.url_button)).setOnClickListener(new OnClickListener() {
 					public void onClick(View view) {
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+						startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse(link)), 0);
 					}
 				});
 				entryCursor.close();
 				setupButton(R.id.prev_button, false, date);
 				setupButton(R.id.next_button, true, date);
+				webView.scrollTo(scrollX, scrollY); // resets the scrolling
 			}
 		} else {
 			entryCursor.close();
@@ -278,7 +285,7 @@ public class EntryActivity extends Activity {
 		}.start();
 		*/
 	}
-	
+
 	private void setupButton(int buttonId, boolean successor, long date) {
 		StringBuilder queryString = new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(date).append(AND_ID).append(successor ? '>' : '<').append(_id).append(')').append(OR_DATE).append(successor ? '<' : '>').append(date).append(')');
 		
@@ -309,7 +316,6 @@ public class EntryActivity extends Activity {
 		}
 		cursor.close();
 	}
-
 	
 	@Override
 	protected void onPause() {
@@ -317,6 +323,5 @@ public class EntryActivity extends Activity {
 		scrollX = webView.getScrollX();
 		scrollY = webView.getScrollY();
 	}
-
 	
 }
