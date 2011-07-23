@@ -104,6 +104,13 @@ public class FeedDataContentProvider extends ContentProvider {
 		public void onCreate(SQLiteDatabase database) {
 			database.execSQL(createTable(TABLE_FEEDS, FeedData.FeedColumns.COLUMNS, FeedData.FeedColumns.TYPES));
 			database.execSQL(createTable(TABLE_ENTRIES, FeedData.EntryColumns.COLUMNS, FeedData.EntryColumns.TYPES));
+			
+			File backupFile = new File(BACKUPOPML);
+			
+			if (backupFile.exists()) {
+				/** Perform an automated import of the backup */
+				OPML.importFromFile(backupFile, database);
+			}
 		}
 		
 		private String createTable(String tableName, String[] columns, String[] types) {

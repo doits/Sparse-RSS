@@ -26,6 +26,7 @@
 package de.shandschuh.sparserss.provider;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -60,7 +61,22 @@ public class OPML {
 	
 	public static void importFromFile(String filename, Context context) throws FileNotFoundException, IOException, SAXException {
 		parser.context = context;
+		parser.database = null;
 		Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
+	}
+	
+	protected static void importFromFile(File file, SQLiteDatabase database) {
+		parser.context = null;
+		parser.database = database;
+		try {
+			database.beginTransaction();
+			Xml.parse(new InputStreamReader(new FileInputStream(file)), parser);
+			database.setTransactionSuccessful();
+		} catch (Exception e) {
+			
+		} finally {
+			database.endTransaction();
+		}
 	}
 	
 	public static void exportToFile(String filename, Context context) throws IOException {
@@ -73,7 +89,7 @@ public class OPML {
 		}
 	}
 	
-	public static void exportToFile(String filename, SQLiteDatabase database) {
+	protected static void exportToFile(String filename, SQLiteDatabase database) {
 		Cursor cursor = database.query(FeedDataContentProvider.TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null, null, null);
 		
 		try {
@@ -118,6 +134,8 @@ public class OPML {
 		
 		private Context context;
 		
+		private SQLiteDatabase database;
+		
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			if (!bodyTagEntered) {
@@ -135,12 +153,16 @@ public class OPML {
 					values.put(FeedData.FeedColumns.URL, url);
 					values.put(FeedData.FeedColumns.NAME, title != null && title.length() > 0 ? title : null);
 					
-					Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
-					
-					if (!cursor.moveToFirst()) {
-						context.getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values); 
+					if (context != null) {
+						Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
+						
+						if (!cursor.moveToFirst()) {
+							context.getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values); 
+						}
+						cursor.close();
+					} else { // this happens only, if the db is new and therefore empty
+						database.insert(FeedDataContentProvider.TABLE_FEEDS, null, values);
 					}
-					cursor.close();
 				}
 			}
 		}
