@@ -81,6 +81,7 @@
     <string name="error_feedimport">Die ausgewählte Datei konnte nicht importiert werden.</string>
     <string name="error_feedexport">Der Export ist fehlgeschlagen. Bitte gehen Sie sicher, dass Sie eine schreibbare SD-Karte eingehängt haben.</string>
     <string name="error_invalidimportfile">Die ausgewählte Datei ist für den Import nicht gültig.</string>
+    <string name="error_externalstoragenotavailable">Der externe Speicher (z.B. SD-Karte) ist nicht verfügbar.</string>
 
     <string name="feed_title">Titel</string>
     <string name="select_file">Datei auswählen (SD-Wurzel)</string>

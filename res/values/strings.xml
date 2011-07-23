@@ -107,8 +107,9 @@
 
     <string name="error_feedurlexists">The URL already exists.</string>
     <string name="error_feedimport">The selected file could not be imported.</string>
-    <string name="error_feedexport">The export has failed. Make sure you have a writable SD card mounted.</string>
+    <string name="error_feedexport">The export has failed. Make sure you have a writable SD-card mounted.</string>
     <string name="error_invalidimportfile">The selected file is not valid for import.</string>
+    <string name="error_externalstoragenotavailable">The external storage (e.g. SD-card)  is not available.</string>
 
     <string name="feed_url">URL</string>
     <string name="optional">(optional)</string>

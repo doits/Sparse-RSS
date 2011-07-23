@@ -44,10 +44,12 @@ import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -75,7 +77,9 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int DIALOG_ERROR_INVALIDIMPORTFILE = 5;
 	
-	private static final int DIALOG_ABOUT = 6;
+	private static final int DIALOG_ERROR_EXTERNALSTORAGENOTAVAILABLE = 6;
+	
+	private static final int DIALOG_ABOUT = 7;
 	
 	private static final int MENU_ADDFEED_ID = 1;
 	
@@ -125,6 +129,13 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread);
 				menu.add(0, CONTEXTMENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread);
 			}
+        });
+        getListView().setOnTouchListener(new OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				return event.getAction() == MotionEvent.ACTION_MOVE;
+			}
+        	
         });
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
         	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
@@ -253,39 +264,48 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case MENU_IMPORT_ID: {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				
-				builder.setTitle(R.string.select_file);
-				
-				try {
-					final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
-						public boolean accept(File dir, String filename) {
-							return filename.endsWith(EXTENSION_OPML) || filename.endsWith(EXTENSION_XML) || filename.endsWith(EXTENSION_PHP);
-						}
-					});
-					builder.setItems(fileNames, new DialogInterface.OnClickListener()  {
-						public void onClick(DialogInterface dialog, int which) {
-							try {
-								OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString()).append(File.separator).append(fileNames[which]).toString(), RSSOverview.this);
-							} catch (Exception e) {
-								showDialog(DIALOG_ERROR_FEEDIMPORT);
+				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ||Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+					final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+					
+					builder.setTitle(R.string.select_file);
+					
+					try {
+						final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
+							public boolean accept(File dir, String filename) {
+								return filename.endsWith(EXTENSION_OPML) || filename.endsWith(EXTENSION_XML) || filename.endsWith(EXTENSION_PHP);
 							}
-						}
-					});
-					builder.create().show();
-				} catch (Exception e) {
-					showDialog(DIALOG_ERROR_FEEDIMPORT);
+						});
+						builder.setItems(fileNames, new DialogInterface.OnClickListener()  {
+							public void onClick(DialogInterface dialog, int which) {
+								try {
+									OPML.importFromFile(new StringBuilder(Environment.getExternalStorageDirectory().toString()).append(File.separator).append(fileNames[which]).toString(), RSSOverview.this);
+								} catch (Exception e) {
+									showDialog(DIALOG_ERROR_FEEDIMPORT);
+								}
+							}
+						});
+						builder.create().show();
+					} catch (Exception e) {
+						showDialog(DIALOG_ERROR_FEEDIMPORT);
+					}
+				} else {
+					showDialog(DIALOG_ERROR_EXTERNALSTORAGENOTAVAILABLE);
 				}
+				
 				break;
 			}
 			case MENU_EXPORT_ID: {
-				try {
-					String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/sparse_rss_").append(System.currentTimeMillis()).append(".opml").toString();
-					
-					OPML.exportToFile(filename, this);
-					Toast.makeText(this, String.format(getString(R.string.message_exportedto), filename), Toast.LENGTH_LONG).show();
-				} catch (Exception e) {
-					showDialog(DIALOG_ERROR_FEEDEXPORT);
+				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ||Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
+					try {
+						String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/sparse_rss_").append(System.currentTimeMillis()).append(".opml").toString();
+						
+						OPML.exportToFile(filename, this);
+						Toast.makeText(this, String.format(getString(R.string.message_exportedto), filename), Toast.LENGTH_LONG).show();
+					} catch (Exception e) {
+						showDialog(DIALOG_ERROR_FEEDEXPORT);
+					}
+				} else {
+					showDialog(DIALOG_ERROR_EXTERNALSTORAGENOTAVAILABLE);
 				}
 				break;
 			}
@@ -339,6 +359,10 @@ public class RSSOverview extends ListActivity {
 			}
 			case DIALOG_ERROR_INVALIDIMPORTFILE: {
 				dialog = createErrorDialog(R.string.error_invalidimportfile);
+				break;
+			}
+			case DIALOG_ERROR_EXTERNALSTORAGENOTAVAILABLE: {
+				dialog = createErrorDialog(R.string.error_externalstoragenotavailable);
 				break;
 			}
 			case DIALOG_ABOUT: {
