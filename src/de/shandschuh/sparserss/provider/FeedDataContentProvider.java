@@ -44,11 +44,7 @@ import android.text.TextUtils;
 import de.shandschuh.sparserss.Strings;
 
 public class FeedDataContentProvider extends ContentProvider {
-	public static boolean USE_SDCARD;
-	
-	public static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
-	
-	public static final String IGNORE_SDCARD = FOLDER+"ignore";
+	private static final String FOLDER = Environment.getExternalStorageDirectory()+"/sparserss/";
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
@@ -70,7 +66,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final int URI_FAVORITES_ENTRY = 8;
 	
-	private static final String TABLE_FEEDS = "feeds";
+	protected static final String TABLE_FEEDS = "feeds";
 	
 	private static final String TABLE_ENTRIES = "entries";
 	
@@ -81,6 +77,8 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final String EQUALS_ONE = "=1";
 
 	public static final String IMAGEFOLDER = Environment.getExternalStorageDirectory()+"/sparserss/images/"; // faster than FOLDER+"images/"
+	
+	private static final String BACKUPOPML = Environment.getExternalStorageDirectory()+"/sparserss/backup.opml";
 	
 	private static UriMatcher URI_MATCHER;
 	
@@ -96,56 +94,13 @@ public class FeedDataContentProvider extends ContentProvider {
 		URI_MATCHER.addURI(FeedData.AUTHORITY, "favorites/#", URI_FAVORITES_ENTRY);
 	}
 	
-	private static class DatabaseHelper {
-		private SQLiteDatabase database;
-		
+	private static class DatabaseHelper extends SQLiteOpenHelper {
 		public DatabaseHelper(Context context, String name, int version) {
-			File file = new File(FOLDER);
-			
-			File ignoreFile = new File(IGNORE_SDCARD);
-			
-			if (((file.exists() && file.isDirectory() || file.mkdir()) && file.canWrite()) && !ignoreFile.exists()) {
-				try {
-					database = SQLiteDatabase.openDatabase(FOLDER+name, null, SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY);
-					
-					if (database.getVersion() == 0) {
-						onCreate(database);
-					} else {
-						onUpgrade(database, database.getVersion(), DATABASE_VERSION);
-					}
-					database.setVersion(DATABASE_VERSION);
-					USE_SDCARD = true;
-				} catch (SQLException sqlException) {
-					database = new SQLiteOpenHelper(context, name, null, version) {
-						@Override
-						public void onCreate(SQLiteDatabase db) {
-							DatabaseHelper.this.onCreate(db);
-						}
-
-						@Override
-						public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-							DatabaseHelper.this.onUpgrade(db, oldVersion, newVersion);
-						}
-					}.getWritableDatabase();
-					USE_SDCARD = false;
-				}
-			} else {
-				database = new SQLiteOpenHelper(context, name, null, version) {
-					@Override
-					public void onCreate(SQLiteDatabase db) {
-						DatabaseHelper.this.onCreate(db);
-					}
-
-					@Override
-					public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-						DatabaseHelper.this.onUpgrade(db, oldVersion, newVersion);
-					}
-				}.getWritableDatabase();
-				USE_SDCARD = ignoreFile.exists();
-			}
+			super(context, name, null, version);
 			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
 
+		@Override
 		public void onCreate(SQLiteDatabase database) {
 			database.execSQL(createTable(TABLE_FEEDS, FeedData.FeedColumns.COLUMNS, FeedData.FeedColumns.TYPES));
 			database.execSQL(createTable(TABLE_ENTRIES, FeedData.EntryColumns.COLUMNS, FeedData.EntryColumns.TYPES));
@@ -169,6 +124,7 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 		}
 
+		@Override
 		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 			if (oldVersion < 2) {
 				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.PRIORITY).append(' ').append(FeedData.TYPE_INT).toString());
@@ -184,8 +140,75 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 		}
 
-		public SQLiteDatabase getWritableDatabase() {
-			return database;
+		@Override
+		public synchronized SQLiteDatabase getWritableDatabase() {
+			File oldDatabaseFile = new File(Environment.getExternalStorageDirectory()+"/sparserss/sparserss.db");
+			
+			if (oldDatabaseFile.exists()) { // get rid of the old structure
+				SQLiteDatabase oldDatabase  = SQLiteDatabase.openDatabase(Environment.getExternalStorageDirectory()+"/sparserss/sparserss.db", null, SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY);
+			
+				SQLiteDatabase newDatabase = super.getWritableDatabase();
+				
+				try {
+					Cursor cursor = oldDatabase.query(TABLE_ENTRIES, null, null, null, null, null, null);
+					
+					newDatabase.beginTransaction();
+					
+					String[] columnNames = cursor.getColumnNames();
+					
+					int i = columnNames.length;
+					
+					int[] columnIndices = new int[i];
+					
+					for (int n = 0; n < i; n++) {
+						columnIndices[n] = cursor.getColumnIndex(columnNames[n]);
+					}
+					while (cursor.moveToNext()) {
+						ContentValues values = new ContentValues();
+						
+						for (int n = 0; n < i; n++) {
+							if (!cursor.isNull(columnIndices[n])) {
+								values.put(columnNames[n], cursor.getString(columnIndices[n]));
+							}
+						}
+						newDatabase.insert(TABLE_ENTRIES, null, values);
+					}
+					cursor.close();
+					cursor = oldDatabase.query(TABLE_FEEDS, null, null, null, null, null, null);
+					columnNames = cursor.getColumnNames();
+					i = columnNames.length;
+					columnIndices = new int[i];
+					
+					for (int n = 0; n < i; n++) {
+						columnIndices[n] = cursor.getColumnIndex(columnNames[n]);
+					}
+					while (cursor.moveToNext()) {
+						ContentValues values = new ContentValues();
+						
+						for (int n = 0; n < i; n++) {
+							if (!cursor.isNull(columnIndices[n])) {
+								if (FeedData.FeedColumns.ICON.equals(columnNames[n])) {
+									values.put(FeedData.FeedColumns.ICON, cursor.getBlob(columnIndices[n]));
+								} else {
+									values.put(columnNames[n], cursor.getString(columnIndices[n]));
+								}
+							} 
+						}
+						newDatabase.insert(TABLE_FEEDS, null, values);
+					}
+					cursor.close();
+					newDatabase.setTransactionSuccessful();
+				} finally {
+					newDatabase.endTransaction();
+				}
+				
+				oldDatabase.close();
+				oldDatabaseFile.delete();
+				OPML.exportToFile(BACKUPOPML, newDatabase);	
+				return newDatabase;
+			} else {
+				return super.getWritableDatabase();
+			}
 		}
 	}
 	
@@ -252,6 +275,9 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		int count = database.delete(table, where.toString(), selectionArgs);
 		
+		if (table == TABLE_FEEDS) { // == is ok here
+			OPML.exportToFile(BACKUPOPML, database);
+		}
 		if (count > 0) {
 			getContext().getContentResolver().notifyChange(uri, null);
 		}
@@ -284,6 +310,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		switch (option) {
 			case URI_FEEDS : {
 				newId = database.insert(TABLE_FEEDS, null, values);
+				OPML.exportToFile(BACKUPOPML, database);
 				break;
 			}
 			case URI_ENTRIES : {
@@ -307,6 +334,13 @@ public class FeedDataContentProvider extends ContentProvider {
 
 	@Override
 	public boolean onCreate() {
+		try {
+			File folder = new File(FOLDER);
+			
+			folder.mkdir(); // maybe we use the boolean return value later
+		} catch (Exception e) {
+			
+		}
 		database = new DatabaseHelper(getContext(), DATABASE_NAME, DATABASE_VERSION).getWritableDatabase();
 		
 		return database != null;
@@ -415,6 +449,9 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		int count = database.update(table, values, where.toString(), selectionArgs);
 		
+		if (table == TABLE_FEEDS) { // == is ok here
+			OPML.exportToFile(BACKUPOPML, database);
+		}
 		if (count > 0) {
 			getContext().getContentResolver().notifyChange(uri, null);
 		}

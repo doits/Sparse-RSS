@@ -23,7 +23,7 @@
  *
  */
 
-package de.shandschuh.sparserss;
+package de.shandschuh.sparserss.provider;
 
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -39,8 +39,9 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Xml;
-import de.shandschuh.sparserss.provider.FeedData;
+import de.shandschuh.sparserss.Strings;
 
 public class OPML {
 	private static final String START = "<?xml version=\"1.0\" encoding=\"utf-8\"?><opml version=\"1.1\"><head><title>Sparse RSS export</title><dateCreated>";
@@ -63,12 +64,31 @@ public class OPML {
 	}
 	
 	public static void exportToFile(String filename, Context context) throws IOException {
+		Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null);
+		
+		try {
+			writeData(filename, cursor);
+		} finally {
+			cursor.close();
+		}
+	}
+	
+	public static void exportToFile(String filename, SQLiteDatabase database) {
+		Cursor cursor = database.query(FeedDataContentProvider.TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null, null, null);
+		
+		try {
+			writeData(filename, cursor);
+		} catch (Exception e) {
+			
+		}
+		cursor.close();
+	}
+	
+	private static void writeData(String filename, Cursor cursor) throws IOException {
 		StringBuilder builder = new StringBuilder(START);
 		
 		builder.append(System.currentTimeMillis());
 		builder.append(AFTERDATE);
-		
-		Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null);
 		
 		while(cursor.moveToNext()) {
 			builder.append(OUTLINE_TITLE);
@@ -77,7 +97,6 @@ public class OPML {
 			builder.append(cursor.getString(2).replace(Strings.AND_CHAR, Strings.AND_HTML));
 			builder.append(OUTLINE_CLOSING);
 		}
-		cursor.close();
 		builder.append(CLOSING);
 		
 		BufferedWriter writer = new BufferedWriter(new FileWriter(filename));

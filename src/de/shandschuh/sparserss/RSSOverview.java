@@ -47,17 +47,15 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.shandschuh.sparserss.provider.FeedData;
-import de.shandschuh.sparserss.provider.FeedDataContentProvider;
+import de.shandschuh.sparserss.provider.OPML;
 import de.shandschuh.sparserss.service.RefreshService;
 
 public class RSSOverview extends ListActivity {	
@@ -142,17 +140,6 @@ public class RSSOverview extends ListActivity {
         } 
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
         	sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
-        }
-        
-        if (!FeedDataContentProvider.USE_SDCARD) {
-        	Button button = (Button) findViewById(R.id.reload_button);
-        	
-        	button.setOnClickListener(new OnClickListener() {
-    			public void onClick(View view) {
-    				android.os.Process.killProcess(android.os.Process.myPid());
-    			}
-            });
-        	button.setVisibility(View.VISIBLE);
         }
     }
     
