@@ -456,7 +456,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		int count = database.update(table, values, where.toString(), selectionArgs);
 		
-		if (table == TABLE_FEEDS) { // == is ok here
+		if (table == TABLE_FEEDS && (values.containsKey(FeedData.FeedColumns.NAME) || values.containsKey(FeedData.FeedColumns.URL) || values.containsKey(FeedData.FeedColumns.PRIORITY))) { // == is ok here
 			OPML.exportToFile(BACKUPOPML, database);
 		}
 		if (count > 0) {
