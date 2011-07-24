@@ -41,6 +41,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -103,10 +104,16 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int MENU_EXPORT_ID = 12;
 	
+	private static final int MENU_ENABLEFEEDSORT = 13;
+	
+	private static final int MENU_DISABLEFEEDSORT = 14;
+	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
 	
 	static NotificationManager notificationManager; // package scope
+	
+	boolean feedSort;
 	
     /** Called when the activity is first created. */
     @Override
@@ -130,10 +137,28 @@ public class RSSOverview extends ListActivity {
         });
         getListView().setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
-				return event.getAction() == MotionEvent.ACTION_MOVE;
+				if (feedSort) {
+					int action = event.getAction();
+					
+					switch (action) {
+						case MotionEvent.ACTION_DOWN:
+						case MotionEvent.ACTION_MOVE: {
+							// this is the drag action
+							Log.d("Drag", event.getX()+", "+event.getY());
+							break;
+						}
+						case MotionEvent.ACTION_UP: 
+						case MotionEvent.ACTION_CANCEL: {
+							// this is the drop action
+							Log.d("Drop", event.getX()+", "+event.getY());
+							break;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
 			}
-        	
         });
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
         	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
@@ -160,6 +185,17 @@ public class RSSOverview extends ListActivity {
 		// no icons will be shown from here
 		menu.add(0, MENU_IMPORT_ID, Menu.NONE, R.string.menu_import);
 		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
+		menu.add(0, MENU_ENABLEFEEDSORT, Menu.NONE, "Enable feed sort");
+		menu.add(1, MENU_DISABLEFEEDSORT, Menu.NONE, "Disable feed sort").setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		return true;
+	}
+	
+	
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.setGroupVisible(0, !feedSort);
+		menu.setGroupVisible(1, feedSort);
 		return true;
 	}
 
@@ -209,7 +245,6 @@ public class RSSOverview extends ListActivity {
 		            		}
 		            	}.start();
 		            }
-
 		        });
 				builder.setNegativeButton(android.R.string.no, null);
 				cursor.close();
@@ -294,6 +329,14 @@ public class RSSOverview extends ListActivity {
 				} else {
 					showDialog(DIALOG_ERROR_EXTERNALSTORAGENOTAVAILABLE);
 				}
+				break;
+			}
+			case MENU_ENABLEFEEDSORT: {
+				feedSort = true;
+				break;
+			}
+			case MENU_DISABLEFEEDSORT: {
+				feedSort = false;
 				break;
 			}
 		}
@@ -472,6 +515,5 @@ public class RSSOverview extends ListActivity {
 		builder.setPositiveButton(android.R.string.ok, null);
 		return builder.create();
 	}
-	
     
 }
