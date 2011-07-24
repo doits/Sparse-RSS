@@ -38,20 +38,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -136,6 +140,18 @@ public class RSSOverview extends ListActivity {
 			}
         });
         getListView().setOnTouchListener(new OnTouchListener() {
+        	private int dragedItem = -1;
+        	
+        	private ImageView dragedView;
+        	
+        	private WindowManager windowManager = RSSOverview.this.getWindowManager();
+        	
+        	private LayoutParams layoutParams;
+        	
+        	private int minY = 25; // is the header size --> needs to be changed
+        	
+        	private ListView listView = getListView();
+        	
 			public boolean onTouch(View v, MotionEvent event) {
 				if (feedSort) {
 					int action = event.getAction();
@@ -144,13 +160,44 @@ public class RSSOverview extends ListActivity {
 						case MotionEvent.ACTION_DOWN:
 						case MotionEvent.ACTION_MOVE: {
 							// this is the drag action
-							Log.d("Drag", event.getX()+", "+event.getY());
+							if (dragedItem == -1) {
+								dragedItem = listView.pointToPosition((int) event.getX(), (int) event.getY());
+								dragedView = new ImageView(listView.getContext());
+								
+								View item = listView.getChildAt(dragedItem - listView.getFirstVisiblePosition());
+								
+								item.setDrawingCacheEnabled(true);
+								dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
+								
+								layoutParams = new LayoutParams();
+								layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+								layoutParams.gravity = Gravity.TOP;
+								layoutParams.y = (int) event.getY();
+								windowManager.addView(dragedView, layoutParams);
+							} else {
+								layoutParams.y = Math.max(minY, Math.max(0, Math.min((int) event.getY(), listView.getHeight()-minY)));
+								windowManager.updateViewLayout(dragedView, layoutParams);
+							}
 							break;
 						}
 						case MotionEvent.ACTION_UP: 
 						case MotionEvent.ACTION_CANCEL: {
 							// this is the drop action
-							Log.d("Drop", event.getX()+", "+event.getY());
+							windowManager.removeView(dragedView);
+							
+							
+							int newPosition = listView.pointToPosition((int) event.getX(), (int) event.getY());
+							
+							if (newPosition == -1) {
+								newPosition = listView.getCount()-1;
+							}
+							if (newPosition != dragedItem) {
+								ContentValues values = new ContentValues();
+								
+								values.put(FeedData.FeedColumns.PRIORITY, newPosition);
+								getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(listView.getItemIdAtPosition(dragedItem)), values, null, null);
+							}
+							dragedItem = -1;
 							break;
 						}
 					}

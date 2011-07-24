@@ -37,11 +37,13 @@ public class FeedData {
 	
 	private static final String TYPE_TEXT = "TEXT";
 	
-	public static final String TYPE_DATETIME = "DATETIME";
+	protected static final String TYPE_DATETIME = "DATETIME";
 	
-	public static final String TYPE_INT = "INT";
+	protected static final String TYPE_INT = "INT";
 
-	public static final String TYPE_BOOLEAN = "INTEGER(1)";
+	protected static final String TYPE_BOOLEAN = "INTEGER(1)";
+	
+	public static final String FEED_DEFAULTSORTORDER = FeedColumns.PRIORITY;
 	
 	public static class FeedColumns implements BaseColumns {
 		public static final Uri CONTENT_URI = Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds").toString());
@@ -67,6 +69,10 @@ public class FeedData {
 		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "TEXT UNIQUE", TYPE_TEXT, TYPE_DATETIME, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT, TYPE_DATETIME};
 		
 		public static final Uri CONTENT_URI(String feedId) {
+			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds/").append(feedId).toString());
+		}
+		
+		public static final Uri CONTENT_URI(long feedId) {
 			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds/").append(feedId).toString());
 		}
 	}
@@ -103,5 +109,6 @@ public class FeedData {
 		}
 		
 	}
+	
 
 }

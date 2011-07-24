@@ -48,7 +48,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 	
 	private static final int URI_FEEDS = 1;
 	
@@ -81,6 +81,8 @@ public class FeedDataContentProvider extends ContentProvider {
 	private static final String BACKUPOPML = Environment.getExternalStorageDirectory()+"/sparserss/backup.opml";
 	
 	private static UriMatcher URI_MATCHER;
+	
+	private static final String[] PROJECTION_PRIORITY = new String[] {FeedData.FeedColumns.PRIORITY};
 	
 	static {
 		URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -144,6 +146,16 @@ public class FeedDataContentProvider extends ContentProvider {
 			}
 			if (oldVersion < 5) {
 				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REALLASTUPDATE).append(' ').append(FeedData.TYPE_DATETIME).toString());
+			} 
+			if (oldVersion < 6) {
+				Cursor cursor = database.query(TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID}, null, null, null, null, FeedData.FeedColumns._ID);
+				
+				int count = 0;
+				
+				while (cursor.moveToNext()) {
+					database.execSQL(new StringBuilder("UPDATE ").append(TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(count++).append(" WHERE _ID=").append(cursor.getLong(0)).toString());
+				}
+				cursor.close();
 			}
 		}
 
@@ -170,6 +182,9 @@ public class FeedDataContentProvider extends ContentProvider {
 					for (int n = 0; n < i; n++) {
 						columnIndices[n] = cursor.getColumnIndex(columnNames[n]);
 					}
+					
+					
+					
 					while (cursor.moveToNext()) {
 						ContentValues values = new ContentValues();
 						
@@ -178,10 +193,11 @@ public class FeedDataContentProvider extends ContentProvider {
 								values.put(columnNames[n], cursor.getString(columnIndices[n]));
 							}
 						}
+						
 						newDatabase.insert(TABLE_ENTRIES, null, values);
 					}
 					cursor.close();
-					cursor = oldDatabase.query(TABLE_FEEDS, null, null, null, null, null, null);
+					cursor = oldDatabase.query(TABLE_FEEDS, null, null, null, null, null, FeedData.FeedColumns._ID);
 					columnNames = cursor.getColumnNames();
 					i = columnNames.length;
 					columnIndices = new int[i];
@@ -189,6 +205,9 @@ public class FeedDataContentProvider extends ContentProvider {
 					for (int n = 0; n < i; n++) {
 						columnIndices[n] = cursor.getColumnIndex(columnNames[n]);
 					}
+					
+					int count = 0;
+					
 					while (cursor.moveToNext()) {
 						ContentValues values = new ContentValues();
 						
@@ -201,9 +220,11 @@ public class FeedDataContentProvider extends ContentProvider {
 								}
 							} 
 						}
+						values.put(FeedData.FeedColumns.PRIORITY, count++);
 						newDatabase.insert(TABLE_FEEDS, null, values);
 					}
 					cursor.close();
+					newDatabase.execSQL(new StringBuilder("UPDATE ").append(TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(FeedData.FeedColumns._ID).toString());
 					newDatabase.setTransactionSuccessful();
 				} finally {
 					newDatabase.endTransaction();
@@ -220,6 +241,8 @@ public class FeedDataContentProvider extends ContentProvider {
 	}
 	
 	private SQLiteDatabase database;
+	
+	private String[] MAXPRIORITY = new String[] {"MAX("+FeedData.FeedColumns.PRIORITY+")"};
 
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
@@ -242,11 +265,20 @@ public class FeedDataContentProvider extends ContentProvider {
 				}.start();
 				
 				where.append(FeedData.FeedColumns._ID).append('=').append(feedId);
+				
+				/** Update the priorities */
+				Cursor priorityCursor = database.query(TABLE_FEEDS, PROJECTION_PRIORITY, "_ID="+feedId, null, null, null, null);
+				
+				if (priorityCursor.moveToNext()) {
+					database.execSQL("UPDATE feeds SET PRIORITY = PRIORITY-1 WHERE PRIORITY > "+priorityCursor.getInt(0));
+					priorityCursor.close();
+				} else {
+					priorityCursor.close();
+				}
 				break;
 			}
 			case URI_FEEDS : {
 				table = TABLE_FEEDS;
-				delete(FeedData.FeedColumns.CONTENT_URI("0"), null, null);
 				break;
 			}
 			case URI_ENTRY : {
@@ -316,6 +348,14 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		switch (option) {
 			case URI_FEEDS : {
+				Cursor cursor = database.query(TABLE_FEEDS, MAXPRIORITY, null, null, null, null, null, null);
+				
+				if (cursor.moveToNext()) {
+					values.put(FeedData.FeedColumns.PRIORITY, cursor.getInt(0)+1);
+				} else {
+					values.put(FeedData.FeedColumns.PRIORITY, 1);
+				}
+				cursor.close();
 				newId = database.insert(TABLE_FEEDS, null, values);
 				OPML.exportToFile(BACKUPOPML, database);
 				break;
@@ -349,7 +389,6 @@ public class FeedDataContentProvider extends ContentProvider {
 			
 		}
 		database = new DatabaseHelper(getContext(), DATABASE_NAME, DATABASE_VERSION).getWritableDatabase();
-		
 		return database != null;
 	}
 
@@ -358,6 +397,10 @@ public class FeedDataContentProvider extends ContentProvider {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		
 		int option = URI_MATCHER.match(uri);
+		
+		if ((option == URI_FEED || option == URI_FEEDS) && sortOrder == null) {
+			sortOrder = FeedData.FEED_DEFAULTSORTORDER;
+		}
 		
 		switch(option) {
 			case URI_FEED : {
@@ -412,11 +455,33 @@ public class FeedDataContentProvider extends ContentProvider {
 		switch(option) {
 			case URI_FEED : {
 				table = TABLE_FEEDS;
-				where.append(FeedData.FeedColumns._ID).append('=').append(uri.getPathSegments().get(1));
+				
+				long feedId = Long.parseLong(uri.getPathSegments().get(1));
+				
+				where.append(FeedData.FeedColumns._ID).append('=').append(feedId);
+				if (values != null && values.containsKey(FeedData.FeedColumns.PRIORITY)) {
+					int newPriority = values.getAsInteger(FeedData.FeedColumns.PRIORITY);
+					
+					Cursor priorityCursor = database.query(TABLE_FEEDS, PROJECTION_PRIORITY, FeedData.FeedColumns._ID+"="+feedId, null, null, null, null);
+				
+					if (priorityCursor.moveToNext()) {
+						int oldPriority = priorityCursor.getInt(0);
+						
+						priorityCursor.close();
+						if (newPriority > oldPriority) {
+							database.execSQL("UPDATE feeds SET PRIORITY = PRIORITY -1 WHERE PRIORITY BETWEEN "+(oldPriority+1)+" AND "+newPriority);
+						} else if (newPriority < oldPriority) {
+							database.execSQL("UPDATE feeds SET PRIORITY = PRIORITY+1 WHERE PRIORITY BETWEEN "+newPriority+" AND "+(oldPriority-1));
+						}
+					} else {
+						priorityCursor.close();
+					}
+				}
 				break;
 			}
 			case URI_FEEDS : {
 				table = TABLE_FEEDS;
+				// maybe this should be disabled
 				break;
 			}
 			case URI_ENTRY : {
