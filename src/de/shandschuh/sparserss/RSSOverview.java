@@ -232,8 +232,9 @@ public class RSSOverview extends ListActivity {
 		// no icons will be shown from here
 		menu.add(0, MENU_IMPORT_ID, Menu.NONE, R.string.menu_import);
 		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
-		menu.add(0, MENU_ENABLEFEEDSORT, Menu.NONE, "Enable feed sort");
-		menu.add(1, MENU_DISABLEFEEDSORT, Menu.NONE, "Disable feed sort").setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(0, MENU_ENABLEFEEDSORT, Menu.NONE, R.string.menu_enablefeedsort);
+		
+		menu.add(1, MENU_DISABLEFEEDSORT, Menu.NONE, R.string.menu_disablefeedsort).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return true;
 	}
 	

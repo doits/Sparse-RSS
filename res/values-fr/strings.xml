@@ -21,6 +21,8 @@
     <string name="menu_import">Importer depuis un fichier OPML</string>
     <string name="menu_export">Exporter vers un fichier OPML</string>
     <string name="menu_about">À propos</string>
+    <string name="menu_enablefeedsort">Trier activer</string>
+    <string name="menu_disablefeedsort">Trier off</string>
 
     <string name="license_intro">Ce logiciel est distribué sous la licence libre MIT et son code source est disponible sur http://code.google.com/p/sparserss</string>
 
@@ -91,7 +93,6 @@
 
     <string name="question_deletefeed">Voulez-vous vraiment effacer ce flux et tous ses messages ?</string>
 
-    <string name="button_usesdcard">Utiliser la carte SD (si présente) - cela fermera l\'application. Veuillez la redémarrer manuellement.</string>
     <string name="button_accept">Accepter</string>
     <string name="button_decline">Décliner</string>
     

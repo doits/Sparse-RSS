@@ -17,14 +17,6 @@
 			android:layout_height="wrap_content"
 			android:text="@string/norssfeeds"
 			android:gravity="center" />
-		<Button
-			android:layout_marginTop="30dip"
-		    android:id="@+id/reload_button"
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:text="@string/button_usesdcard"
-			android:visibility="gone"
-			/>
 		</LinearLayout>
              <ListView android:id="@android:id/list" android:layout_width="fill_parent"
     		android:layout_height="wrap_content"

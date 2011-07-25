@@ -24,6 +24,9 @@
     <string name="menu_import">Importeer uit OPML</string>
     <string name="menu_export">Exporteer naar OPML</string>
     <string name="menu_about">Over</string>
+    <string name="menu_enablefeedsort">Sorteer activeren</string>
+    <string name="menu_disablefeedsort">Sort off</string>
+    
     <string name="license_intro">De software wordt verspreid onder de MIT open source licentie en de broncode is beschikbaar via http://code.google.com/p/sparserss</string>
 
     <string name="settings_category_refresh">Automatisch vernieuwen</string>
@@ -81,8 +84,6 @@
     <string name="select_file">Selecteer een bestand (SD-Root)</string>
 
     <string name="question_deletefeed">Wilt u deze feed en alle bijbehorende artikelen echt verwijderen?</string>
-
-    <string name="button_usesdcard">Gebruik SD-kaart (mits aanwezig). Dit zal de applicatie sluiten. Handmatig herstarten a.u.b.</string>
 
     <string name="message_exportedto">Exporteren naar %s.</string>
 

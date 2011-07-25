@@ -180,4 +180,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		forcedState = STATE_NEUTRAL;
 	}
 
+	@Override
+	public boolean hasStableIds() {
+		return false;
+	}
+	
 }

@@ -23,6 +23,8 @@
     <string name="menu_import">OPMLからインポート</string>
     <string name="menu_export">OPMLへエクスポート</string>
     <string name="menu_about">インフメーション</string>
+    <string name="menu_enablefeedsort">仕分け開始</string>
+    <string name="menu_disablefeedsort">仕分け終了</string>
 
     <string name="settings_category_refresh">自動更新</string>
     <string name="settings_enabled">ＯＮ</string>
@@ -88,8 +90,6 @@
     <string name="websiteorfeed">(ウェブサイト又はフィード)</string>
 
     <string name="question_deletefeed">本当にこのフィードとフィード内の全ての記事を消去しますか?</string>
-
-    <string name="button_usesdcard">SDカードを使用(手元にある場合) - プログラムを終了します。プログラムを再スタートさせてください</string>
 
     <string name="message_exportedto">データ %s エクスポート</string>
     <string-array name="settings_intervals">

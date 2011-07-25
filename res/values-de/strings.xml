@@ -23,6 +23,8 @@
     <string name="menu_import">Importiere von OPML</string>
     <string name="menu_export">Exportiere nach OPML</string>
     <string name="menu_about">Info</string>
+    <string name="menu_enablefeedsort">Sortieren aktivieren</string>
+    <string name="menu_disablefeedsort">Sortieren deaktivieren</string>
 
     <string name="settings_category_refresh">Automatische Aktualisierung</string>
     <string name="settings_enabled">Aktiviert</string>
@@ -90,7 +92,6 @@
 
     <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
 
-    <string name="button_usesdcard">Benutze SD-Karte (wenn vorhanden) - das schließt das Programm. Bitte starten Sie es manuell neu.</string>
     <string name="button_accept">Akzeptieren</string>
     <string name="button_decline">Ablehnen</string>
     
