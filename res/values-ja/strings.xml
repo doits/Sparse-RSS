@@ -90,8 +90,13 @@
     <string name="websiteorfeed">(ウェブサイト又はフィード)</string>
 
     <string name="question_deletefeed">本当にこのフィードとフィード内の全ての記事を消去しますか?</string>
+    
+    <string name="button_accept">許可する</string>
+    <string name="button_decline">許可しない</string>
 
     <string name="message_exportedto">データ %s エクスポート</string>
+    
+    <string name="dialog_licenseagreement">認可</string>
     <string-array name="settings_intervals">
         <item>１分</item>
         <item>５分</item>
