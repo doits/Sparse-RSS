@@ -224,7 +224,6 @@ public class FeedDataContentProvider extends ContentProvider {
 						newDatabase.insert(TABLE_FEEDS, null, values);
 					}
 					cursor.close();
-					newDatabase.execSQL(new StringBuilder("UPDATE ").append(TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(FeedData.FeedColumns._ID).toString());
 					newDatabase.setTransactionSuccessful();
 				} finally {
 					newDatabase.endTransaction();
