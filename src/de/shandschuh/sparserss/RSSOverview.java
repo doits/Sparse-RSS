@@ -38,19 +38,24 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,10 +108,16 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int MENU_EXPORT_ID = 12;
 	
+	private static final int MENU_ENABLEFEEDSORT = 13;
+	
+	private static final int MENU_DISABLEFEEDSORT = 14;
+	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
 	
 	static NotificationManager notificationManager; // package scope
+	
+	boolean feedSort;
 	
     /** Called when the activity is first created. */
     @Override
@@ -129,11 +140,72 @@ public class RSSOverview extends ListActivity {
 			}
         });
         getListView().setOnTouchListener(new OnTouchListener() {
-			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
-				return event.getAction() == MotionEvent.ACTION_MOVE;
-			}
+        	private int dragedItem = -1;
         	
+        	private ImageView dragedView;
+        	
+        	private WindowManager windowManager = RSSOverview.this.getWindowManager();
+        	
+        	private LayoutParams layoutParams;
+        	
+        	private int minY = 25; // is the header size --> needs to be changed
+        	
+        	private ListView listView = getListView();
+        	
+			public boolean onTouch(View v, MotionEvent event) {
+				if (feedSort) {
+					int action = event.getAction();
+					
+					switch (action) {
+						case MotionEvent.ACTION_DOWN:
+						case MotionEvent.ACTION_MOVE: {
+							// this is the drag action
+							if (dragedItem == -1) {
+								dragedItem = listView.pointToPosition((int) event.getX(), (int) event.getY());
+								dragedView = new ImageView(listView.getContext());
+								
+								View item = listView.getChildAt(dragedItem - listView.getFirstVisiblePosition());
+								
+								item.setDrawingCacheEnabled(true);
+								dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
+								
+								layoutParams = new LayoutParams();
+								layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+								layoutParams.gravity = Gravity.TOP;
+								layoutParams.y = (int) event.getY();
+								windowManager.addView(dragedView, layoutParams);
+							} else {
+								layoutParams.y = Math.max(minY, Math.max(0, Math.min((int) event.getY(), listView.getHeight()-minY)));
+								windowManager.updateViewLayout(dragedView, layoutParams);
+							}
+							break;
+						}
+						case MotionEvent.ACTION_UP: 
+						case MotionEvent.ACTION_CANCEL: {
+							// this is the drop action
+							windowManager.removeView(dragedView);
+							
+							
+							int newPosition = listView.pointToPosition((int) event.getX(), (int) event.getY());
+							
+							if (newPosition == -1) {
+								newPosition = listView.getCount()-1;
+							}
+							if (newPosition != dragedItem) {
+								ContentValues values = new ContentValues();
+								
+								values.put(FeedData.FeedColumns.PRIORITY, newPosition);
+								getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(listView.getItemIdAtPosition(dragedItem)), values, null, null);
+							}
+							dragedItem = -1;
+							break;
+						}
+					}
+					return true;
+				} else {
+					return false;
+				}
+			}
         });
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
         	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
@@ -160,6 +232,18 @@ public class RSSOverview extends ListActivity {
 		// no icons will be shown from here
 		menu.add(0, MENU_IMPORT_ID, Menu.NONE, R.string.menu_import);
 		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
+		menu.add(0, MENU_ENABLEFEEDSORT, Menu.NONE, R.string.menu_enablefeedsort);
+		
+		menu.add(1, MENU_DISABLEFEEDSORT, Menu.NONE, R.string.menu_disablefeedsort).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		return true;
+	}
+	
+	
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.setGroupVisible(0, !feedSort);
+		menu.setGroupVisible(1, feedSort);
 		return true;
 	}
 
@@ -209,7 +293,6 @@ public class RSSOverview extends ListActivity {
 		            		}
 		            	}.start();
 		            }
-
 		        });
 				builder.setNegativeButton(android.R.string.no, null);
 				cursor.close();
@@ -294,6 +377,14 @@ public class RSSOverview extends ListActivity {
 				} else {
 					showDialog(DIALOG_ERROR_EXTERNALSTORAGENOTAVAILABLE);
 				}
+				break;
+			}
+			case MENU_ENABLEFEEDSORT: {
+				feedSort = true;
+				break;
+			}
+			case MENU_DISABLEFEEDSORT: {
+				feedSort = false;
 				break;
 			}
 		}
@@ -472,6 +563,5 @@ public class RSSOverview extends ListActivity {
 		builder.setPositiveButton(android.R.string.ok, null);
 		return builder.create();
 	}
-	
     
 }

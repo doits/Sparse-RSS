@@ -25,8 +25,6 @@
 
 package de.shandschuh.sparserss;
 
-import java.text.MessageFormat;
-
 import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -119,7 +117,7 @@ public class EntriesListActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, MENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_revert);
-		menu.add(0, MENU_MARKASUNREAD_ID, Menu.NONE, MessageFormat.format(getString(R.string.contextmenu_markasunread), entriesListAdapter.getCount())).setIcon(android.R.drawable.ic_menu_set_as);
+		menu.add(0, MENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread).setIcon(android.R.drawable.ic_menu_set_as);
 		menu.add(1, MENU_HIDEREAD_ID, Menu.NONE, R.string.contextmenu_hideread).setCheckable(true).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return true;
 	}

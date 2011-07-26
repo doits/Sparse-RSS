@@ -21,6 +21,8 @@
     <string name="menu_import">OPML dosyasından içe aktar</string> 
     <string name="menu_export">OPML dosyası olarak dışa aktar</string> 
     <string name="menu_about">Hakkında</string> 
+    <string name="menu_enablefeedsort">Besleme sıralamasını etkinleştir</string>
+    <string name="menu_disablefeedsort">Besleme sıralamasını devre dışı bırak</string>
  
     <string name="license_intro">Bu yazılım MIT özgür yazılım lisansı kapsamında yayınlanmıştır ve kaynak kodu şu adreste mevcuttur: http://code.google.com/p/sparserss</string> 
  
@@ -90,7 +92,6 @@
  
     <string name="question_deletefeed">Bu beslemeyi ve tüm mesajlarını silmek istediğinizden emin misiniz?</string> 
  
-    <string name="button_usesdcard">SD kartı kullan (varsa) - bu uygulamayı kapatacaktır. Elle yeniden başlatınız.</string> 
     <string name="button_accept">Tamam</string> 
     <string name="button_decline">İptal</string> 
     

@@ -71,6 +71,9 @@ public class OPML {
 		try {
 			database.beginTransaction();
 			Xml.parse(new InputStreamReader(new FileInputStream(file)), parser);
+			
+			/** This is ok since the database is empty */
+			database.execSQL(new StringBuilder("UPDATE ").append(FeedDataContentProvider.TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(FeedData.FeedColumns._ID).append("-1").toString());
 			database.setTransactionSuccessful();
 		} catch (Exception e) {
 			
@@ -90,7 +93,7 @@ public class OPML {
 	}
 	
 	protected static void exportToFile(String filename, SQLiteDatabase database) {
-		Cursor cursor = database.query(FeedDataContentProvider.TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null, null, null);
+		Cursor cursor = database.query(FeedDataContentProvider.TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null, null, FeedData.FEED_DEFAULTSORTORDER);
 		
 		try {
 			writeData(filename, cursor);
