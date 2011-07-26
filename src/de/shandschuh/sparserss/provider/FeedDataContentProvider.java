@@ -164,11 +164,11 @@ public class FeedDataContentProvider extends ContentProvider {
 			File oldDatabaseFile = new File(Environment.getExternalStorageDirectory()+"/sparserss/sparserss.db");
 			
 			if (oldDatabaseFile.exists()) { // get rid of the old structure
-				SQLiteDatabase oldDatabase  = SQLiteDatabase.openDatabase(Environment.getExternalStorageDirectory()+"/sparserss/sparserss.db", null, SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY);
-			
 				SQLiteDatabase newDatabase = super.getWritableDatabase();
 				
 				try {
+					SQLiteDatabase oldDatabase  = SQLiteDatabase.openDatabase(Environment.getExternalStorageDirectory()+"/sparserss/sparserss.db", null, SQLiteDatabase.OPEN_READWRITE + SQLiteDatabase.CREATE_IF_NECESSARY);
+					
 					Cursor cursor = oldDatabase.query(TABLE_ENTRIES, null, null, null, null, null, null);
 					
 					newDatabase.beginTransaction();
@@ -224,14 +224,14 @@ public class FeedDataContentProvider extends ContentProvider {
 						newDatabase.insert(TABLE_FEEDS, null, values);
 					}
 					cursor.close();
+					oldDatabase.close();
+					oldDatabaseFile.delete();
 					newDatabase.setTransactionSuccessful();
-				} finally {
 					newDatabase.endTransaction();
+					OPML.exportToFile(BACKUPOPML, newDatabase);
+				} catch (Exception e) {
+					
 				}
-				
-				oldDatabase.close();
-				oldDatabaseFile.delete();
-				OPML.exportToFile(BACKUPOPML, newDatabase);	
 				return newDatabase;
 			} else {
 				return super.getWritableDatabase();
