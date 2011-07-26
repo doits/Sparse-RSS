@@ -21,8 +21,8 @@
     <string name="menu_import">OPML dosyasından içe aktar</string> 
     <string name="menu_export">OPML dosyası olarak dışa aktar</string> 
     <string name="menu_about">Hakkında</string> 
-    <string name="menu_enablefeedsort">Sıralama etkinleştirmek</string>
-    <string name="menu_disablefeedsort">Kapalı sırala</string>
+    <string name="menu_enablefeedsort">Besleme sıralamasını etkinleştir</string>
+    <string name="menu_disablefeedsort">Besleme sıralamasını devre dışı bırak</string>
  
     <string name="license_intro">Bu yazılım MIT özgür yazılım lisansı kapsamında yayınlanmıştır ve kaynak kodu şu adreste mevcuttur: http://code.google.com/p/sparserss</string> 
  
