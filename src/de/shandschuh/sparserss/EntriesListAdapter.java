@@ -168,21 +168,16 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	public void markAsRead() {
 		forcedState = STATE_ALLREAD;
-		notifyDataSetChanged();
+		notifyDataSetInvalidated();
 	}
 	
 	public void markAsUnread() {
 		forcedState = STATE_ALLUNREAD;
-		notifyDataSetChanged();
+		notifyDataSetInvalidated();
 	}
 	
 	public void neutralizeReadState() {
 		forcedState = STATE_NEUTRAL;
-	}
-
-	@Override
-	public boolean hasStableIds() {
-		return false;
 	}
 	
 }
