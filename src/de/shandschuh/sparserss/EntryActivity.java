@@ -41,6 +41,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -118,12 +119,27 @@ public class EntryActivity extends Activity {
 	int scrollX;
 	
 	int scrollY;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 		canShowIcon = requestWindowFeature(Window.FEATURE_LEFT_ICON);
+
 		setContentView(R.layout.entry);
+		
+		try {
+			TextView titleTextView = (TextView) findViewById(android.R.id.title);
+			
+			titleTextView.setSingleLine(true);
+			titleTextView.setHorizontallyScrolling(true);
+			titleTextView.setMarqueeRepeatLimit(-1);
+			titleTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+			titleTextView.setFocusable(true);
+			titleTextView.setFocusableInTouchMode(true);
+		} catch (Exception e) {
+			// just in case for non standard android, nullpointer etc
+		}
 		
 		uri = getIntent().getData();
 		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
@@ -231,8 +247,6 @@ public class EntryActivity extends Activity {
 				// loadData does not recognize the encoding without correct html-header
 				abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
 
-				
-				
 				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
