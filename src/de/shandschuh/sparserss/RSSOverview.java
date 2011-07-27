@@ -162,19 +162,25 @@ public class RSSOverview extends ListActivity {
 							// this is the drag action
 							if (dragedItem == -1) {
 								dragedItem = listView.pointToPosition((int) event.getX(), (int) event.getY());
-								dragedView = new ImageView(listView.getContext());
-								
-								View item = listView.getChildAt(dragedItem - listView.getFirstVisiblePosition());
-								
-								item.setDrawingCacheEnabled(true);
-								dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
-								
-								layoutParams = new LayoutParams();
-								layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-								layoutParams.gravity = Gravity.TOP;
-								layoutParams.y = (int) event.getY();
-								windowManager.addView(dragedView, layoutParams);
-							} else {
+								if (dragedItem > -1) {
+									dragedView = new ImageView(listView.getContext());
+									
+									View item = listView.getChildAt(dragedItem - listView.getFirstVisiblePosition());
+									
+									if (item != null) {
+										item.setDrawingCacheEnabled(true);
+										dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
+										
+										layoutParams = new LayoutParams();
+										layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+										layoutParams.gravity = Gravity.TOP;
+										layoutParams.y = (int) event.getY();
+										windowManager.addView(dragedView, layoutParams);
+									} else {
+										dragedItem = -1;
+									}
+								}
+							} else if (dragedView != null) {
 								layoutParams.y = Math.max(minY, Math.max(0, Math.min((int) event.getY(), listView.getHeight()-minY)));
 								windowManager.updateViewLayout(dragedView, layoutParams);
 							}
@@ -183,21 +189,22 @@ public class RSSOverview extends ListActivity {
 						case MotionEvent.ACTION_UP: 
 						case MotionEvent.ACTION_CANCEL: {
 							// this is the drop action
-							windowManager.removeView(dragedView);
-							
-							
-							int newPosition = listView.pointToPosition((int) event.getX(), (int) event.getY());
-							
-							if (newPosition == -1) {
-								newPosition = listView.getCount()-1;
-							}
-							if (newPosition != dragedItem) {
-								ContentValues values = new ContentValues();
+							if (dragedItem > -1) {
+								windowManager.removeView(dragedView);
+
+								int newPosition = listView.pointToPosition((int) event.getX(), (int) event.getY());
 								
-								values.put(FeedData.FeedColumns.PRIORITY, newPosition);
-								getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(listView.getItemIdAtPosition(dragedItem)), values, null, null);
+								if (newPosition == -1) {
+									newPosition = listView.getCount()-1;
+								}
+								if (newPosition != dragedItem) {
+									ContentValues values = new ContentValues();
+									
+									values.put(FeedData.FeedColumns.PRIORITY, newPosition);
+									getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(listView.getItemIdAtPosition(dragedItem)), values, null, null);
+								}
+								dragedItem = -1;
 							}
-							dragedItem = -1;
 							break;
 						}
 					}

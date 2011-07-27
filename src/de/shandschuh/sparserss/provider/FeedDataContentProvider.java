@@ -266,10 +266,10 @@ public class FeedDataContentProvider extends ContentProvider {
 				where.append(FeedData.FeedColumns._ID).append('=').append(feedId);
 				
 				/** Update the priorities */
-				Cursor priorityCursor = database.query(TABLE_FEEDS, PROJECTION_PRIORITY, "_ID="+feedId, null, null, null, null);
+				Cursor priorityCursor = database.query(TABLE_FEEDS, PROJECTION_PRIORITY, FeedData.FeedColumns._ID+"="+feedId, null, null, null, null);
 				
 				if (priorityCursor.moveToNext()) {
-					database.execSQL("UPDATE feeds SET PRIORITY = PRIORITY-1 WHERE PRIORITY > "+priorityCursor.getInt(0));
+					database.execSQL("UPDATE "+TABLE_FEEDS+" SET "+FeedData.FeedColumns.PRIORITY+" = "+FeedData.FeedColumns.PRIORITY+"-1 WHERE "+FeedData.FeedColumns.PRIORITY+" > "+priorityCursor.getInt(0));
 					priorityCursor.close();
 				} else {
 					priorityCursor.close();
@@ -468,9 +468,9 @@ public class FeedDataContentProvider extends ContentProvider {
 						
 						priorityCursor.close();
 						if (newPriority > oldPriority) {
-							database.execSQL("UPDATE feeds SET PRIORITY = PRIORITY -1 WHERE PRIORITY BETWEEN "+(oldPriority+1)+" AND "+newPriority);
+							database.execSQL("UPDATE "+TABLE_FEEDS+" SET "+FeedData.FeedColumns.PRIORITY+" = "+FeedData.FeedColumns.PRIORITY+"-1 WHERE "+FeedData.FeedColumns.PRIORITY+" BETWEEN "+(oldPriority+1)+" AND "+newPriority);
 						} else if (newPriority < oldPriority) {
-							database.execSQL("UPDATE feeds SET PRIORITY = PRIORITY+1 WHERE PRIORITY BETWEEN "+newPriority+" AND "+(oldPriority-1));
+							database.execSQL("UPDATE "+TABLE_FEEDS+" SET "+FeedData.FeedColumns.PRIORITY+" = "+FeedData.FeedColumns.PRIORITY+"+1 WHERE "+FeedData.FeedColumns.PRIORITY+" BETWEEN "+newPriority+" AND "+(oldPriority-1));
 						}
 					} else {
 						priorityCursor.close();
