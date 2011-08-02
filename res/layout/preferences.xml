@@ -1,112 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-<PreferenceCategory android:title="@string/settings_category_refresh">
-<CheckBoxPreference
-android:title="@string/settings_enabled"
-android:defaultValue="false"
-android:summary="@string/settings_refreshenabled_description"
-android:key="refresh.enabled" />
-<ListPreference
-android:name="@string/settings_refreshinterval"
-android:summary="@string/settings_refreshinterval_description"
-android:title="@string/settings_refreshinterval"
-android:key="refresh.interval" 
-android:numeric="integer"
-android:dependency="refresh.enabled"
-android:defaultValue="1800000"
-android:entries="@array/settings_intervals"
-android:entryValues="@array/settings_intervalvalues" />
-<CheckBoxPreference
-android:title="@string/settings_refreshonopen"
-android:defaultValue="false"
-android:summary="@string/settings_refreshonopen_description"
-android:key="refreshonopen.enabled" />
-</PreferenceCategory>
-
-<PreferenceCategory android:title="@string/settings_category_notofications">
-<CheckBoxPreference
-android:title="@string/settings_enabled"
-android:defaultValue="false"
-android:summary="@string/settings_notificationsenabled_description"
-android:key="notifications.enabled" />
-<RingtonePreference
-android:ringtoneType="notification"
-android:summary="@string/settings_notificationsringtone_description"
-android:title="@string/settings_notificationsringtone"
-android:key="notifications.ringtone"
-android:dependency="notifications.enabled" />
-<CheckBoxPreference
-android:summary="@string/settings_notificationsvibrate_description"
-android:title="@string/settings_notificationsvibrate"
-android:key="notifications.vibrate"
-android:dependency="notifications.enabled" />
-</PreferenceCategory>
-
-<PreferenceCategory android:title="@string/settings_category_contentpresentation">
-<CheckBoxPreference
-android:title="@string/settings_showtabs"
-android:defaultValue="false"
-android:summary="@string/settings_showtabs_description"
-android:key="tabs.show" />
-<CheckBoxPreference
-android:title="@string/settings_prioritize"
-android:defaultValue="false"
-android:summary="@string/settings_prioritize_description"
-android:key="contentpresentation.prioritize" />
-<ListPreference
-android:name="@string/settings_keeptime"
-android:summary="@string/settings_keeptime_description"
-android:title="@string/settings_keeptime"
-android:key="keeptime" 
-android:numeric="integer"
-android:defaultValue="2"
-android:entries="@array/settings_keeptimes"
-android:entryValues="@array/settings_keeptimevalues" />
-<CheckBoxPreference
-android:title="@string/settings_fetchpictures"
-android:defaultValue="false"
-android:summary="@string/settings_fetchpictures_description"
-android:key="pictures.fetch" />
-<CheckBoxPreference
-android:title="@string/settings_blacktextwhite"
-android:defaultValue="false"
-android:summary="@string/settings_blacktextwhite_description"
-android:key="blacktextonwhite" />
-<ListPreference
-  android:name="@string/settings_fontsize"
-  android:title="@string/settings_fontsize"
-  android:summary="@string/settings_fontsize_description"
-  android:key="fontsize"
-  android:defaultValue="0"
-  android:numeric="integer"
-  android:entries="@array/settings_fontsizes"
-  android:entryValues="@array/settings_fontsizevalues"/>
-</PreferenceCategory>
-<PreferenceCategory android:title="@string/settings_category_network">
-<CheckBoxPreference
-android:title="@string/settings_standarduseragent"
-android:defaultValue="false"
-android:summary="@string/settings_standarduseragent_description"
-android:key="standarduseragent" />
-<PreferenceScreen android:title="Proxy">
-    <CheckBoxPreference
-        android:key="proxy.enabled"
-        android:title="@string/settings_enabled" />
-    <CheckBoxPreference
-        android:key="proxy.wifionly"
-        android:title="@string/settings_proxy_wifionly"
-        android:summary="@string/settings_proxy_wifionly_description"
-        android:dependency="proxy.enabled" />
-    <EditTextPreference
-    	android:key="proxy.host"
-    	android:title="@string/settings_proxy_host"
-    	android:dependency="proxy.enabled"/>
-    <EditTextPreference
-    	android:key="proxy.port"
-    	android:title="@string/settings_proxy_port"
-    	android:inputType="number"
-    	android:dependency="proxy.enabled"/>		
-</PreferenceScreen>
-</PreferenceCategory>
-
+<PreferenceScreen 
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory 
+        android:title="@string/settings_category_refresh">
+        <CheckBoxPreference
+            android:title="@string/settings_enabled"
+            android:defaultValue="false"
+            android:summary="@string/settings_refreshenabled_description"
+            android:key="refresh.enabled" />
+        <ListPreference
+            android:name="@string/settings_refreshinterval"
+            android:summary="@string/settings_refreshinterval_description"
+            android:title="@string/settings_refreshinterval"
+            android:key="refresh.interval" 
+            android:numeric="integer"
+            android:dependency="refresh.enabled"
+            android:defaultValue="1800000"
+            android:entries="@array/settings_intervals"
+            android:entryValues="@array/settings_intervalvalues" />
+        <CheckBoxPreference
+            android:title="@string/settings_refreshonopen"
+            android:defaultValue="false"
+            android:summary="@string/settings_refreshonopen_description"
+            android:key="refreshonopen.enabled" />
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/settings_category_notofications">
+        <CheckBoxPreference
+            android:title="@string/settings_enabled"
+            android:defaultValue="false"
+            android:summary="@string/settings_notificationsenabled_description"
+            android:key="notifications.enabled" />
+        <RingtonePreference
+            android:ringtoneType="notification"
+            android:summary="@string/settings_notificationsringtone_description"
+            android:title="@string/settings_notificationsringtone"
+            android:key="notifications.ringtone"
+            android:dependency="notifications.enabled" />
+        <CheckBoxPreference
+            android:summary="@string/settings_notificationsvibrate_description"
+            android:title="@string/settings_notificationsvibrate"
+            android:key="notifications.vibrate"
+            android:dependency="notifications.enabled" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_category_contentpresentation">
+        <CheckBoxPreference
+            android:title="@string/settings_showtabs"
+            android:defaultValue="false"
+            android:summary="@string/settings_showtabs_description"
+            android:key="tabs.show" />
+        <CheckBoxPreference
+            android:title="@string/settings_prioritize"
+            android:defaultValue="false"
+            android:summary="@string/settings_prioritize_description"
+            android:key="contentpresentation.prioritize" />
+        <ListPreference
+            android:name="@string/settings_keeptime"
+            android:summary="@string/settings_keeptime_description"
+            android:title="@string/settings_keeptime"
+            android:key="keeptime" 
+            android:numeric="integer"
+            android:defaultValue="2"
+            android:entries="@array/settings_keeptimes"
+            android:entryValues="@array/settings_keeptimevalues" />
+        <CheckBoxPreference
+            android:title="@string/settings_disablepictures"
+            android:defaultValue="false"
+            android:summary="@string/settings_disablepictures_description"
+            android:key="pictures.disable" 
+            android:disableDependentsState="true"/>
+        <CheckBoxPreference
+            android:title="@string/settings_fetchpictures"
+            android:defaultValue="false"
+            android:summary="@string/settings_fetchpictures_description"
+            android:key="pictures.fetch" 
+            android:dependency="pictures.disable"/>
+        <CheckBoxPreference
+            android:title="@string/settings_blacktextwhite"
+            android:defaultValue="false"
+            android:summary="@string/settings_blacktextwhite_description"
+            android:key="blacktextonwhite" />
+        <ListPreference
+            android:name="@string/settings_fontsize"
+            android:title="@string/settings_fontsize"
+            android:summary="@string/settings_fontsize_description"
+            android:key="fontsize"
+            android:defaultValue="0"
+            android:numeric="integer"
+            android:entries="@array/settings_fontsizes"
+            android:entryValues="@array/settings_fontsizevalues"/>
+    </PreferenceCategory>
+    <PreferenceCategory 
+        android:title="@string/settings_category_network">
+        <CheckBoxPreference
+            android:title="@string/settings_standarduseragent"
+            android:defaultValue="false"
+            android:summary="@string/settings_standarduseragent_description"
+            android:key="standarduseragent" />
+        <PreferenceScreen android:title="Proxy">
+            <CheckBoxPreference
+                android:key="proxy.enabled"
+                android:title="@string/settings_enabled" />
+            <CheckBoxPreference
+                android:key="proxy.wifionly"
+                android:title="@string/settings_proxy_wifionly"
+                android:summary="@string/settings_proxy_wifionly_description"
+                android:dependency="proxy.enabled" />
+            <EditTextPreference
+                android:key="proxy.host"
+                android:title="@string/settings_proxy_host"
+                android:dependency="proxy.enabled"/>
+            <EditTextPreference
+                android:key="proxy.port"
+                android:title="@string/settings_proxy_port"
+                android:inputType="number"
+                android:dependency="proxy.enabled"/>		
+        </PreferenceScreen>
+    </PreferenceCategory>
 </PreferenceScreen>
