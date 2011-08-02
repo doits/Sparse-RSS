@@ -250,7 +250,7 @@ public class EntryActivity extends Activity {
 				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 				
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
-					abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
+					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
 				}
 				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
