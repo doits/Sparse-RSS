@@ -60,6 +60,8 @@ public class EntriesListActivity extends ListActivity {
 	
 	public static final String EXTRA_SHOWFEEDINFO = "show_feedinfo";
 
+	public static final String EXTRA_AUTORELOAD = "autoreload";
+	
 	private Uri uri;
 	
 	private EntriesListAdapter entriesListAdapter;
@@ -80,11 +82,14 @@ public class EntriesListActivity extends ListActivity {
 		}
         
 		setContentView(R.layout.entries);
-		uri = getIntent().getData();
-		entriesListAdapter = new EntriesListAdapter(this, uri, getIntent().getBooleanExtra(EXTRA_SHOWFEEDINFO, false));
+		
+		Intent intent = getIntent();
+		
+		uri = intent.getData();
+		entriesListAdapter = new EntriesListAdapter(this, uri, intent.getBooleanExtra(EXTRA_SHOWFEEDINFO, false), intent.getBooleanExtra(EXTRA_AUTORELOAD, false));
         setListAdapter(entriesListAdapter);
         
-        String title = getIntent().getStringExtra(FeedData.FeedColumns.NAME);
+        String title = intent.getStringExtra(FeedData.FeedColumns.NAME);
         
         if (title != null) {
         	setTitle(title);
