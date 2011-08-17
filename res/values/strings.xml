@@ -148,6 +148,9 @@
         <item>1 week</item>
         <item>2 weeks</item>
         <item>1 month</item>
+        <item>2 months</item>
+        <item>3 months</item>
+        <item>Forever</item>
     </string-array>
 
     <string-array name="settings_fontsizes">

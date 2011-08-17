@@ -111,6 +111,9 @@
         <item>1 semana</item>
         <item>2 semanas</item>
         <item>1 mes</item>
+        <item>2 meses</item>
+        <item>3 meses</item>
+        <item>Eternidad</item>
     </string-array>
 
     <string-array name="settings_fontsizes">

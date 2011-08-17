@@ -118,5 +118,8 @@
         <item>1 semaine</item>
         <item>2 semaines</item>
         <item>1 mois</item>
+        <item>2 mois</item>
+        <item>3 mois</item>
+        <item>Jamais</item>
     </string-array>
 </resources>

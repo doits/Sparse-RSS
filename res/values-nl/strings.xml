@@ -105,6 +105,9 @@
         <item>1 week</item>
         <item>2 weken</item>
         <item>1 maand</item>
+        <item>2 maanden</item>
+        <item>3 maanden</item>
+        <item>Voor altijd</item>
     </string-array>
 
     <string-array name="settings_fontsizes">

@@ -117,6 +117,9 @@
         <item>1 hafta</item> 
         <item>2 hafta</item> 
         <item>1 ay</item> 
+        <item>2 ay</item> 
+        <item>3 ay</item> 
+        <item>sonsuza dek</item> 
     </string-array> 
  
     <string-array name="settings_fontsizes"> 

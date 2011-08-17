@@ -182,7 +182,7 @@ public class RSSHandler extends DefaultHandler {
 	}
 	
 	public void init(Date lastUpdateDate, String id, String title) {
-		final long keepDateBorderTime = System.currentTimeMillis()-KEEP_TIME;
+		final long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis()-KEEP_TIME : 0;
 		
 		keepDateBorder = new Date(keepDateBorderTime);
 		this.lastUpdateDate = lastUpdateDate;
