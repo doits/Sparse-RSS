@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010, 2011 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,6 +27,7 @@ package de.shandschuh.sparserss;
 
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -81,6 +82,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private int forcedState;
 	
+	private Vector<Long> markedAsRead;
+	
+	private Vector<Long> markedAsUnread;
+	
 	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo, boolean autoreload) {
 		super(context, R.layout.listitem, createManagedCursor(context, uri, true), autoreload);
 		showRead = true;
@@ -97,6 +102,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			feedNameColumn = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
 		}
 		forcedState = STATE_NEUTRAL;
+		markedAsRead = new Vector<Long>();
+		markedAsUnread = new Vector<Long>();
 	}
 
 	@Override
@@ -111,7 +118,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		 
 		final boolean favorite = cursor.getInt(favoriteColumn) == 1;
 		
-		final String id = cursor.getString(idColumn);
+		final long id = cursor.getLong(idColumn);
 		
 		imageView.setImageResource(favorite ? android.R.drawable.star_on : android.R.drawable.star_off);
 		imageView.setOnClickListener(new OnClickListener() {
@@ -119,7 +126,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 				ContentValues values = new ContentValues();
 				
 				values.put(FeedData.EntryColumns.FAVORITE, favorite ? 0 : 1);
-				view.getContext().getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns._ID).append(Strings.DB_ARG).toString(), new String[] {id});
+				view.getContext().getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns._ID).append(Strings.DB_ARG).toString(), new String[] {Long.toString(id)});
 				context.getContentResolver().notifyChange(FeedData.EntryColumns.FAVORITES_CONTENT_URI, null);
 			}
 		});
@@ -140,7 +147,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
 		}
 		
-		if (forcedState == STATE_ALLUNREAD || (forcedState != STATE_ALLREAD && cursor.isNull(readDateColumn))) {
+		if (forcedState == STATE_ALLUNREAD && !markedAsRead.contains(id) || (forcedState != STATE_ALLREAD && cursor.isNull(readDateColumn) && !markedAsRead.contains(id)) || markedAsUnread.contains(id)) {
 			textView.setTypeface(Typeface.DEFAULT_BOLD);
 			textView.setEnabled(true);
 			dateTextView.setEnabled(true);
@@ -168,16 +175,32 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	public void markAsRead() {
 		forcedState = STATE_ALLREAD;
+		markedAsRead.clear();
+		markedAsUnread.clear();
 		notifyDataSetInvalidated();
 	}
 	
 	public void markAsUnread() {
 		forcedState = STATE_ALLUNREAD;
+		markedAsRead.clear();
+		markedAsUnread.clear();
 		notifyDataSetInvalidated();
 	}
 	
 	public void neutralizeReadState() {
 		forcedState = STATE_NEUTRAL;
+	}
+
+	public void markAsRead(long id) {
+		markedAsRead.add(id);
+		markedAsUnread.remove(id);
+		notifyDataSetInvalidated();
+	}
+
+	public void markAsUnread(long id) {
+		markedAsUnread.add(id);
+		markedAsRead.remove(id);
+		notifyDataSetInvalidated();
 	}
 	
 }

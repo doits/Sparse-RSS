@@ -56,6 +56,8 @@ public class EntriesListActivity extends ListActivity {
 	
 	private static final int CONTEXTMENU_MARKASUNREAD_ID = 5;
 	
+	private static final int CONTEXTMENU_DELETE_ID = 6;
+	
 	public static final String EXTRA_SHOWREAD = "show_read";
 	
 	public static final String EXTRA_SHOWFEEDINFO = "show_feedinfo";
@@ -104,6 +106,7 @@ public class EntriesListActivity extends ListActivity {
 				menu.setHeaderTitle(((TextView) ((AdapterView.AdapterContextMenuInfo) menuInfo).targetView.findViewById(android.R.id.text1)).getText());
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_manage);
 				menu.add(0, CONTEXTMENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread).setIcon(android.R.drawable.ic_menu_manage);
+				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete).setIcon(android.R.drawable.ic_menu_delete);
 			}
         });
 	}
@@ -164,11 +167,22 @@ public class EntriesListActivity extends ListActivity {
 				break;
 			}
 			case CONTEXTMENU_MARKASREAD_ID: {
-				getContentResolver().update(ContentUris.withAppendedId(uri, ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id), RSSOverview.getReadContentValues(), null, null);
+				long id = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id;
+				
+				getContentResolver().update(ContentUris.withAppendedId(uri, id), RSSOverview.getReadContentValues(), null, null);
+				entriesListAdapter.markAsRead(id);
 				break;
 			}
 			case CONTEXTMENU_MARKASUNREAD_ID: {
-				getContentResolver().update(ContentUris.withAppendedId(uri, ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id), RSSOverview.getUnreadContentValues(), null, null);
+				long id = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id;
+				
+				getContentResolver().update(ContentUris.withAppendedId(uri, id), RSSOverview.getUnreadContentValues(), null, null);
+				entriesListAdapter.markAsUnread(id);
+				break;
+			}
+			case CONTEXTMENU_DELETE_ID: {
+				getContentResolver().delete(ContentUris.withAppendedId(uri, ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id), null, null);
+				entriesListAdapter.getCursor().requery(); // he have no other choice
 				break;
 			}
 			
