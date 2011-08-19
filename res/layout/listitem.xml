@@ -12,8 +12,7 @@
         android:id="@android:id/text1" 
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content" 
-        android:layout_marginRight="2dip"
-        android:ellipsize="marquee"/>
+        android:layout_marginRight="2dip" />
     <TextView 
         android:singleLine="true" 
         android:layout_below="@android:id/text1" 
