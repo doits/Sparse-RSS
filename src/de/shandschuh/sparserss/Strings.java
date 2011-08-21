@@ -128,5 +128,9 @@ public final class Strings {
 	
 	public static final String GT = ">";
 
+	protected static final String TRUE = "true";
+	
+	protected static final String FALSE = "false";
+
 
 }

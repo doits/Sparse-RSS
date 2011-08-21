@@ -86,6 +86,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private Vector<Long> markedAsUnread;
 	
+	private Vector<Long> favorited;
+	
+	private Vector<Long> unfavorited;
+	
 	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo, boolean autoreload) {
 		super(context, R.layout.listitem, createManagedCursor(context, uri, true), autoreload);
 		showRead = true;
@@ -104,6 +108,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		forcedState = STATE_NEUTRAL;
 		markedAsRead = new Vector<Long>();
 		markedAsUnread = new Vector<Long>();
+		favorited = new Vector<Long>();
+		unfavorited = new Vector<Long>();
 	}
 
 	@Override
@@ -114,20 +120,36 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		
 		TextView dateTextView = (TextView) view.findViewById(android.R.id.text2);
 		
-		ImageView imageView = (ImageView) view.findViewById(android.R.id.icon);
-		 
-		final boolean favorite = cursor.getInt(favoriteColumn) == 1;
+		final ImageView imageView = (ImageView) view.findViewById(android.R.id.icon);
 		
 		final long id = cursor.getLong(idColumn);
+		 
+		final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
 		
 		imageView.setImageResource(favorite ? android.R.drawable.star_on : android.R.drawable.star_off);
+		imageView.setTag(favorite ? Strings.TRUE : Strings.FALSE);
 		imageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
+				boolean newFavorite = !Strings.TRUE.equals(view.getTag());
+				
+				if (newFavorite) {
+					view.setTag(Strings.TRUE);
+					imageView.setImageResource(android.R.drawable.star_on);
+					favorited.add(id);
+					unfavorited.remove(id);
+				} else {
+					view.setTag(Strings.FALSE);
+					imageView.setImageResource(android.R.drawable.star_off);
+					unfavorited.add(id);
+					favorited.remove(id);
+				}
+				
 				ContentValues values = new ContentValues();
 				
-				values.put(FeedData.EntryColumns.FAVORITE, favorite ? 0 : 1);
+				values.put(FeedData.EntryColumns.FAVORITE, newFavorite ? 1 : 0);
 				view.getContext().getContentResolver().update(uri, values, new StringBuilder(FeedData.EntryColumns._ID).append(Strings.DB_ARG).toString(), new String[] {Long.toString(id)});
 				context.getContentResolver().notifyChange(FeedData.EntryColumns.FAVORITES_CONTENT_URI, null);
+				
 			}
 		});
 		
