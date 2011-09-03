@@ -54,6 +54,16 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	public static DateFormat DATEFORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	
+	private static final String[] PROJECTION = {
+		FeedData.EntryColumns._ID, 
+		FeedData.EntryColumns.FEED_ID, 
+		FeedData.EntryColumns.TITLE, 
+		FeedData.EntryColumns.DATE, 
+		FeedData.EntryColumns.READDATE, 
+		FeedData.EntryColumns.LINK, 
+		FeedData.EntryColumns.FAVORITE
+	};
+	
 	private int titleColumnPosition;
 	
 	private int dateColumn;
@@ -67,6 +77,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private int feedIconColumn;
 	
 	private int feedNameColumn;
+	
+	private int linkColumn;
 	
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
@@ -95,15 +107,19 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		showRead = true;
 		this.context = context;
 		this.uri = uri;
-		titleColumnPosition = getCursor().getColumnIndex(FeedData.EntryColumns.TITLE);
-		dateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.DATE);
-		readDateColumn = getCursor().getColumnIndex(FeedData.EntryColumns.READDATE);
-		favoriteColumn = getCursor().getColumnIndex(FeedData.EntryColumns.FAVORITE);
-		idColumn = getCursor().getColumnIndex(FeedData.EntryColumns._ID);
+		
+		Cursor cursor = getCursor();
+		
+		titleColumnPosition = cursor.getColumnIndex(FeedData.EntryColumns.TITLE);
+		dateColumn = cursor.getColumnIndex(FeedData.EntryColumns.DATE);
+		readDateColumn = cursor.getColumnIndex(FeedData.EntryColumns.READDATE);
+		favoriteColumn = cursor.getColumnIndex(FeedData.EntryColumns.FAVORITE);
+		idColumn = cursor.getColumnIndex(FeedData.EntryColumns._ID);
+		linkColumn = cursor.getColumnIndex(FeedData.EntryColumns.LINK);
 		this.showFeedInfo = showFeedInfo;
 		if (showFeedInfo) {
-			feedIconColumn = getCursor().getColumnIndex(FeedData.FeedColumns.ICON);
-			feedNameColumn = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
+			feedIconColumn = cursor.getColumnIndex(FeedData.FeedColumns.ICON);
+			feedNameColumn = cursor.getColumnIndex(FeedData.FeedColumns.NAME);
 		}
 		forcedState = STATE_NEUTRAL;
 		markedAsRead = new Vector<Long>();
@@ -123,6 +139,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		final ImageView imageView = (ImageView) view.findViewById(android.R.id.icon);
 		
 		final long id = cursor.getLong(idColumn);
+		
+		view.setTag(cursor.getString(linkColumn));
 		 
 		final boolean favorite = !unfavorited.contains(id) && (cursor.getInt(favoriteColumn) == 1 || favorited.contains(id));
 		
@@ -192,7 +210,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	}
 	
 	private static Cursor createManagedCursor(Activity context, Uri uri, boolean showRead) {
-		return context.managedQuery(uri, null, showRead ? null : READDATEISNULL, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
+		return context.managedQuery(uri, PROJECTION, showRead ? null : READDATEISNULL, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
 	}
 	
 	public void markAsRead() {

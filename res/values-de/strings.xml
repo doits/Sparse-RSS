@@ -19,6 +19,7 @@
     <string name="contextmenu_markasunread">Als ungelesen markieren</string>
     <string name="contextmenu_hideread">Verstecke gelesene Einträge</string>
     <string name="contextmenu_showread">Zeige gelesene Einträge</string>
+    <string name="contextmenu_copyurl">Kopiere Link in Zwischenablage</string>
     <string name="menu_allread">Alle gelesen</string>
     <string name="menu_import">Importiere von OPML</string>
     <string name="menu_export">Exportiere nach OPML</string>

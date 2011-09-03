@@ -33,6 +33,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.ClipboardManager;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -57,6 +58,8 @@ public class EntriesListActivity extends ListActivity {
 	private static final int CONTEXTMENU_MARKASUNREAD_ID = 5;
 	
 	private static final int CONTEXTMENU_DELETE_ID = 6;
+	
+	private static final int CONTEXTMENU_COPYURL = 7;
 	
 	public static final String EXTRA_SHOWREAD = "show_read";
 	
@@ -107,6 +110,7 @@ public class EntriesListActivity extends ListActivity {
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_manage);
 				menu.add(0, CONTEXTMENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread).setIcon(android.R.drawable.ic_menu_manage);
 				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete).setIcon(android.R.drawable.ic_menu_delete);
+				menu.add(0, CONTEXTMENU_COPYURL, Menu.NONE, R.string.contextmenu_copyurl).setIcon(android.R.drawable.ic_menu_share);
 			}
         });
 	}
@@ -183,6 +187,10 @@ public class EntriesListActivity extends ListActivity {
 			case CONTEXTMENU_DELETE_ID: {
 				getContentResolver().delete(ContentUris.withAppendedId(uri, ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id), null, null);
 				entriesListAdapter.getCursor().requery(); // he have no other choice
+				break;
+			}
+			case CONTEXTMENU_COPYURL: {
+				((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setText(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).targetView.getTag().toString());
 				break;
 			}
 			
