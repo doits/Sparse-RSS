@@ -139,7 +139,7 @@ public class FetcherService extends Service {
 		running = true;
 		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		
-		NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+		final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		
 		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED && intent != null) {
 			if (preferences.getBoolean(Strings.SETTINGS_PROXYENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !preferences.getBoolean(Strings.SETTINGS_PROXYWIFIONLY, false))) {
@@ -153,7 +153,7 @@ public class FetcherService extends Service {
 			}
 			new Thread() {
 				public void run() {
-					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID));
+					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo);
 					
 					if (newCount > 0) {
 						
@@ -215,8 +215,14 @@ public class FetcherService extends Service {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
-	private static int refreshFeedsStatic(Context context, String feedId) {
-		Cursor cursor = context.getContentResolver().query(feedId == null ? FeedData.FeedColumns.CONTENT_URI : FeedData.FeedColumns.CONTENT_URI(feedId), null, null, null, null); // no managed query here
+	private static int refreshFeedsStatic(Context context, String feedId, NetworkInfo networkInfo) {
+		String selection = null;
+		
+		if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
+			selection = new StringBuilder(FeedData.FeedColumns.WIFIONLY).append("=0").toString();
+		}
+		
+		Cursor cursor = context.getContentResolver().query(feedId == null ? FeedData.FeedColumns.CONTENT_URI : FeedData.FeedColumns.CONTENT_URI(feedId), null, selection, null, null); // no managed query here
 		
 		int urlPosition = cursor.getColumnIndex(FeedData.FeedColumns.URL);
 		
