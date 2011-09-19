@@ -53,6 +53,10 @@ public class OPML {
 	
 	private static final String OUTLINE_XMLURL = "\" type=\"rss\" xmlUrl=\"";
 	
+	private static final String ATTRIBUTE_CATEGORY_VALUE = "/"+FeedData.FeedColumns.WIFIONLY;
+	
+	private static final String OUTLINE_CATEGORY = "\" category=\"";
+	
 	private static final String OUTLINE_CLOSING = "\" />";
 	
 	private static final String CLOSING = "</body></opml>\n";
@@ -83,7 +87,7 @@ public class OPML {
 	}
 	
 	public static void exportToFile(String filename, Context context) throws IOException {
-		Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null);
+		Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY}, null, null, null);
 		
 		try {
 			writeData(filename, cursor);
@@ -93,7 +97,7 @@ public class OPML {
 	}
 	
 	protected static void exportToFile(String filename, SQLiteDatabase database) {
-		Cursor cursor = database.query(FeedDataContentProvider.TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null, null, FeedData.FEED_DEFAULTSORTORDER);
+		Cursor cursor = database.query(FeedDataContentProvider.TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY}, null, null, null, null, FeedData.FEED_DEFAULTSORTORDER);
 		
 		try {
 			writeData(filename, cursor);
@@ -114,6 +118,10 @@ public class OPML {
 			builder.append(cursor.isNull(1) ? Strings.EMPTY : cursor.getString(1));
 			builder.append(OUTLINE_XMLURL);
 			builder.append(cursor.getString(2).replace(Strings.AND_CHAR, Strings.AND_HTML));
+			if (cursor.getInt(3) == 1) {
+				builder.append(OUTLINE_CATEGORY);
+				builder.append(ATTRIBUTE_CATEGORY_VALUE);
+			}
 			builder.append(OUTLINE_CLOSING);
 		}
 		builder.append(CLOSING);
@@ -132,6 +140,8 @@ public class OPML {
 		private static final String ATTRIBUTE_TITLE = "title";
 		
 		private static final String ATTRIBUTE_XMLURL = "xmlUrl";
+		
+		private static final String ATTRIBUTE_CATEGORY = "category";
 		
 		private boolean bodyTagEntered;
 		
@@ -155,6 +165,7 @@ public class OPML {
 					
 					values.put(FeedData.FeedColumns.URL, url);
 					values.put(FeedData.FeedColumns.NAME, title != null && title.length() > 0 ? title : null);
+					values.put(FeedData.FeedColumns.WIFIONLY, ATTRIBUTE_CATEGORY_VALUE.equals(attributes.getValue(Strings.EMPTY, ATTRIBUTE_CATEGORY)) ? 1 : 0);
 					
 					if (context != null) {
 						Cursor cursor = context.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
