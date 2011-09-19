@@ -54,16 +54,6 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	public static DateFormat DATEFORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 	
-	private static final String[] PROJECTION = {
-		FeedData.EntryColumns._ID, 
-		FeedData.EntryColumns.FEED_ID, 
-		FeedData.EntryColumns.TITLE, 
-		FeedData.EntryColumns.DATE, 
-		FeedData.EntryColumns.READDATE, 
-		FeedData.EntryColumns.LINK, 
-		FeedData.EntryColumns.FAVORITE
-	};
-	
 	private int titleColumnPosition;
 	
 	private int dateColumn;
@@ -171,7 +161,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			}
 		});
 		
-		if (showFeedInfo) {
+		if (showFeedInfo && feedIconColumn > -1 && feedNameColumn > -1) {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
 			
 			if (iconBytes != null && iconBytes.length > 0) {
@@ -210,7 +200,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	}
 	
 	private static Cursor createManagedCursor(Activity context, Uri uri, boolean showRead) {
-		return context.managedQuery(uri, PROJECTION, showRead ? null : READDATEISNULL, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
+		return context.managedQuery(uri, null, showRead ? null : READDATEISNULL, null, new StringBuilder(PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_PRIORITIZE, false) ? SQLREAD : Strings.EMPTY).append(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).toString());
 	}
 	
 	public void markAsRead() {

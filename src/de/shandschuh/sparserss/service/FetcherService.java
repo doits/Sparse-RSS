@@ -57,6 +57,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Xml;
+import de.shandschuh.sparserss.BASE64;
 import de.shandschuh.sparserss.MainTabActivity;
 import de.shandschuh.sparserss.R;
 import de.shandschuh.sparserss.Strings;
@@ -479,7 +480,10 @@ public class FetcherService extends Service {
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
-		connection.setRequestProperty("connection", "close"); // Workaround for issue android issue 7786
+		if (url.getUserInfo() != null) {
+			connection.setRequestProperty("Authorization", "Basic "+BASE64.encode(url.getUserInfo().getBytes()));
+		}
+		connection.setRequestProperty("connection", "close"); // Workaround for android issue 7786
 		connection.connect();
 		return connection;
 	}
