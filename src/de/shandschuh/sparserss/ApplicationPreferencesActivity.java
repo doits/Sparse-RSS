@@ -26,21 +26,26 @@
 package de.shandschuh.sparserss;
 
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceChangeListener;
 import de.shandschuh.sparserss.service.RefreshService;
 
 public class ApplicationPreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (MainTabActivity.LIGHTTHEME) {
+			setTheme(android.R.style.Theme_Light);
+		}
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.layout.preferences);
 		
-		Preference enablePreference = (Preference) findPreference(Strings.SETTINGS_REFRESHENABLED);
+		Preference preference = (Preference) findPreference(Strings.SETTINGS_REFRESHENABLED);
 
-		enablePreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				if (Boolean.TRUE.equals(newValue)) {
 					new Thread() {
@@ -55,16 +60,29 @@ public class ApplicationPreferencesActivity extends PreferenceActivity {
 			}
 		});
 		
-		Preference showTabsPreference = (Preference) findPreference(Strings.SETTINGS_SHOWTABS);
-		
-		showTabsPreference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+		preference = (Preference) findPreference(Strings.SETTINGS_SHOWTABS);
+		preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			public boolean onPreferenceChange(Preference preference, Object newValue) {
 				if (MainTabActivity.INSTANCE != null ) {
 					MainTabActivity.INSTANCE.setTabWidgetVisible(Boolean.TRUE.equals(newValue));
 				}
 				return true;
 			}
-		});		
+		});	
+		
+		preference = (Preference) findPreference(Strings.SETTINGS_LIGHTTHEME);
+		preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(Preference preference, Object newValue) {
+				Editor editor = PreferenceManager.getDefaultSharedPreferences(ApplicationPreferencesActivity.this).edit();
+				
+				editor.putBoolean(Strings.SETTINGS_LIGHTTHEME, Boolean.TRUE.equals(newValue));
+				editor.commit();
+				android.os.Process.killProcess(android.os.Process.myPid());
+				
+				// this return statement will never be reached
+				return true;
+			}
+		});	
 	}
 	
 }

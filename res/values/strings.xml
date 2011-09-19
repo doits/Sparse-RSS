@@ -74,6 +74,8 @@
     <string name="settings_disablepictures_description">Do not show and load any pictures</string>
     <string name="settings_fetchpictures">Download pictures</string>
     <string name="settings_fetchpictures_description">Download all pictures and store them locally</string>
+    <string name="settings_lighttheme">Light theme</string>
+    <string name="settings_lighttheme_description">Use the light theme (application will be restarted)</string>
     <string name="settings_blacktextwhite">Black text on white background</string>
     <string name="settings_blacktextwhite_description">Present rss entries in black text on white background</string>
     <string name="settings_fontsize">Font size</string>
@@ -121,6 +123,7 @@
     <string name="websiteorfeed">(website or feed)</string>
     <string name="feed_title">Title</string>
     <string name="select_file">Select file (SD-root)</string>
+    <string name="refreshonwifionly">Refresh only over Wifi</string>
 
     <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 

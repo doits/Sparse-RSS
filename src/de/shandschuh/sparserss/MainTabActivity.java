@@ -55,7 +55,15 @@ public class MainTabActivity extends TabActivity {
 	
 	public static MainTabActivity INSTANCE;
 	
+	public static boolean LIGHTTHEME;
+	
 	public void onCreate(Bundle savedInstanceState) {
+	    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_LIGHTTHEME, false)) {
+	    	setTheme(android.R.style.Theme_Light);
+	    	LIGHTTHEME = true;
+	    } else {
+	    	LIGHTTHEME = false;
+	    }
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.tabs);
 	    INSTANCE = this;

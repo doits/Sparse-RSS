@@ -76,6 +76,10 @@ public class EntriesListActivity extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		if (MainTabActivity.LIGHTTHEME) {
+			setTheme(android.R.style.Theme_Light);
+		}
+		
 		super.onCreate(savedInstanceState);
 		
 		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);

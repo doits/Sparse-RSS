@@ -49,6 +49,8 @@
     <string name="settings_disablepictures_description">Keine Bilder anzeigen oder laden</string>
     <string name="settings_fetchpictures">Bilder herunterladen</string>
     <string name="settings_fetchpictures_description">Alle Bilder herunterladen und local speichern</string>
+    <string name="settings_lighttheme">Helles Theme</string>
+    <string name="settings_lighttheme_description">Benutze helles Theme (Anwendung wird neugestartet)</string>
     <string name="settings_blacktextwhite">Schwarzer Text auf weißem Hintergrund</string>
     <string name="settings_blacktextwhite_description">Präsentiere rss-Einträge mit schwarzem Text auf weißem Hintergrund</string>
     <string name="settings_fontsize">Schriftgröße</string>
@@ -90,6 +92,7 @@
 
     <string name="feed_title">Titel</string>
     <string name="select_file">Datei auswählen (SD-Wurzel)</string>
+    <string name="refreshonwifionly">Nur über WLan aktualisieren</string>
 
     <string name="websiteorfeed">(Webseite oder Feed)</string>
 

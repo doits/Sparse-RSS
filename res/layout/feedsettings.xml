@@ -26,4 +26,9 @@
         android:id="@+id/feed_url" 
         android:layout_width="fill_parent" 
         android:layout_height="wrap_content"/>
+    <CheckBox
+        android:text="@string/refreshonwifionly"
+        android:id="@+id/wifionlycheckbox"
+        android:layout_width="fill_parent" 
+        android:layout_height="wrap_content"/>
 </LinearLayout>

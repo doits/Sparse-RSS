@@ -54,6 +54,7 @@ import android.view.View.OnCreateContextMenuListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -122,6 +123,10 @@ public class RSSOverview extends ListActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+    	if (MainTabActivity.LIGHTTHEME) {
+    		setTheme(android.R.style.Theme_Light);
+    	}
+    	
         super.onCreate(savedInstanceState);
 
     	if (notificationManager == null) {
@@ -268,10 +273,10 @@ public class RSSOverview extends ListActivity {
 			case CONTEXTMENU_EDIT_ID: {
 				String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
 				
-				Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL}, null, null, null);
+				Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY}, null, null, null);
 				
 				cursor.moveToFirst();
-				createURLDialog(cursor.getString(0), cursor.getString(1), id).show();
+				createURLDialog(cursor.getString(0), cursor.getString(1), id, cursor.getInt(2) == 1).show();
 				cursor.close();
 				break;
 			}
@@ -427,7 +432,7 @@ public class RSSOverview extends ListActivity {
 
 		switch (id) {
 			case DIALOG_ADDFEED_ID: {
-				dialog = createURLDialog(null, null, null);
+				dialog = createURLDialog(null, null, null, false);
 				break;
 			}
 			case DIALOG_ERROR_FEEDURLEXISTS: {
@@ -479,7 +484,7 @@ public class RSSOverview extends ListActivity {
 		super.onPrepareDialog(id, dialog);
 	}
 
-	private Dialog createURLDialog(String title, String url, final String id) {
+	private Dialog createURLDialog(String title, String url, final String id, boolean refreshOnlyWifi) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 		View view = getLayoutInflater().inflate(R.layout.feedsettings, null);
@@ -487,6 +492,8 @@ public class RSSOverview extends ListActivity {
 		final EditText nameEditText = (EditText) view.findViewById(R.id.feed_title);
 		
 		final EditText urlEditText = (EditText) view.findViewById(R.id.feed_url);
+		
+		final CheckBox refreshOnlyWifiCheckBox = (CheckBox) view.findViewById(R.id.wifionlycheckbox);
 		
 		if (title != null) {
 			builder.setTitle(title);
@@ -496,6 +503,7 @@ public class RSSOverview extends ListActivity {
 		}
 		if (url != null) { // indicates an edit
 			urlEditText.setText(url);
+			refreshOnlyWifiCheckBox.setChecked(refreshOnlyWifi);
 			
 			int urlLength = url.length();
 			
@@ -513,12 +521,16 @@ public class RSSOverview extends ListActivity {
 					} else {
 						ContentValues values = new ContentValues();
 						
-						values.put(FeedData.FeedColumns.URL, urlEditText.getText().toString());
+						if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
+							url = Strings.HTTP+url;
+						}
+						values.put(FeedData.FeedColumns.URL, url);
 						
 						String name = nameEditText.getText().toString();
 						
 						values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
 						values.put(FeedData.FeedColumns.FETCHMODE, 0);
+						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);	
 					}
@@ -540,6 +552,8 @@ public class RSSOverview extends ListActivity {
 						if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
 							url = Strings.HTTP+url;
 						}
+						
+						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.URL, url);
 						values.put(FeedData.FeedColumns.ERROR, (String) null);
 						

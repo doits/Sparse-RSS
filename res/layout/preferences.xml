@@ -76,10 +76,17 @@
             android:key="pictures.fetch" 
             android:dependency="pictures.disable"/>
         <CheckBoxPreference
+            android:title="@string/settings_lighttheme"
+            android:defaultValue="false"
+            android:summary="@string/settings_lighttheme_description"
+            android:key="lighttheme" 
+            android:disableDependentsState="true"/>
+        <CheckBoxPreference
             android:title="@string/settings_blacktextwhite"
             android:defaultValue="false"
             android:summary="@string/settings_blacktextwhite_description"
-            android:key="blacktextonwhite" />
+            android:key="blacktextonwhite" 
+            android:dependency="lighttheme"/>
         <ListPreference
             android:name="@string/settings_fontsize"
             android:title="@string/settings_fontsize"

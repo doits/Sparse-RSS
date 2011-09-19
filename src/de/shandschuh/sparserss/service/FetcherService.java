@@ -102,13 +102,10 @@ public class FetcherService extends Service {
 	   Build.VERSION.RELEASE.startsWith("2.0") ||
 	   Build.VERSION.RELEASE.startsWith("2.1") ||
 	   Build.VERSION.RELEASE.startsWith("2.2");
-	
-	static {
-		HttpURLConnection.setFollowRedirects(true);
-	}
-	
+		
 	@Override
 	public void onStart(Intent intent, int startId) {
+		HttpURLConnection.setFollowRedirects(true);
 		handleIntent(intent);
 	}
 
@@ -133,8 +130,6 @@ public class FetcherService extends Service {
 				preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
 			}
 		}
-		
-		
 		
 		running = true;
 		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -219,9 +214,9 @@ public class FetcherService extends Service {
 		String selection = null;
 		
 		if (networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
-			selection = new StringBuilder(FeedData.FeedColumns.WIFIONLY).append("=0").toString();
+			selection = new StringBuilder(FeedData.FeedColumns.WIFIONLY).append("=0 or ").append(FeedData.FeedColumns.WIFIONLY).append(" IS NULL").toString(); // "IS NOT 1" does not work on 2.1
 		}
-		
+
 		Cursor cursor = context.getContentResolver().query(feedId == null ? FeedData.FeedColumns.CONTENT_URI : FeedData.FeedColumns.CONTENT_URI(feedId), null, selection, null, null); // no managed query here
 		
 		int urlPosition = cursor.getColumnIndex(FeedData.FeedColumns.URL);

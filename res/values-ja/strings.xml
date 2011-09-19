@@ -46,6 +46,8 @@
     <string name="settings_keeptime_description">過去の記事を自動的に消去する</string>
     <string name="settings_fetchpictures">画像をダウンロード</string>
     <string name="settings_fetchpictures_description">全ての画像をダウンロードし、保存する</string>
+    <string name="settings_lighttheme">テーマカラー・明るい</string>
+    <string name="settings_lighttheme_description">テーマカラーを明るくする(更新する）</string>
     <string name="settings_blacktextwhite">黒文字白背景</string>
     <string name="settings_blacktextwhite_description">白色背景に黒い文字</string>
     <string name="settings_fontsize">文字の大きさ</string>
@@ -86,6 +88,7 @@
 
     <string name="feed_title">タイトル</string>
     <string name="select_file">データを選択（SDルート）</string>
+    <string name="refreshonwifionly">ワイヤレス接続のみ更新可</string>
 
     <string name="websiteorfeed">(ウェブサイト又はフィード)</string>
 
