@@ -76,7 +76,11 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_DESCRIPTION = "description";
 	
+	private static final String TAG_MEDIA_DESCRIPTION = "media:description";
+	
 	private static final String TAG_CONTENT = "content";
+	
+	private static final String TAG_MEDIA_CONTENT = "media:content";
 	
 	private static final String TAG_ENCODEDCONTENT = "encoded";
 	
@@ -87,6 +91,10 @@ public class RSSHandler extends DefaultHandler {
 	private static final String TAG_DATE = "date";
 	
 	private static final String TAG_LASTBUILDDATE = "lastBuildDate";
+	
+	private static final String TAG_ENCLOSURE = "enclosure";
+	
+	private static final String ATTRIBUTE_URL = "url";
 	
 	private static final String ATTRIBUTE_HREF = "href";
 	
@@ -234,6 +242,7 @@ public class RSSHandler extends DefaultHandler {
 			dateStringBuilder = new StringBuilder();
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
 			description = null;
+			entryLink = null;
 			if (!feedRefreshed) {
 				ContentValues values = new ContentValues();
 					
@@ -277,7 +286,7 @@ public class RSSHandler extends DefaultHandler {
 			if (!foundLink) {
 				linkTagEntered = true;
 			}
-		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName) || TAG_CONTENT.equals(localName)) {
+		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
 			if (description == null) { // this happens, if there is no encoded description
 				descriptionTagEntered = true;
 				description = new StringBuilder();
@@ -294,6 +303,10 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_ENCODEDCONTENT.equals(localName)) {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
+		} else if (TAG_ENCLOSURE.equals(localName)) {
+			if (entryLink == null) {
+				entryLink = new StringBuilder(attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
+			} // otherwise, use the already existing link which is more reliable
 		}
 	}
 
@@ -320,7 +333,7 @@ public class RSSHandler extends DefaultHandler {
 	public void endElement(String uri, String localName, String qName) throws SAXException {
 		if (TAG_TITLE.equals(localName)) {
 			titleTagEntered = false;
-		} else if (TAG_DESCRIPTION.equals(localName) || TAG_SUMMARY.equals(localName) || TAG_CONTENT.equals(localName) || TAG_ENCODEDCONTENT.equals(localName)) {
+		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName)) || TAG_ENCODEDCONTENT.equals(localName)) {
 			descriptionTagEntered = false;
 		} else if (TAG_LINK.equals(localName)) {
 			linkTagEntered = false;
@@ -359,21 +372,21 @@ public class RSSHandler extends DefaultHandler {
 				if (description != null) {
 					String descriptionString = description.toString().trim().replaceAll(Strings.HTML_SPAN_REGEX, Strings.EMPTY);
 					
-					
-					if (fetchImages) {
-						images = new Vector<String>(4);
-						 
-						Matcher matcher = imgPattern.matcher(description);
-						
-						while (matcher.find()) {
-							String match = matcher.group(1).replace(Strings.SPACE, Strings.URL_SPACE);
+					if (descriptionString.length() > 0) {
+						if (fetchImages) {
+							images = new Vector<String>(4);
+							 
+							Matcher matcher = imgPattern.matcher(description);
 							
-							images.add(match);
-							descriptionString = descriptionString.replace(match, new StringBuilder(Strings.FILEURL).append(FeedDataContentProvider.IMAGEFOLDER).append(Strings.IMAGEID_REPLACEMENT).append(match.substring(match.lastIndexOf('/')+1)).toString());
+							while (matcher.find()) {
+								String match = matcher.group(1).replace(Strings.SPACE, Strings.URL_SPACE);
+								
+								images.add(match);
+								descriptionString = descriptionString.replace(match, new StringBuilder(Strings.FILEURL).append(FeedDataContentProvider.IMAGEFOLDER).append(Strings.IMAGEID_REPLACEMENT).append(match.substring(match.lastIndexOf('/')+1)).toString());
+							}
 						}
+						values.put(FeedData.EntryColumns.ABSTRACT, descriptionString); 
 					}
-					
-					values.put(FeedData.EntryColumns.ABSTRACT, descriptionString); 
 					description = null;
 				}
 				
