@@ -37,6 +37,7 @@
             android:authorities="de.shandschuh.sparserss.provider.FeedData"
             android:readPermission="de.shandschuh.sparserss.READFEEDS"
             android:writePermission="de.shandschuh.sparserss.WRITEFEEDS"/>
+		<activity android:name=".FeedPrefsActivity" />
         <activity android:name=".MainTabActivity" android:label="@string/app_name" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

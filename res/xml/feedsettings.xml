@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference android:key="skipalert" android:summaryOn="@string/feed_skip_alert_on" android:title="@string/feed_skip_alert" android:summaryOff="@string/feed_skip_alert_off" android:persistent="false" android:disableDependentsState="true"></CheckBoxPreference><CheckBoxPreference android:key="other_alertringtone" android:disableDependentsState="false" android:title="@string/feed_other_alert_ringtone" android:summaryOff="@string/feed_other_alert_ringtone_off" android:summaryOn="@string/feed_other_alert_ringtone_on" android:persistent="false" android:dependency="skipalert"></CheckBoxPreference><RingtonePreference android:showDefault="true" android:showSilent="true" android:title="@string/feed_alert_ringtone" android:ringtoneType="ringtone|notification|alarm|all" android:key="alertringtone" android:dependency="other_alertringtone" android:persistent="false"></RingtonePreference>
+    
+    
+</PreferenceScreen>

@@ -96,6 +96,8 @@ public class RSSOverview extends ListActivity {
 	
 	private static final Uri CANGELOG_URI = Uri.parse("http://code.google.com/p/sparserss/wiki/Changelog");
 	
+	private static final int CONTEXTMENU_SETTINGS_ID = 99;
+	
 	static NotificationManager notificationManager; // package scope
 	
 	boolean feedSort;
@@ -127,6 +129,7 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_EDIT_ID, Menu.NONE, R.string.contextmenu_edit);
 				menu.add(0, CONTEXTMENU_RESETUPDATEDATE_ID, Menu.NONE, R.string.contextmenu_resetupdatedate);
 				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete);
+				menu.add(0, CONTEXTMENU_SETTINGS_ID, Menu.NONE, R.string.contextmenu_settings);
 			}
         });
         getListView().setOnTouchListener(new OnTouchListener() {
@@ -373,6 +376,10 @@ public class RSSOverview extends ListActivity {
 						}
 					}
 				}.start();
+                break;
+			}
+			case CONTEXTMENU_SETTINGS_ID: {
+				startActivity(new Intent(this, FeedPrefsActivity.class).putExtra(FeedData.FeedColumns._ID, Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)));
 				break;
 			}
 			case CONTEXTMENU_DELETEREAD_ID: {

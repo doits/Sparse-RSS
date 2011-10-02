@@ -48,7 +48,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
-	private static final int DATABASE_VERSION = 10;
+	private static final int DATABASE_VERSION = 13;
 	
 	private static final int URI_FEEDS = 1;
 	
@@ -150,6 +150,15 @@ public class FeedDataContentProvider extends ContentProvider {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REALLASTUPDATE).append(' ').append(FeedData.TYPE_DATETIME).toString());
 			} 
 			if (oldVersion < 6) {
+				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.ALERT_RINGTONE).append(' ').append(FeedData.TYPE_TEXT).toString());
+			}
+			if (oldVersion < 7) {
+				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.OTHER_ALERT_RINGTONE).append(' ').append(FeedData.TYPE_INT).toString());
+			}
+			if (oldVersion < 8) {
+				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.SKIP_ALERT).append(' ').append(FeedData.TYPE_INT).toString());
+			}
+			if (oldVersion < 9) {
 				Cursor cursor = database.query(TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID}, null, null, null, null, FeedData.FeedColumns._ID);
 				
 				int count = 0;
@@ -159,14 +168,14 @@ public class FeedDataContentProvider extends ContentProvider {
 				}
 				cursor.close();
 			} 
-			if (oldVersion < 7) {
+			if (oldVersion < 10) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.WIFIONLY).append(' ').append(FeedData.TYPE_BOOLEAN).toString());
 			}
 			// we simply leave the "encoded" column untouched
-			if (oldVersion < 9) {
+			if (oldVersion < 12) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.ENCLOSURE).append(' ').append(FeedData.TYPE_TEXT).toString());
 			}
-			if (oldVersion < 10) {
+			if (oldVersion < 13) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.GUID).append(' ').append(FeedData.TYPE_TEXT).toString());
 			}
 		}
@@ -175,7 +184,6 @@ public class FeedDataContentProvider extends ContentProvider {
 			try {
 				database.execSQL(query);
 			} catch (Exception e) {
-				
 			}
 		}
 

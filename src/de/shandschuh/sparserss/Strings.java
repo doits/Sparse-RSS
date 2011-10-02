@@ -28,6 +28,13 @@ package de.shandschuh.sparserss;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public final class Strings {
+
+	public static final String FEED_SETTINGS_OTHER_ALERT_RINGTONE = "other_alertringtone";
+	
+	public static final String FEED_SETTINGS_ALERT_RINGTONE = "alertringtone";
+	
+	public static final String FEED_SETTINGS_SKIP_ALERT = "skipalert";
+
 	public static final String PACKAGE = "de.shandschuh.sparserss";
 	
 	public static final String SETTINGS_REFRESHINTERVAL = "refresh.interval";

@@ -24,7 +24,6 @@
  */
 
 package de.shandschuh.sparserss.service;
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -39,6 +38,7 @@ import java.net.Proxy;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.IntentService;
@@ -98,6 +98,15 @@ public class FetcherService extends IntentService {
 	
 	private static Proxy proxy;
 	
+	public static class FetchResult {
+		public final int count;
+		public final ArrayList<String> feedIds;
+		public FetchResult(int count, ArrayList<String> feedIds) {
+			this.count = count;
+			this.feedIds = feedIds;
+		}
+	}
+	
 	public FetcherService() {
 		super(SERVICENAME);
 		HttpURLConnection.setFollowRedirects(true);
@@ -132,16 +141,16 @@ public class FetcherService extends IntentService {
 				proxy = null;
 			}
 
-			int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo, intent.getBooleanExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, false));
-					
-			if (newCount > 0) {
+            FetchResult updates = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo, intent.getBooleanExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, false) || preferences.getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false));
+
+            if (updates.count > 0) {
 				if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
 					Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);
 							
 					cursor.moveToFirst();
-					newCount = cursor.getInt(0);
+					int newCount = cursor.getInt(0);
 					cursor.close();
-							
+
 					String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.newentries)).toString();
 							
 					Notification notification = new Notification(R.drawable.ic_statusbar_rss, text, System.currentTimeMillis());
@@ -158,7 +167,29 @@ public class FetcherService extends IntentService {
 					notification.ledOnMS = 300;
 					notification.ledOffMS = 1000;
 							
-					String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
+                    StringBuilder ids = new StringBuilder();
+                    for( String id : updates.feedIds ) {
+                        ids.append(",").append(id);
+                    }
+                    String idList = ids.toString().substring(1);
+
+                    // get the ringtone of the feed
+                    // returns an empty cursor, if feed does not override the global one or is silent
+                    Cursor ringCursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI,
+                            new String[] {FeedData.FeedColumns.ALERT_RINGTONE},
+                            FeedData.FeedColumns.OTHER_ALERT_RINGTONE+" = 1"
+                            + " and "+FeedData.FeedColumns._ID+" IN("+idList+")",
+                            null, null);
+
+                    String ringtone = null;
+                    while( (ringtone == null || ringtone.length() == 0) && ringCursor.moveToNext() ) { // this one has set custom ringtone to silence, check next
+                        ringtone = ringCursor.getString(0);
+                    }
+
+                    if( (ringtone == null || ringtone.length() == 0) && updates.feedIds.size() != ringCursor.getCount()) { // at least one not overridden but the others were all silence
+                        ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
+                    }
+                    ringCursor.close();
 							
 					if (ringtone != null && ringtone.length() > 0) {
 						notification.sound = Uri.parse(ringtone);
@@ -190,7 +221,7 @@ public class FetcherService extends IntentService {
 		super.onDestroy();
 	}
 	
-	private static int refreshFeedsStatic(Context context, String feedId, NetworkInfo networkInfo, boolean overrideWifiOnly) {
+	private static FetchResult refreshFeedsStatic(Context context, String feedId, NetworkInfo networkInfo, boolean overrideWifiOnly) {
 		String selection = null;
 		
 		if (!overrideWifiOnly && networkInfo.getType() != ConnectivityManager.TYPE_WIFI) {
@@ -212,16 +243,20 @@ public class FetcherService extends IntentService {
 		int iconPosition = cursor.getColumnIndex(FeedData.FeedColumns.ICON);
 		
 		boolean imposeUserAgent = !preferences.getBoolean(Strings.SETTINGS_STANDARDUSERAGENT, false);
+
+		int skipAlertPosition = cursor.getColumnIndex(FeedData.FeedColumns.SKIP_ALERT);
 		
 		boolean followHttpHttpsRedirects = preferences.getBoolean(Strings.SETTINGS_HTTPHTTPSREDIRECTS, false);
 		
 		int result = 0;
+		ArrayList<String> ids = new ArrayList<String>();
+		boolean updateWidget = false;
 		
 		RSSHandler handler = new RSSHandler(context);
 		
 		handler.setEfficientFeedParsing(preferences.getBoolean(Strings.SETTINGS_EFFICIENTFEEDPARSING, true));
 		handler.setFetchImages(preferences.getBoolean(Strings.SETTINGS_FETCHPICTURES, false));
-				
+		
 		while(cursor.moveToNext()) {
 			String id = cursor.getString(idPosition);
 			
@@ -449,14 +484,23 @@ public class FetcherService extends IntentService {
 					connection.disconnect();
 				}
 			}
-			result += handler.getNewCount();
+			if( cursor.getInt(skipAlertPosition) != 1 ) {
+				result += handler.getNewCount();
+				if( handler.getNewCount() > 0 ) {
+					ids.add(handler.getId());
+				}
+			}
+			
+			if(!updateWidget && handler.getNewCount() > 0) {
+				updateWidget = true;
+			}
 		}
 		cursor.close();
 		
-		if (result > 0) {
-			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET).putExtra(Strings.COUNT, result));
+		if (updateWidget) {
+			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
 		}
-		return result;
+		return new FetchResult(result, ids);
 	}
 	
 	private static final HttpURLConnection setupConnection(String url, boolean imposeUseragent, boolean followHttpHttpsRedirects) throws IOException, NoSuchAlgorithmException, KeyManagementException {

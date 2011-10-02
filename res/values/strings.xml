@@ -184,6 +184,15 @@
     <string name="blue">Blue</string>
     <string name="transparency">Transparency</string>
 
+    <string name="contextmenu_settings">Additional settings</string>
+    <string name="feed_other_alert_ringtone">Custom feed ringtone</string>
+    <string name="feed_other_alert_ringtone_on">Enabled: Use ringtone defined below</string>
+    <string name="feed_other_alert_ringtone_off">Disabled: Use ringtone defined in settings</string>
+    <string name="feed_alert_ringtone">Choose ringtone</string>
+    <string name="feed_skip_alert">Skip alerts</string>
+    <string name="feed_skip_alert_on">Enabled: Do NOT notify on updates</string>
+    <string name="feed_skip_alert_off">Disabled: Notify on updates</string>
+
     <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
     <string name="question_refreshwowifi">Do you really want to refresh this feed while not being on wifi?</string>
     <string name="question_areyousure">Are you sure?</string>

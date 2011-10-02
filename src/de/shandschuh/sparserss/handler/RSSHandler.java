@@ -510,6 +510,10 @@ public class RSSHandler extends DefaultHandler {
 		return newCount;
 	}
 	
+	public String getId() {
+		return id;
+	}
+	
 	public boolean isDone() {
 		return done;
 	}

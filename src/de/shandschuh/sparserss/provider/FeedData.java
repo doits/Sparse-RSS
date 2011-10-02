@@ -58,6 +58,12 @@ public class FeedData {
 		
 		public static final String NAME = "name";
 		
+		public static final String OTHER_ALERT_RINGTONE = "other_alertringtone";
+		
+		public static final String ALERT_RINGTONE = "alertringtone";
+		
+		public static final String SKIP_ALERT = "skipalert";
+		
 		public static final String LASTUPDATE = "lastupdate";
 		
 		public static final String ICON = "icon";
@@ -72,9 +78,9 @@ public class FeedData {
 		
 		public static final String WIFIONLY = "wifionly";
 		
-		public static final String[] COLUMNS = new String[] {_ID, URL, NAME, LASTUPDATE, ICON, ERROR, PRIORITY, FETCHMODE, REALLASTUPDATE, WIFIONLY};
+		public static final String[] COLUMNS = new String[] {_ID, URL, NAME, LASTUPDATE, ICON, ERROR, PRIORITY, FETCHMODE, REALLASTUPDATE, ALERT_RINGTONE, OTHER_ALERT_RINGTONE, SKIP_ALERT, WIFIONLY};
 		
-		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "TEXT UNIQUE", TYPE_TEXT, TYPE_DATETIME, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT, TYPE_DATETIME, TYPE_BOOLEAN};
+		public static final String[] TYPES = new String[] {TYPE_PRIMARY_KEY, "TEXT UNIQUE", TYPE_TEXT, TYPE_DATETIME, "BLOB", TYPE_TEXT, TYPE_INT, TYPE_INT, TYPE_DATETIME, TYPE_TEXT, TYPE_INT, TYPE_INT, TYPE_BOOLEAN};
 		
 		public static final Uri CONTENT_URI(String feedId) {
 			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/feeds/").append(feedId).toString());

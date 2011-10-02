@@ -26,6 +26,8 @@
 package de.shandschuh.sparserss;
 
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -495,6 +497,26 @@ public class EntryActivity extends Activity {
 				});
 				// loadData does not recognize the encoding without correct html-header
 				localPictures = abstractText.indexOf(Strings.IMAGEID_REPLACEMENT) > -1;
+
+				abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
+
+				Pattern linkP = Pattern.compile("<a[^>]*href=[^>]*>");
+				Matcher linkM = linkP.matcher(abstractText);
+				if(!linkM.find()) {
+				    abstractText = abstractText.replaceAll("(?i)(https?://[^ \n\r\t\\[\\]]+)", "<a href=\"$1\">$1</a>");
+				}
+				
+				Pattern brP = Pattern.compile("<br[^>]*>");
+				Matcher brM = brP.matcher(abstractText);
+                if(!brM.find()) {
+                    abstractText = abstractText.replaceAll("\n", "<br>");
+                }
+                  
+                abstractText = abstractText.replaceAll("(?i)\\[(/?(b|u))\\]", "<$1>");
+                abstractText = abstractText.replaceAll("(?i)\\[img\\](https?://[^ \n\r\t\\[\\]]+)\\[/img\\]", "<img src='$1'>");                
+                abstractText = abstractText.replaceAll("(?i)\\[/?(center|color|size|img|url|pre)[^\\]]*\\]", "");                
+				
+				final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
 				
 				if (localPictures) {
 					abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, _id+Strings.IMAGEFILE_IDSEPARATOR);
