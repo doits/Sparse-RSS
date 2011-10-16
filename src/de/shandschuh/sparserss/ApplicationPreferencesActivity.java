@@ -37,7 +37,7 @@ import de.shandschuh.sparserss.service.RefreshService;
 public class ApplicationPreferencesActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (MainTabActivity.LIGHTTHEME) {
+		if (MainTabActivity.isLightTheme(this)) {
 			setTheme(android.R.style.Theme_Light);
 		}
 		super.onCreate(savedInstanceState);

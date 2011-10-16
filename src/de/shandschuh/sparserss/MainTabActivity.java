@@ -28,6 +28,7 @@ package de.shandschuh.sparserss;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.DialogInterface.OnKeyListener;
@@ -55,14 +56,18 @@ public class MainTabActivity extends TabActivity {
 	
 	public static MainTabActivity INSTANCE;
 	
-	public static boolean LIGHTTHEME;
+	private static Boolean LIGHTTHEME;
+	
+	public static boolean isLightTheme(Context context) {
+		if (LIGHTTHEME == null) {
+			LIGHTTHEME = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_LIGHTTHEME, false);
+		} 
+		return LIGHTTHEME;
+	}
 	
 	public void onCreate(Bundle savedInstanceState) {
-	    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_LIGHTTHEME, false)) {
+		if (isLightTheme(this)) {
 	    	setTheme(android.R.style.Theme_Light);
-	    	LIGHTTHEME = true;
-	    } else {
-	    	LIGHTTHEME = false;
 	    }
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.tabs);

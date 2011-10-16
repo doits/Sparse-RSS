@@ -122,7 +122,7 @@ public class EntryActivity extends Activity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (MainTabActivity.LIGHTTHEME) {
+		if (MainTabActivity.isLightTheme(this)) {
 			setTheme(android.R.style.Theme_Light);
 		}
 		
@@ -265,7 +265,7 @@ public class EntryActivity extends Activity {
 				}
 				*/
 				
-				if (MainTabActivity.LIGHTTHEME || preferences.getBoolean(Strings.SETTINGS_BLACKTEXTONWHITE, false)) {
+				if (MainTabActivity.isLightTheme(this) || preferences.getBoolean(Strings.SETTINGS_BLACKTEXTONWHITE, false)) {
 					if (fontsize > 0) {
 						webView.loadDataWithBaseURL(null, new StringBuilder(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONTSIZE_END).toString(), TEXT_HTML, UTF8, null);
 					} else {

@@ -311,7 +311,10 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 		
 		if (!TextUtils.isEmpty(selection)) {
-			where.append(Strings.DB_AND).append(selection);
+			if (where.length() > 0) {
+				where.append(Strings.DB_AND);
+			}
+			where.append(selection);
 		}
 		
 		int count = database.delete(table, where.toString(), selectionArgs);

@@ -25,6 +25,8 @@
 
 package de.shandschuh.sparserss;
 
+import de.shandschuh.sparserss.provider.FeedData;
+
 public final class Strings {
 	public static final String PACKAGE = "de.shandschuh.sparserss";
 	
@@ -133,6 +135,8 @@ public final class Strings {
 	protected static final String TRUE = "true";
 	
 	protected static final String FALSE = "false";
+	
+	public static final String READDATE_GREATERZERO = FeedData.EntryColumns.READDATE+">0";
 
 
 }

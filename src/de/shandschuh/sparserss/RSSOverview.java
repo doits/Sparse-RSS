@@ -99,19 +99,23 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int CONTEXTMENU_MARKASUNREAD_ID = 7;
 	
-	private static final int MENU_SETTINGS_ID = 8;
+	private static final int CONTEXTMENU_DELETEREAD_ID = 8;
 	
-	private static final int MENU_ALLREAD = 9;
+	private static final int MENU_SETTINGS_ID = 9;
 	
-	private static final int MENU_ABOUT_ID = 10;
+	private static final int MENU_ALLREAD = 10;
 	
-	private static final int MENU_IMPORT_ID = 11;
+	private static final int MENU_ABOUT_ID = 11;
 	
-	private static final int MENU_EXPORT_ID = 12;
+	private static final int MENU_IMPORT_ID = 12;
 	
-	private static final int MENU_ENABLEFEEDSORT = 13;
+	private static final int MENU_EXPORT_ID = 13;
 	
-	private static final int MENU_DISABLEFEEDSORT = 14;
+	private static final int MENU_ENABLEFEEDSORT = 14;
+	
+	private static final int MENU_DELETEREAD_ID = 15;
+	
+	private static final int MENU_DISABLEFEEDSORT = 16;
 	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
@@ -123,7 +127,7 @@ public class RSSOverview extends ListActivity {
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	if (MainTabActivity.LIGHTTHEME) {
+    	if (MainTabActivity.isLightTheme(this)) {
     		setTheme(android.R.style.Theme_Light);
     	}
     	
@@ -142,6 +146,7 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete);
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread);
 				menu.add(0, CONTEXTMENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread);
+				menu.add(0, CONTEXTMENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread);
 			}
         });
         getListView().setOnTouchListener(new OnTouchListener() {
@@ -245,6 +250,7 @@ public class RSSOverview extends ListActivity {
 		menu.add(0, MENU_IMPORT_ID, Menu.NONE, R.string.menu_import);
 		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
 		menu.add(0, MENU_ENABLEFEEDSORT, Menu.NONE, R.string.menu_enablefeedsort);
+		menu.add(0, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread);
 		
 		menu.add(1, MENU_DISABLEFEEDSORT, Menu.NONE, R.string.menu_disablefeedsort).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		return true;
@@ -327,6 +333,15 @@ public class RSSOverview extends ListActivity {
 				}.start();
 				break;
 			}
+			case CONTEXTMENU_DELETEREAD_ID: {
+				new Thread() {
+					public void run() {
+						getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), Strings.READDATE_GREATERZERO, null);
+					}
+				}.start();
+				break;
+			}
+				
 			case MENU_SETTINGS_ID: {
 				startActivityForResult(new Intent(this, ApplicationPreferencesActivity.class), ACTIVITY_APPLICATIONPREFERENCES_ID);
 				break;
@@ -393,6 +408,11 @@ public class RSSOverview extends ListActivity {
 			}
 			case MENU_ENABLEFEEDSORT: {
 				feedSort = true;
+				break;
+			}
+			case MENU_DELETEREAD_ID: {
+				getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI, Strings.READDATE_GREATERZERO, null);
+				((RSSOverviewListAdapter) getListAdapter()).notifyDataSetChanged();
 				break;
 			}
 			case MENU_DISABLEFEEDSORT: {

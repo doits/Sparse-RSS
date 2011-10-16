@@ -53,13 +53,15 @@ public class EntriesListActivity extends ListActivity {
 	
 	private static final int MENU_HIDEREAD_ID = 3;
 	
-	private static final int CONTEXTMENU_MARKASREAD_ID = 4;
+	private static final int MENU_DELETEREAD_ID = 4;
 	
-	private static final int CONTEXTMENU_MARKASUNREAD_ID = 5;
+	private static final int CONTEXTMENU_MARKASREAD_ID = 5;
 	
-	private static final int CONTEXTMENU_DELETE_ID = 6;
+	private static final int CONTEXTMENU_MARKASUNREAD_ID = 6;
 	
-	private static final int CONTEXTMENU_COPYURL = 7;
+	private static final int CONTEXTMENU_DELETE_ID = 7;
+	
+	private static final int CONTEXTMENU_COPYURL = 8;
 	
 	public static final String EXTRA_SHOWREAD = "show_read";
 	
@@ -76,7 +78,7 @@ public class EntriesListActivity extends ListActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		if (MainTabActivity.LIGHTTHEME) {
+		if (MainTabActivity.isLightTheme(this)) {
 			setTheme(android.R.style.Theme_Light);
 		}
 		
@@ -135,6 +137,7 @@ public class EntriesListActivity extends ListActivity {
 		menu.add(0, MENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_revert);
 		menu.add(0, MENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread).setIcon(android.R.drawable.ic_menu_set_as);
 		menu.add(1, MENU_HIDEREAD_ID, Menu.NONE, R.string.contextmenu_hideread).setCheckable(true).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(1, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread).setCheckable(true).setIcon(android.R.drawable.ic_menu_delete);
 		return true;
 	}
 
@@ -172,6 +175,15 @@ public class EntriesListActivity extends ListActivity {
 					item.setChecked(true).setTitle(R.string.contextmenu_showread).setIcon(android.R.drawable.ic_menu_view);
 					entriesListAdapter.showRead(false);
 				}
+				break;
+			}
+			case MENU_DELETEREAD_ID: {
+				entriesListAdapter.showRead(false);
+				new Thread() { // the delete process takes some time
+					public void run() {
+						getContentResolver().delete(uri, Strings.READDATE_GREATERZERO, null);
+					}
+				}.start();
 				break;
 			}
 			case CONTEXTMENU_MARKASREAD_ID: {
