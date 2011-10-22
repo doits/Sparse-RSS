@@ -447,7 +447,7 @@ public class FetcherService extends Service {
 					ContentValues values = new ContentValues();
 					
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
-					values.put(FeedData.FeedColumns.ERROR, e.getMessage());
+					values.put(FeedData.FeedColumns.ERROR, e.toString());
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				} 
 			} finally {
