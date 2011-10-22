@@ -441,8 +441,7 @@ public class RSSOverview extends ListActivity {
 	protected void onListItemClick(ListView listView, View view, int position, long id) {
 		Intent intent = new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI(Long.toString(id)));
 		
-		intent.putExtra(FeedData.FeedColumns.NAME, ((TextView) view.findViewById(android.R.id.text1)).getText());
-		intent.putExtra(FeedData.FeedColumns.ICON, view.getTag() != null ? (byte[]) view.getTag() : null);
+		intent.putExtra(FeedData.FeedColumns._ID, id);
 		startActivity(intent);
 	}
 

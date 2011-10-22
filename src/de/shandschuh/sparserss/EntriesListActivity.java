@@ -28,6 +28,7 @@ package de.shandschuh.sparserss;
 import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -69,13 +70,17 @@ public class EntriesListActivity extends ListActivity {
 
 	public static final String EXTRA_AUTORELOAD = "autoreload";
 	
+	private static final String[] FEED_PROJECTION = {FeedData.FeedColumns.NAME,
+		FeedData.FeedColumns.URL,
+		FeedData.FeedColumns.ICON
+	};
+	
 	private Uri uri;
 	
 	private EntriesListAdapter entriesListAdapter;
 	
 	private byte[] iconBytes;
 	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if (MainTabActivity.isLightTheme(this)) {
@@ -84,7 +89,23 @@ public class EntriesListActivity extends ListActivity {
 		
 		super.onCreate(savedInstanceState);
 		
-		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
+		String title = null;
+		
+		iconBytes = null;
+		
+		Intent intent = getIntent();
+		
+		long feedId = intent.getLongExtra(FeedData.FeedColumns._ID, 0);
+		
+		if (feedId > 0) {
+			Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(feedId), FEED_PROJECTION, null, null, null);
+			
+			if (cursor.moveToFirst()) {
+				title = cursor.isNull(0) ? cursor.getString(1) : cursor.getString(0);
+				iconBytes = cursor.getBlob(2);
+			}
+			cursor.close();
+		}
 
 		if (iconBytes != null && iconBytes.length > 0) { // we cannot insert the icon here because it would be overwritten, but we have to reserve the icon here
 			if (!requestWindowFeature(Window.FEATURE_LEFT_ICON)) {
@@ -94,13 +115,10 @@ public class EntriesListActivity extends ListActivity {
         
 		setContentView(R.layout.entries);
 		
-		Intent intent = getIntent();
-		
 		uri = intent.getData();
+		
 		entriesListAdapter = new EntriesListAdapter(this, uri, intent.getBooleanExtra(EXTRA_SHOWFEEDINFO, false), intent.getBooleanExtra(EXTRA_AUTORELOAD, false));
         setListAdapter(entriesListAdapter);
-        
-        String title = intent.getStringExtra(FeedData.FeedColumns.NAME);
         
         if (title != null) {
         	setTitle(title);
