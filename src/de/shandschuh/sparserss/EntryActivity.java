@@ -282,11 +282,19 @@ public class EntryActivity extends Activity {
 				
 				final String link = entryCursor.getString(linkPosition);
 				
-				((Button) findViewById(R.id.url_button)).setOnClickListener(new OnClickListener() {
-					public void onClick(View view) {
-						startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse(link)), 0);
-					}
-				});
+				Button urlButton = ((Button) findViewById(R.id.url_button));
+				
+				if (link != null && link.length() > 0) {
+					urlButton.setEnabled(true);
+					urlButton.setOnClickListener(new OnClickListener() {
+						public void onClick(View view) {
+							startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse(link)), 0);
+						}
+					});
+				} else {
+					urlButton.setEnabled(false);
+				}
+				
 				entryCursor.close();
 				setupButton(R.id.prev_button, false, date);
 				setupButton(R.id.next_button, true, date);
