@@ -273,7 +273,11 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case MENU_REFRESH_ID: {
-				sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
+				new Thread() {
+					public void run() {
+						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
+					}
+				}.start();
 				break;
 			}
 			case CONTEXTMENU_EDIT_ID: {
@@ -287,7 +291,11 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case CONTEXTMENU_REFRESH_ID: {
-				sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.FEEDID, Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)));
+				new Thread() {
+					public void run() {
+						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.FEEDID, Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)));
+					}
+				}.start();
 				break;
 			}
 			case CONTEXTMENU_DELETE_ID: {
