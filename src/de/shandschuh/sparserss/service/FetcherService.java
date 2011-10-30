@@ -40,10 +40,10 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 
+import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -64,7 +64,7 @@ import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.handler.RSSHandler;
 import de.shandschuh.sparserss.provider.FeedData;
 
-public class FetcherService extends Service {
+public class FetcherService extends IntentService {
 	private static final int FETCHMODE_DIRECT = 1;
 	
 	private static final int FETCHMODE_REENCODE = 2;
@@ -91,6 +91,8 @@ public class FetcherService extends Service {
 	
 	private static final String ENCODING = "encoding=\"";
 	
+	private static final String SERVICENAME = "RssFetcherService";
+	
 	boolean running = false;
 	
 	private NotificationManager notificationManager;
@@ -103,11 +105,14 @@ public class FetcherService extends Service {
 	   Build.VERSION.RELEASE.startsWith("2.0") ||
 	   Build.VERSION.RELEASE.startsWith("2.1") ||
 	   Build.VERSION.RELEASE.startsWith("2.2");
+	
+	public FetcherService() {
+		super(SERVICENAME);
+	}
 		
 	@Override
 	public void onStart(Intent intent, int startId) {
 		HttpURLConnection.setFollowRedirects(true);
-		handleIntent(intent);
 	}
 
 	@Override
@@ -116,11 +121,10 @@ public class FetcherService extends Service {
 	}
 
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		handleIntent(intent);
 		return START_STICKY;
 	}
 	
-	private void handleIntent(final Intent intent) {
+	public void onHandleIntent(Intent intent) {
 		if (running) {
 			return;
 		}
@@ -147,52 +151,46 @@ public class FetcherService extends Service {
 			} else {
 				proxy = null;
 			}
-			new Thread() {
-				public void run() {
-					int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo);
+
+			int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo);
 					
-					if (newCount > 0) {
-						
-						if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
-							Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);
+			if (newCount > 0) {
+				if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
+					Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {COUNT}, new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null, null);
 							
-							cursor.moveToFirst();
-							newCount = cursor.getInt(0);
-							cursor.close();
+					cursor.moveToFirst();
+					newCount = cursor.getInt(0);
+					cursor.close();
 							
-							String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.newentries)).toString();
+					String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.newentries)).toString();
 							
-							Notification notification = new Notification(PRIOR_GINGERBREAD ? R.drawable.ic_statusbar_rss : R.drawable.ic_statusbar_rss_23, text, System.currentTimeMillis());
+					Notification notification = new Notification(PRIOR_GINGERBREAD ? R.drawable.ic_statusbar_rss : R.drawable.ic_statusbar_rss_23, text, System.currentTimeMillis());
 							
-							Intent notificationIntent = new Intent(FetcherService.this, MainTabActivity.class);
+					Intent notificationIntent = new Intent(FetcherService.this, MainTabActivity.class);
 							
-							PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent contentIntent = PendingIntent.getActivity(FetcherService.this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-							if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSVIBRATE, false)) {
-								notification.defaults = Notification.DEFAULT_VIBRATE;
-							} 
-							notification.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
-							notification.ledARGB = 0xffffffff;
-							notification.ledOnMS = 300;
-							notification.ledOffMS = 1000;
+					if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSVIBRATE, false)) {
+						notification.defaults = Notification.DEFAULT_VIBRATE;
+					} 
+					notification.flags = Notification.FLAG_AUTO_CANCEL | Notification.FLAG_SHOW_LIGHTS;
+					notification.ledARGB = 0xffffffff;
+					notification.ledOnMS = 300;
+					notification.ledOffMS = 1000;
 							
-							String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
+					String ringtone = preferences.getString(Strings.SETTINGS_NOTIFICATIONSRINGTONE, null);
 							
-							if (ringtone != null && ringtone.length() > 0) {
-								notification.sound = Uri.parse(ringtone);
-							}
-							notification.setLatestEventInfo(FetcherService.this, getString(R.string.rss_feeds), text, contentIntent);
-							notificationManager.notify(0, notification);
-						} else {
-							notificationManager.cancel(0);
-						}
+					if (ringtone != null && ringtone.length() > 0) {
+						notification.sound = Uri.parse(ringtone);
 					}
-					running = false;
-					stopSelf();
+					notification.setLatestEventInfo(FetcherService.this, getString(R.string.rss_feeds), text, contentIntent);
+					notificationManager.notify(0, notification);
+				} else {
+					notificationManager.cancel(0);
 				}
-
-				
-			}.start();
+			}
+			running = false;
+			stopSelf();
 		} else {
 			running = false;
 			stopSelf();
@@ -262,7 +260,6 @@ public class FetcherService extends Service {
 						int pos = -1, posStart = -1;
 						
 						while ((line = reader.readLine()) != null) {
-							
 							if (line.indexOf(HTML_BODY) > -1) {
 								break;
 							} else {
@@ -324,7 +321,7 @@ public class FetcherService extends Service {
 						char[] chars = new char[20];
 						
 						int length = bufferedReader.read(chars);
-						
+
 						String xmlDescription = new String(chars, 0, length);
 						
 						connection.disconnect();
@@ -393,7 +390,6 @@ public class FetcherService extends Service {
 						break;
 					}
 					case FETCHMODE_REENCODE: {
-						
 						ByteArrayOutputStream ouputStream = new ByteArrayOutputStream();
 						
 						InputStream inputStream = connection.getInputStream();
@@ -445,7 +441,6 @@ public class FetcherService extends Service {
 			} catch (Throwable e) {
 				if (!handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
-					
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
 					values.put(FeedData.FeedColumns.ERROR, e.toString());
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
@@ -480,6 +475,7 @@ public class FetcherService extends Service {
 		connection.setConnectTimeout(30000);
 		connection.setReadTimeout(30000);
 		connection.setUseCaches(false);
+		
 		if (url.getUserInfo() != null) {
 			connection.setRequestProperty("Authorization", "Basic "+BASE64.encode(url.getUserInfo().getBytes()));
 		}
