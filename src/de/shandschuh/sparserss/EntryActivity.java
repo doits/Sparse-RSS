@@ -41,7 +41,10 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.text.ClipboardManager;
 import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -86,6 +89,8 @@ public class EntryActivity extends Activity {
 	
 	private static final String BODY_END = "</body>";
 	
+	private static final int MENU_COPYURL_ID = 1;
+	
 	private int titlePosition;
 	
 	private int datePosition;
@@ -119,6 +124,8 @@ public class EntryActivity extends Activity {
 	int scrollX;
 	
 	int scrollY;
+	
+	private String link;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +287,7 @@ public class EntryActivity extends Activity {
 					webView.setBackgroundColor(color.black);
 				}
 				
-				final String link = entryCursor.getString(linkPosition);
+				link = entryCursor.getString(linkPosition);
 				
 				Button urlButton = ((Button) findViewById(R.id.url_button));
 				
@@ -348,6 +355,25 @@ public class EntryActivity extends Activity {
 		super.onPause();
 		scrollX = webView.getScrollX();
 		scrollY = webView.getScrollY();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		menu.add(0, MENU_COPYURL_ID, Menu.NONE, R.string.contextmenu_copyurl).setIcon(android.R.drawable.ic_menu_share);
+		return true;
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (featureId) {
+			case MENU_COPYURL_ID: {
+				if (link != null) {
+					((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setText(link);
+				}
+				break;
+			}
+		}
+		return true;
 	}
 	
 }
