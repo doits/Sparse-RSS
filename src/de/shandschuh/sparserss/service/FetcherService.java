@@ -432,7 +432,7 @@ public class FetcherService extends IntentService {
 				if (!handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
-					values.put(FeedData.FeedColumns.ERROR, e.toString());
+					values.put(FeedData.FeedColumns.ERROR, e.getMessage());
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 				} 
 			} finally {
@@ -476,17 +476,20 @@ public class FetcherService extends IntentService {
 		connection.setRequestProperty("connection", "close"); // Workaround for android issue 7786
 		connection.connect();
 		
-		if (followHttpHttpsRedirects) {
-			String location = connection.getHeaderField("Location");
-			
-			if (location != null && (url.getProtocol().equals(Strings._HTTP) && location.startsWith(Strings.HTTPS) || url.getProtocol().equals(Strings._HTTPS) && location.startsWith(Strings.HTTP))) {
+		String location = connection.getHeaderField("Location");
+		
+		if (location != null && (url.getProtocol().equals(Strings._HTTP) && location.startsWith(Strings.HTTPS) || url.getProtocol().equals(Strings._HTTPS) && location.startsWith(Strings.HTTP))) { 
+			// if location != null, the system-automatic redirect has failed which indicates a protocol change
+			if (followHttpHttpsRedirects) {
 				connection.disconnect();
-				
+					
 				if (cycle < 5) {
 					return setupConnection(new URL(location), imposeUseragent, followHttpHttpsRedirects, cycle+1);
 				} else {
 					throw new IOException("Too many redirects.");
 				}
+			} else {
+				throw new IOException("https<->http redirect - enable in settings");
 			}
 		}
 		return connection;
