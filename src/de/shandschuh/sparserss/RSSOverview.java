@@ -39,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -111,13 +112,15 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int MENU_EXPORT_ID = 13;
 	
-	private static final int MENU_ENABLEFEEDSORT = 14;
+	private static final int MENU_ENABLEFEEDSORT_ID = 14;
 	
 	private static final int MENU_DELETEREAD_ID = 15;
 	
-	private static final int MENU_DISABLEFEEDSORT = 16;
+	private static final int MENU_DISABLEFEEDSORT_ID = 16;
 	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
+	
+	private static final Uri CANGELOG_URI = Uri.parse("http://code.google.com/p/sparserss/wiki/Changelog");
 	
 	
 	static NotificationManager notificationManager; // package scope
@@ -249,10 +252,11 @@ public class RSSOverview extends ListActivity {
 		// no icons will be shown from here
 		menu.add(0, MENU_IMPORT_ID, Menu.NONE, R.string.menu_import);
 		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
-		menu.add(0, MENU_ENABLEFEEDSORT, Menu.NONE, R.string.menu_enablefeedsort);
+		menu.add(0, MENU_ENABLEFEEDSORT_ID, Menu.NONE, R.string.menu_enablefeedsort);
 		menu.add(0, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread);
 		
-		menu.add(1, MENU_DISABLEFEEDSORT, Menu.NONE, R.string.menu_disablefeedsort).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		menu.add(1, MENU_DISABLEFEEDSORT_ID, Menu.NONE, R.string.menu_disablefeedsort).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
+		
 		return true;
 	}
 	
@@ -414,7 +418,7 @@ public class RSSOverview extends ListActivity {
 				}
 				break;
 			}
-			case MENU_ENABLEFEEDSORT: {
+			case MENU_ENABLEFEEDSORT_ID: {
 				feedSort = true;
 				break;
 			}
@@ -423,7 +427,7 @@ public class RSSOverview extends ListActivity {
 				((RSSOverviewListAdapter) getListAdapter()).notifyDataSetChanged();
 				break;
 			}
-			case MENU_DISABLEFEEDSORT: {
+			case MENU_DISABLEFEEDSORT_ID: {
 				feedSort = false;
 				break;
 			}
@@ -491,6 +495,11 @@ public class RSSOverview extends ListActivity {
 				builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						dialog.cancel();
+					}
+				});
+				builder.setNeutralButton(R.string.changelog, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						startActivity(new Intent(Intent.ACTION_VIEW, CANGELOG_URI));
 					}
 				});
 				return builder.create();

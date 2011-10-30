@@ -68,6 +68,8 @@ public final class Strings {
 	
 	public static final String SETTINGS_DISABLEPICTURES = "pictures.disable";
 	
+	public static final String SETTINGS_HTTPHTTPSREDIRECTS = "httphttpsredirects";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";
@@ -89,6 +91,10 @@ public final class Strings {
 	public static final String HTTP = "http://";
 	
 	public static final String HTTPS = "https://";
+	
+	public static final String _HTTP = "http";
+	
+	public static final String _HTTPS = "https";
 
 	public static final String PROTOCOL_SEPARATOR = "://";
 
@@ -137,6 +143,5 @@ public final class Strings {
 	protected static final String FALSE = "false";
 	
 	public static final String READDATE_GREATERZERO = FeedData.EntryColumns.READDATE+">0";
-
 
 }

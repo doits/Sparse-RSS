@@ -108,22 +108,10 @@ public class FetcherService extends IntentService {
 	
 	public FetcherService() {
 		super(SERVICENAME);
+		HttpURLConnection.setFollowRedirects(true);
 	}
 		
 	@Override
-	public void onStart(Intent intent, int startId) {
-		HttpURLConnection.setFollowRedirects(true);
-	}
-
-	@Override
-	public void onLowMemory() {
-		stopSelf();
-	}
-
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		return START_STICKY;
-	}
-	
 	public void onHandleIntent(Intent intent) {
 		if (running) {
 			return;
@@ -232,6 +220,8 @@ public class FetcherService extends IntentService {
 		
 		boolean imposeUserAgent = !preferences.getBoolean(Strings.SETTINGS_STANDARDUSERAGENT, false);
 		
+		boolean followHttpHttpsRedirects = preferences.getBoolean(Strings.SETTINGS_HTTPHTTPSREDIRECTS, false);
+		
 		int result = 0;
 		
 		RSSHandler handler = new RSSHandler(context);
@@ -244,7 +234,7 @@ public class FetcherService extends IntentService {
 			HttpURLConnection connection = null;
 			
 			try {
-				connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent);
+				connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent, followHttpHttpsRedirects);
 				
 				String contentType = connection.getContentType();
 
@@ -284,7 +274,7 @@ public class FetcherService extends IntentService {
 										values.put(FeedData.FeedColumns.URL, url);
 										context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
 										connection.disconnect();
-										connection = setupConnection(url, imposeUserAgent);
+										connection = setupConnection(url, imposeUserAgent, followHttpHttpsRedirects);
 										contentType = connection.getContentType();
 										break;
 									}
@@ -293,7 +283,7 @@ public class FetcherService extends IntentService {
 						}
 						if (posStart == -1) { // this indicates a badly configured feed
 							connection.disconnect();
-							connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent);
+							connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent, followHttpHttpsRedirects);
 							contentType = connection.getContentType();
 						}
 						
@@ -325,7 +315,7 @@ public class FetcherService extends IntentService {
 						String xmlDescription = new String(chars, 0, length);
 						
 						connection.disconnect();
-						connection = setupConnection(connection.getURL(), imposeUserAgent);
+						connection = setupConnection(connection.getURL(), imposeUserAgent, followHttpHttpsRedirects);
 						
 						int start = xmlDescription != null ?  xmlDescription.indexOf(ENCODING) : -1;
 						
@@ -351,7 +341,7 @@ public class FetcherService extends IntentService {
 				byte[] iconBytes = cursor.getBlob(iconPosition);
 				
 				if (iconBytes == null) {
-					HttpURLConnection iconURLConnection = setupConnection(new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString()), imposeUserAgent);
+					HttpURLConnection iconURLConnection = setupConnection(new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString()), imposeUserAgent, followHttpHttpsRedirects);
 					
 					try {
 						iconBytes = getBytes(iconURLConnection.getInputStream());
@@ -460,11 +450,15 @@ public class FetcherService extends IntentService {
 		return result;
 	}
 	
-	private static final HttpURLConnection setupConnection(String url, boolean imposeUseragent) throws IOException, NoSuchAlgorithmException, KeyManagementException {
-		return setupConnection(new URL(url), imposeUseragent);
+	private static final HttpURLConnection setupConnection(String url, boolean imposeUseragent, boolean followHttpHttpsRedirects) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+		return setupConnection(new URL(url), imposeUseragent, followHttpHttpsRedirects);
 	}
 	
-	private static final HttpURLConnection setupConnection(URL url, boolean imposeUseragent) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+	private static final HttpURLConnection setupConnection(URL url, boolean imposeUseragent, boolean followHttpHttpsRedirects) throws IOException, NoSuchAlgorithmException, KeyManagementException {
+		return setupConnection(url, imposeUseragent, followHttpHttpsRedirects, 0);
+	}
+	
+	private static final HttpURLConnection setupConnection(URL url, boolean imposeUseragent, boolean followHttpHttpsRedirects, int cycle) throws IOException, NoSuchAlgorithmException, KeyManagementException {
 		HttpURLConnection connection = proxy == null ? (HttpURLConnection) url.openConnection() : (HttpURLConnection) url.openConnection(proxy);
 		
 		connection.setDoInput(true);
@@ -481,6 +475,20 @@ public class FetcherService extends IntentService {
 		}
 		connection.setRequestProperty("connection", "close"); // Workaround for android issue 7786
 		connection.connect();
+		
+		if (followHttpHttpsRedirects) {
+			String location = connection.getHeaderField("Location");
+			
+			if (location != null && (url.getProtocol().equals(Strings._HTTP) && location.startsWith(Strings.HTTPS) || url.getProtocol().equals(Strings._HTTPS) && location.startsWith(Strings.HTTP))) {
+				connection.disconnect();
+				
+				if (cycle < 5) {
+					return setupConnection(new URL(location), imposeUseragent, followHttpHttpsRedirects, cycle+1);
+				} else {
+					throw new IOException("Too many redirects.");
+				}
+			}
+		}
 		return connection;
 	}
 

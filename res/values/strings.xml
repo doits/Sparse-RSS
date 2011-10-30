@@ -95,6 +95,8 @@
     <string name="settings_category_network">Network</string>
     <string name="settings_standarduseragent">Standard user-agent</string>
     <string name="settings_standarduseragent_description">Use the standard user-agent name</string>
+    <string name="settings_httphttpsredirects">Follow http &lt;-&gt; https redirects</string>
+    <string name="settings_httphttpsredirects_description">Automatically follow http to https and vice versa redirects</string>
     <string name="settings_proxy_wifionly">Wifi only</string>
     <string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
     <string name="settings_proxy_host">Host</string>
@@ -125,6 +127,7 @@
     <string name="feed_title">Title</string>
     <string name="select_file">Select file (SD-root)</string>
     <string name="refreshonwifionly">Refresh only over Wifi</string>
+    <string name="changelog">Changelog</string>
 
     <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 
