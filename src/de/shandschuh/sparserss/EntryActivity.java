@@ -365,7 +365,7 @@ public class EntryActivity extends Activity {
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		switch (featureId) {
+		switch (item.getItemId()) {
 			case MENU_COPYURL_ID: {
 				if (link != null) {
 					((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setText(link);
