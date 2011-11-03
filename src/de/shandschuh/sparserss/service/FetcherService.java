@@ -93,8 +93,6 @@ public class FetcherService extends IntentService {
 	
 	private static final String SERVICENAME = "RssFetcherService";
 	
-	boolean running = false;
-	
 	private NotificationManager notificationManager;
 	
 	private static SharedPreferences preferences = null;
@@ -113,9 +111,6 @@ public class FetcherService extends IntentService {
 		
 	@Override
 	public void onHandleIntent(Intent intent) {
-		if (running) {
-			return;
-		}
 		if (preferences == null) {
 			try {
 				preferences = PreferenceManager.getDefaultSharedPreferences(createPackageContext(Strings.PACKAGE, 0));
@@ -124,7 +119,6 @@ public class FetcherService extends IntentService {
 			}
 		}
 		
-		running = true;
 		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 		final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -177,12 +171,7 @@ public class FetcherService extends IntentService {
 					notificationManager.cancel(0);
 				}
 			}
-			running = false;
-			stopSelf();
-		} else {
-			running = false;
-			stopSelf();
-		}
+		} 
 	}
 	
 	@Override
@@ -193,7 +182,6 @@ public class FetcherService extends IntentService {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		running = false;
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
