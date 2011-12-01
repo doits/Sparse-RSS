@@ -62,6 +62,8 @@
     <string name="settings_showtabs_description">Onglets additionnels pour les favoris et l\'ensemble des flux</string>
 
     <string name="settings_category_network">Réseau</string>
+    <string name="settings_httphttpsredirects">Suivre les redirections http &lt;-&gt; https</string>
+    <string name="settings_httphttpsredirects_description">Suivre automatiquement les redirections http vers https et vice versa</string>
     <string name="settings_proxy_wifionly">Wifi seulement</string>
     <string name="settings_proxy_wifionly_description">Utilise le proxy pour le wifi seulement</string>
     <string name="settings_proxy_host">Hôte</string>

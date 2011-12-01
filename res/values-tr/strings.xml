@@ -62,6 +62,8 @@
     <string name="settings_showtabs_description">Favori ve tüm beslemeler için ek sekmeler</string> 
  
     <string name="settings_category_network">Ağ</string> 
+    <string name="settings_httphttpsredirects">http &lt;-&gt; https yönlendirmelerini izle</string>
+    <string name="settings_httphttpsredirects_description">http\'den https\'e ve tersi yönlendirmeleri otomatik olarak izle</string>
     <string name="settings_proxy_wifionly">Sadece Wifi</string> 
     <string name="settings_proxy_wifionly_description">Vekil sunucusunu sadece wifi için kullan</string> 
     <string name="settings_proxy_host">Host</string> 
