@@ -119,7 +119,7 @@ public class FetcherService extends IntentService {
 			}
 		}
 		
-		ConnectivityManager connectivityManager =  (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		
 		final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 		
