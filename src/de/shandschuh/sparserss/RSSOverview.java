@@ -39,6 +39,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -295,11 +297,46 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case CONTEXTMENU_REFRESH_ID: {
-				new Thread() {
-					public void run() {
-						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.FEEDID, Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)));
+				final String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
+
+				ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+				
+				final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+				
+				if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) { // since we have acquired the networkInfo, we use it for basic checks
+					final Thread thread = new Thread() {
+						public void run() {
+							sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.FEEDID, id));
+						}
+					};
+					
+					if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+						thread.start();
+					} else {
+						Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.WIFIONLY}, null, null, null);
+						
+						cursor.moveToFirst();
+						
+						if (cursor.isNull(0) || cursor.getInt(0) == 0) {
+							thread.start();
+						} else {
+							Builder builder = new AlertDialog.Builder(this);
+							
+							builder.setIcon(android.R.drawable.ic_dialog_alert);
+							builder.setTitle(R.string.dialog_hint);
+							builder.setMessage(R.string.question_refreshwowifi);
+							builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					            public void onClick(DialogInterface dialog, int which) {
+					            	thread.start();
+					            }
+					        });
+							builder.setNegativeButton(android.R.string.no, null);
+							builder.show();
+						}
+						cursor.close();
 					}
-				}.start();
+					
+				}
 				break;
 			}
 			case CONTEXTMENU_DELETE_ID: {

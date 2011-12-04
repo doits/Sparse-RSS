@@ -130,13 +130,15 @@
     <string name="changelog">Changelog</string>
 
     <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
-
+	<string name="question_refreshwowifi">Do you really want to refresh this feed while not being on wifi?</string>
+	
     <string name="button_accept">Accept</string>
     <string name="button_decline">Decline</string>
     
     <string name="message_exportedto">Exported into %s.</string>
 
     <string name="dialog_licenseagreement">License</string>
+    <string name="dialog_hint">Hint</string>
 
     <string-array name="settings_intervals">
         <item>1 minute</item>
