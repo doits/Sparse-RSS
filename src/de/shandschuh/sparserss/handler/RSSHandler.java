@@ -286,8 +286,11 @@ public class RSSHandler extends DefaultHandler {
 			if (!foundLink) {
 				linkTagEntered = true;
 			}
-		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || TAG_SUMMARY.equals(localName) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
-			if (description == null) { // this happens, if there is no encoded description
+		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
+			descriptionTagEntered = true;
+			description = new StringBuilder();
+		} else if (TAG_SUMMARY.equals(localName)) {
+			if (description == null) {
 				descriptionTagEntered = true;
 				description = new StringBuilder();
 			}
@@ -387,7 +390,6 @@ public class RSSHandler extends DefaultHandler {
 						}
 						values.put(FeedData.EntryColumns.ABSTRACT, descriptionString); 
 					}
-					description = null;
 				}
 				
 				String entryLinkString = entryLink.toString().trim();
@@ -426,6 +428,7 @@ public class RSSHandler extends DefaultHandler {
 			} else {
 				cancel();
 			}
+			description = null;
 			title = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
