@@ -178,11 +178,9 @@ public class EntryActivity extends Activity {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN) {
 					if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
-						webView.scrollBy(webView.getScrollX(), Math.max(webView.getScrollY()-40, 0));
-						return true;
+						return webView.onKeyDown(KeyEvent.KEYCODE_DPAD_UP, event);
 					} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
-						webView.scrollBy(webView.getScrollX(), Math.min(webView.getScrollY()+40, webView.getHeight()));
-						return true;
+						return webView.onKeyDown(KeyEvent.KEYCODE_DPAD_DOWN, event);
 					} else {
 						return false;
 					}
