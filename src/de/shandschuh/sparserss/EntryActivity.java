@@ -193,7 +193,6 @@ public class EntryActivity extends Activity {
 		scrollY = 0;
 	}
 
-
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -412,7 +411,6 @@ public class EntryActivity extends Activity {
 		}
 		return true;
 	}
-
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
