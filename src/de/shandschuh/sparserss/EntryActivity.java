@@ -416,9 +416,10 @@ public class EntryActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (!webView.hasFocus() && (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == KeyEvent.KEYCODE_PAGE_DOWN)) {
-			webView.requestFocus();
-			return webView.onKeyDown(keyCode, event);
+		if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
+			return super.onKeyDown(KeyEvent.KEYCODE_DPAD_UP, event);
+		} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
+			return super.onKeyDown(KeyEvent.KEYCODE_DPAD_DOWN, event);
 		} else {
 			return super.onKeyDown(keyCode, event);
 		}
