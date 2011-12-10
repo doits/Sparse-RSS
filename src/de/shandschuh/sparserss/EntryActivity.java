@@ -43,11 +43,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -172,6 +174,23 @@ public class EntryActivity extends Activity {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 		webView = (WebView) findViewById(R.id.entry_abstract);
+		webView.setOnKeyListener(new OnKeyListener() {
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (event.getAction() == KeyEvent.ACTION_DOWN) {
+					if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
+						webView.scrollBy(webView.getScrollX(), Math.max(webView.getScrollY()-40, 0));
+						return true;
+					} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
+						webView.scrollBy(webView.getScrollX(), Math.min(webView.getScrollY()+40, webView.getHeight()));
+						return true;
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+		});
 		scrollX = 0;
 		scrollY = 0;
 	}
@@ -394,6 +413,17 @@ public class EntryActivity extends Activity {
 			}
 		}
 		return true;
+	}
+
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (!webView.hasFocus() && (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == KeyEvent.KEYCODE_PAGE_DOWN)) {
+			webView.requestFocus();
+			return webView.onKeyDown(keyCode, event);
+		} else {
+			return super.onKeyDown(keyCode, event);
+		}
 	}
 	
 }
