@@ -70,6 +70,8 @@ public final class Strings {
 	
 	public static final String SETTINGS_HTTPHTTPSREDIRECTS = "httphttpsredirects";
 	
+	public static final String SETTINGS_OVERRIDEWIFIONLY = "overridewifionly";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.widget.UPDATE";

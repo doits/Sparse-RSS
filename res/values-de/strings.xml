@@ -59,6 +59,9 @@
     <string name="settings_refreshonopen">Aktualisiere bei Start</string>
     <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
 
+	<string name="settings_overridewifionly">Überschreibe \"Nur mit WLan aktualisieren\"</string>
+	<string name="settings_overridewifionly_description">Erlaube manuelles Aktualisieren einzelner \"nur WLan\" Feeds</string>
+	
     <string name="settings_hideread">Verstecke gelesene Einträge</string>
     <string name="settings_hideread_description">Verstecke Einträge, wenn sie gelesen wurden</string>
     <string name="settings_entrysettings">Einträgeeinstellungen</string>
@@ -100,6 +103,7 @@
 
     <string name="button_accept">Akzeptieren</string>
     <string name="button_decline">Ablehnen</string>
+    <string name="button_alwaysokforall">Immer Ok für alle</string>
     
     <string name="message_exportedto">In Datei %s exportiert.</string>
 

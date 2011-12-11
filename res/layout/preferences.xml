@@ -23,6 +23,11 @@
             android:defaultValue="false"
             android:summary="@string/settings_refreshonopen_description"
             android:key="refreshonopen.enabled" />
+        <CheckBoxPreference
+            android:title="@string/settings_overridewifionly"
+            android:defaultValue="false"
+            android:summary="@string/settings_overridewifionly_description"
+            android:key="overridewifionly" />
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/settings_category_notofications">

@@ -304,13 +304,15 @@ public class RSSOverview extends ListActivity {
 				final NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 				
 				if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED) { // since we have acquired the networkInfo, we use it for basic checks
+					final Intent intent = new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.FEEDID, id);
+					
 					final Thread thread = new Thread() {
 						public void run() {
-							sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.FEEDID, id));
+							sendBroadcast(intent);
 						}
 					};
 					
-					if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+					if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false)) {
 						thread.start();
 					} else {
 						Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.WIFIONLY}, null, null, null);
@@ -327,6 +329,13 @@ public class RSSOverview extends ListActivity {
 							builder.setMessage(R.string.question_refreshwowifi);
 							builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 					            public void onClick(DialogInterface dialog, int which) {
+					            	intent.putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, true);
+					            	thread.start();
+					            }
+					        });
+							builder.setNeutralButton(R.string.button_alwaysokforall, new DialogInterface.OnClickListener() {
+					            public void onClick(DialogInterface dialog, int which) {
+					            	PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).edit().putBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, true).commit();
 					            	thread.start();
 					            }
 					        });
