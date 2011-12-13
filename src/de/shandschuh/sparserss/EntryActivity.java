@@ -178,15 +178,14 @@ public class EntryActivity extends Activity {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN) {
 					if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
-						return webView.onKeyDown(KeyEvent.KEYCODE_DPAD_UP, event);
-					} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
-						return webView.onKeyDown(KeyEvent.KEYCODE_DPAD_DOWN, event);
-					} else {
-						return false;
+						scrollUp();
+						return true;
+					} else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+						scrollDown();
+						return true;
 					}
-				} else {
-					return false;
 				}
+				return false;
 			}
 		});
 		scrollX = 0;
@@ -414,12 +413,27 @@ public class EntryActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
-			return super.onKeyDown(KeyEvent.KEYCODE_DPAD_UP, event);
-		} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
-			return super.onKeyDown(KeyEvent.KEYCODE_DPAD_DOWN, event);
-		} else {
-			return super.onKeyDown(keyCode, event);
+		if (event.getAction() == KeyEvent.ACTION_DOWN) {
+			if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
+				scrollUp();
+				return true;
+			} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
+				scrollDown();
+				return true;
+			}
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
+	private void scrollUp() {
+		if (webView != null) {
+			webView.pageUp(false);
+		}
+	}
+	
+	private void scrollDown() {
+		if (webView != null) {
+			webView.pageDown(false);
 		}
 	}
 	
