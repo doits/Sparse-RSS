@@ -104,21 +104,25 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int CONTEXTMENU_DELETEREAD_ID = 8;
 	
-	private static final int MENU_SETTINGS_ID = 9;
+	private static final int CONTEXTMENU_DELETEALLENTRIES_ID = 9;
 	
-	private static final int MENU_ALLREAD = 10;
+	private static final int MENU_SETTINGS_ID = 10;
 	
-	private static final int MENU_ABOUT_ID = 11;
+	private static final int MENU_ALLREAD = 11;
 	
-	private static final int MENU_IMPORT_ID = 12;
+	private static final int MENU_ABOUT_ID = 12;
 	
-	private static final int MENU_EXPORT_ID = 13;
+	private static final int MENU_IMPORT_ID = 13;
 	
-	private static final int MENU_ENABLEFEEDSORT_ID = 14;
+	private static final int MENU_EXPORT_ID = 14;
 	
-	private static final int MENU_DELETEREAD_ID = 15;
+	private static final int MENU_ENABLEFEEDSORT_ID = 15;
 	
-	private static final int MENU_DISABLEFEEDSORT_ID = 16;
+	private static final int MENU_DELETEREAD_ID = 16;
+	
+	private static final int MENU_DELETEALLENTRIES_ID = 17;
+	
+	private static final int MENU_DISABLEFEEDSORT_ID = 18;
 	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
@@ -152,6 +156,7 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread);
 				menu.add(0, CONTEXTMENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread);
 				menu.add(0, CONTEXTMENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread);
+				menu.add(0, CONTEXTMENU_DELETEALLENTRIES_ID, Menu.NONE, R.string.contextmenu_deleteallentries);
 			}
         });
         getListView().setOnTouchListener(new OnTouchListener() {
@@ -256,6 +261,7 @@ public class RSSOverview extends ListActivity {
 		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
 		menu.add(0, MENU_ENABLEFEEDSORT_ID, Menu.NONE, R.string.menu_enablefeedsort);
 		menu.add(0, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread);
+		menu.add(0, MENU_DELETEALLENTRIES_ID, Menu.NONE, R.string.contextmenu_deleteallentries);
 		
 		menu.add(1, MENU_DISABLEFEEDSORT_ID, Menu.NONE, R.string.menu_disablefeedsort).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 		
@@ -378,7 +384,11 @@ public class RSSOverview extends ListActivity {
 			case CONTEXTMENU_MARKASREAD_ID: {
 				new Thread() {
 					public void run() {
-						getContentResolver().update(FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), getReadContentValues(), new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null);
+						String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
+						
+						if (getContentResolver().update(FeedData.EntryColumns.CONTENT_URI(id), getReadContentValues(), new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null) > 0) {
+							getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI(id), null);
+						}
 					}
 				}.start();
 				break;
@@ -386,7 +396,11 @@ public class RSSOverview extends ListActivity {
 			case CONTEXTMENU_MARKASUNREAD_ID: {
 				new Thread() {
 					public void run() {
-						getContentResolver().update(FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), getUnreadContentValues(), null, null);
+						String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
+						
+						if (getContentResolver().update(FeedData.EntryColumns.CONTENT_URI(id), getUnreadContentValues(), null, null) > 0) {
+							getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI(id), null);;
+						}
 					}
 				}.start();
 				break;
@@ -394,9 +408,17 @@ public class RSSOverview extends ListActivity {
 			case CONTEXTMENU_DELETEREAD_ID: {
 				new Thread() {
 					public void run() {
-						getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), Strings.READDATE_GREATERZERO, null);
+						String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
+						
+						if (getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI(id), Strings.READDATE_GREATERZERO, null) > 0) {
+							getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI(id), null);
+						}
 					}
 				}.start();
+				break;
+			}
+			case CONTEXTMENU_DELETEALLENTRIES_ID: {
+				showDeleteAllEntriesQuestion(this, FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)));
 				break;
 			}
 				
@@ -471,6 +493,10 @@ public class RSSOverview extends ListActivity {
 			case MENU_DELETEREAD_ID: {
 				getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI, Strings.READDATE_GREATERZERO, null);
 				((RSSOverviewListAdapter) getListAdapter()).notifyDataSetChanged();
+				break;
+			}
+			case MENU_DELETEALLENTRIES_ID: {
+				showDeleteAllEntriesQuestion(this, FeedData.EntryColumns.CONTENT_URI);
 				break;
 			}
 			case MENU_DISABLEFEEDSORT_ID: {
@@ -665,6 +691,27 @@ public class RSSOverview extends ListActivity {
 		builder.setIcon(android.R.drawable.ic_dialog_alert);
 		builder.setPositiveButton(android.R.string.ok, null);
 		return builder.create();
+	}
+	
+	private static void showDeleteAllEntriesQuestion(final Context context, final Uri uri) {
+		Builder builder = new AlertDialog.Builder(context);
+		
+		builder.setIcon(android.R.drawable.ic_dialog_alert);
+		builder.setTitle(R.string.contextmenu_deleteallentries);
+		builder.setMessage(R.string.question_areyousure);
+		builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+            	new Thread() {
+					public void run() {
+						if (context.getContentResolver().delete(uri, Strings.DB_EXCUDEFAVORITE, null) > 0) {
+							context.getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI, null);
+						}
+					}
+				}.start();
+            }
+        });
+		builder.setNegativeButton(android.R.string.no, null);
+		builder.show();
 	}
     
 }

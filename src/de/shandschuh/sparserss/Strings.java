@@ -88,6 +88,8 @@ public final class Strings {
 	
 	public static final String DB_AND = " AND ";
 	
+	public static final String DB_EXCUDEFAVORITE = new StringBuilder(FeedData.EntryColumns.FAVORITE).append(Strings.DB_ISNULL).append(" OR ").append(FeedData.EntryColumns.FAVORITE).append("=0").toString();
+	
 	public static final String EMPTY = "";
 
 	public static final String HTTP = "http://";

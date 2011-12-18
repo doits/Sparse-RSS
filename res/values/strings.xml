@@ -135,6 +135,7 @@
 
     <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
 	<string name="question_refreshwowifi">Do you really want to refresh this feed while not being on wifi?</string>
+	<string name="question_areyousure">Are you sure?</string>
 	
     <string name="button_accept">Accept</string>
     <string name="button_decline">Decline</string>

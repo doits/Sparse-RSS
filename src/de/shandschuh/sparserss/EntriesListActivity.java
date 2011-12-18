@@ -25,8 +25,11 @@
 
 package de.shandschuh.sparserss;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.app.AlertDialog.Builder;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -56,13 +59,15 @@ public class EntriesListActivity extends ListActivity {
 	
 	private static final int MENU_DELETEREAD_ID = 4;
 	
-	private static final int CONTEXTMENU_MARKASREAD_ID = 5;
+	private static final int MENU_DELETEALLENTRIES_ID = 5;
 	
-	private static final int CONTEXTMENU_MARKASUNREAD_ID = 6;
+	private static final int CONTEXTMENU_MARKASREAD_ID = 6;
 	
-	private static final int CONTEXTMENU_DELETE_ID = 7;
+	private static final int CONTEXTMENU_MARKASUNREAD_ID = 7;
 	
-	private static final int CONTEXTMENU_COPYURL = 8;
+	private static final int CONTEXTMENU_DELETE_ID = 8;
+	
+	private static final int CONTEXTMENU_COPYURL = 9;
 	
 	public static final String EXTRA_SHOWREAD = "show_read";
 	
@@ -155,7 +160,8 @@ public class EntriesListActivity extends ListActivity {
 		menu.add(0, MENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_revert);
 		menu.add(0, MENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread).setIcon(android.R.drawable.ic_menu_set_as);
 		menu.add(1, MENU_HIDEREAD_ID, Menu.NONE, R.string.contextmenu_hideread).setCheckable(true).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-		menu.add(1, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread).setCheckable(true).setIcon(android.R.drawable.ic_menu_delete);
+		menu.add(1, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread).setIcon(android.R.drawable.ic_menu_delete);
+		menu.add(1, MENU_DELETEALLENTRIES_ID, Menu.NONE, R.string.contextmenu_deleteallentries).setIcon(android.R.drawable.ic_menu_delete);
 		return true;
 	}
 
@@ -202,6 +208,30 @@ public class EntriesListActivity extends ListActivity {
 						getContentResolver().delete(uri, Strings.READDATE_GREATERZERO, null);
 					}
 				}.start();
+				break;
+			}
+			case MENU_DELETEALLENTRIES_ID: {
+				Builder builder = new AlertDialog.Builder(this);
+				
+				builder.setIcon(android.R.drawable.ic_dialog_alert);
+				builder.setTitle(R.string.contextmenu_deleteallentries);
+				builder.setMessage(R.string.question_areyousure);
+				builder.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            	new Thread() {
+							public void run() {
+								getContentResolver().delete(uri, Strings.DB_EXCUDEFAVORITE, null);
+								runOnUiThread(new Runnable() {
+									public void run() {
+										entriesListAdapter.getCursor().requery();
+									}
+								});
+							}
+						}.start();
+		            }
+		        });
+				builder.setNegativeButton(android.R.string.no, null);
+				builder.show();
 				break;
 			}
 			case CONTEXTMENU_MARKASREAD_ID: {
