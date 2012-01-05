@@ -177,10 +177,10 @@ public class EntryActivity extends Activity {
 		webView.setOnKeyListener(new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN) {
-					if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
+					if (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == 94) {
 						scrollUp();
 						return true;
-					} else if (keyCode == KeyEvent.KEYCODE_DPAD_DOWN) {
+					} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN || keyCode == 95) {
 						scrollDown();
 						return true;
 					}
@@ -414,10 +414,10 @@ public class EntryActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
-			if (keyCode == KeyEvent.KEYCODE_PAGE_UP) {
+			if (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == 94) {
 				scrollUp();
 				return true;
-			} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN) {
+			} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN || keyCode == 95) {
 				scrollDown();
 				return true;
 			}
