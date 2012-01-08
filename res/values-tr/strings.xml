@@ -17,6 +17,8 @@
     <string name="contextmenu_markasunread">Okunmamış say</string>
     <string name="contextmenu_hideread">Okunmuş mesajları sakla</string> 
     <string name="contextmenu_showread">Okunmuş mesajları göster</string> 
+    <string name="contextmenu_deleteread">Okunan mesajları sil</string>
+    <string name="contextmenu_deleteallentries">Tüm mesajları sil</string>
     <string name="menu_allread">Tümünü okunmuş say</string> 
     <string name="menu_import">OPML dosyasından içe aktar</string> 
     <string name="menu_export">OPML dosyası olarak dışa aktar</string> 
@@ -53,6 +55,9 @@
  
     <string name="settings_refreshonopen">Açılışta beslemeleri tazele</string> 
     <string name="settings_refreshonopen_description">Tüm beslemeleri uygulama açıldığında tazele</string> 
+    
+    <string name="settings_overridewifionly">\"sadece wifi vasıtasıyla tazele\" ayarını görmezden gel</string>
+	<string name="settings_overridewifionly_description">\"sadece wifi\" beslemelerinin tek tek elle tazelenmesine izin ver</string>
  
     <string name="settings_hideread">Okunmuş tüm mesajları sakla</string> 
     <string name="settings_hideread_description">Okunmuş mesajları widget\'ten sakla</string> 
@@ -91,15 +96,20 @@
     <string name="websiteorfeed">(ağ sitesi veya besleme)</string> 
     <string name="feed_title">Başlık</string> 
     <string name="select_file">Dosya seç (SD kökü)</string> 
+    <string name="refreshonwifionly">Sadece Wifi vasıtasıyla tazele</string>
  
     <string name="question_deletefeed">Bu beslemeyi ve tüm mesajlarını silmek istediğinizden emin misiniz?</string> 
+    <string name="question_refreshwowifi">Bu beslemeyi wifi vasıtasıyla bağlanmadığınız hâlde tazelemek istediğinizden emin misiniz?</string>
+    <string name="question_areyousure">Emin misiniz?</string>
  
     <string name="button_accept">Tamam</string> 
     <string name="button_decline">İptal</string> 
+    <string name="button_alwaysokforall">Her zaman hepsine evet</string>
     
     <string name="message_exportedto">%s olarak dışa aktarıldı.</string> 
  
     <string name="dialog_licenseagreement">Lisans</string> 
+    <string name="dialog_hint">İpucu</string>
  
     <string-array name="settings_intervals"> 
         <item>1 dakika</item> 

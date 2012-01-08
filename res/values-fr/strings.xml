@@ -17,6 +17,8 @@
     <string name="contextmenu_markasunread">Marquer comme non lu</string>
     <string name="contextmenu_hideread">Cacher le contenu lu</string>
     <string name="contextmenu_showread">Montrer le contenu lu</string>
+    <string name="contextmenu_deleteread">Effacer les entrées lues</string>
+    <string name="contextmenu_deleteallentries">Effacer toutes les entrées</string>
     <string name="menu_allread">Marquer tout comme lu</string>
     <string name="menu_import">Importer depuis OPML</string>
     <string name="menu_export">Exporter vers OPML</string>
@@ -54,6 +56,9 @@
     <string name="settings_refreshonopen">Actualiser à l\'ouverture</string>
     <string name="settings_refreshonopen_description">Actualise tous les flux à l\'ouverture de l\'application</string>
 
+    <string name="settings_overridewifionly">Ignorer \"rafraîchir uniquementvia Wifi\"</string>
+	<string name="settings_overridewifionly_description">Autoriser le rafraîchissement des flux \"wifi seul\"</string>
+	
     <string name="settings_hideread">Cacher le contenu lu</string>
     <string name="settings_hideread_description">Cache le contenu déjà lu dans le widget</string>
     <string name="settings_entrysettings">Réglages du contenu</string>
@@ -92,16 +97,21 @@
     <string name="websiteorfeed">(site web ou flux)</string>
     <string name="feed_title">Titre</string>
     <string name="select_file">Sélectionner le fichier (racine SD)</string>
+    <string name="refreshonwifionly">Rafraîchir uniquement via Wifi</string>
 
     <string name="question_deletefeed">Voulez-vous vraiment effacer ce flux et tout son contenu\u00A0?</string>
+    <string name="question_refreshwowifi">Êtes-vous sûr de vouloir rafraîchir ce flux alors que vous n\'êtes pas sur wifi\u00A0?</string>
+    <string name="question_areyousure">Êtes-vous sûr\u00A0?</string>
 
     <string name="button_accept">Accepter</string>
     <string name="button_decline">Refuser</string>
+    <string name="button_alwaysokforall">Toujours Oui pour tout</string>
     
     <string name="message_exportedto">Exporté vers %s.</string>
 
     <string name="dialog_licenseagreement">Licence</string>
-
+    <string name="dialog_hint">Conseil</string>
+    
     <string-array name="settings_intervals">
         <item>1 minute</item>
         <item>5 minutes</item>
