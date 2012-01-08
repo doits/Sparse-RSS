@@ -202,10 +202,14 @@ public class EntriesListActivity extends ListActivity {
 				break;
 			}
 			case MENU_DELETEREAD_ID: {
-				entriesListAdapter.showRead(false);
 				new Thread() { // the delete process takes some time
 					public void run() {
-						getContentResolver().delete(uri, Strings.READDATE_GREATERZERO, null);
+						getContentResolver().delete(uri, Strings.READDATE_GREATERZERO+Strings.DB_AND+" ("+Strings.DB_EXCUDEFAVORITE+")", null);
+						runOnUiThread(new Runnable() {
+							public void run() {
+								entriesListAdapter.getCursor().requery();
+							}
+						});
 					}
 				}.start();
 				break;

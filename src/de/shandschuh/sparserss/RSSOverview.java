@@ -410,7 +410,7 @@ public class RSSOverview extends ListActivity {
 					public void run() {
 						String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
 						
-						if (getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI(id), Strings.READDATE_GREATERZERO, null) > 0) {
+						if (getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI(id), Strings.READDATE_GREATERZERO+Strings.DB_AND+" ("+Strings.DB_EXCUDEFAVORITE+")", null) > 0) {
 							getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI(id), null);
 						}
 					}
