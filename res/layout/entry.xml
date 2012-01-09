@@ -45,7 +45,8 @@
 		style="@android:style/ButtonBar">
   	    <Button 
   	        android:layout_height="wrap_content" 
-  	        android:text="&lt;-" 
+  	        android:text="\u21E6"
+  	        android:textAppearance="?android:attr/textAppearanceLarge"
   	        android:id="@+id/prev_button" 
   	        android:layout_width="70dp"/>
   	    <Button 
@@ -57,7 +58,8 @@
 		    android:layout_weight="1"/>
   	    <Button 
   	        android:layout_height="wrap_content" 
-  	        android:text="-&gt;" 
+  	        android:text="\u21E8" 
+  	        android:textAppearance="?android:attr/textAppearanceLarge"
   	        android:id="@+id/next_button" 
   	        android:layout_width="70dp"/>
     </LinearLayout>
