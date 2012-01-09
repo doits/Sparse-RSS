@@ -30,6 +30,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -109,7 +110,13 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		
 		if (iconBytes != null && iconBytes.length > 0) {
 			textView.setText(" " + (cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition)));
-			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null, null);
+			
+			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+			
+			if (bitmap.getHeight() > 16) {
+				bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
+			}
+			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null, null);
 		} else {
 			view.setTag(null);
 			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
