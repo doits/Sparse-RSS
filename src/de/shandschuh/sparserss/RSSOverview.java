@@ -236,7 +236,9 @@ public class RSSOverview extends ListActivity {
         });
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHENABLED, false)) {
         	startService(new Intent(this, RefreshService.class)); // starts the service independent to this activity
-        } 
+        } else {
+        	stopService(new Intent(this, RefreshService.class));
+        }
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
         	sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
         }
