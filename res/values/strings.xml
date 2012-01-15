@@ -28,7 +28,7 @@
     <string name="menu_disablefeedsort">Disable feed sort</string>
 
     <!-- For translators: you don't need to translate or include the following string -->
-    <string name="license">Copyright (c) 2010, 2011 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\n
+    <string name="license">Copyright (c) 2010-2012 Stefan Handschuh (handschuh.stefan@googlemail.com)\n\n
         Translators\n
          - Dutch: Eelko Berkenpies\n
          - Spanish: Sergio Martín\n
