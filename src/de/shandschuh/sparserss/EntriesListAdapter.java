@@ -33,6 +33,7 @@ import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
@@ -165,8 +166,15 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
 			
 			if (iconBytes != null && iconBytes.length > 0) {
+				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+				
+				if (bitmap.getHeight() > 16) {
+					bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
+				}
+				textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null, null);
+				
 				dateTextView.setText(" "+DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
-				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)), null, null,  null);
+				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null,  null);
 			} else {
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 				dateTextView.setText(DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn));
