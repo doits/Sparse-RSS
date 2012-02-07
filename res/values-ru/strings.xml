@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="menu_addfeed">Добавить</string>
+    <string name="norssfeeds">Нет лент RSS</string>
+    <string name="noentries">Нет новостей</string>
+    <string name="menu_refresh">Обновить</string>
+    <string name="contextmenu_delete">Удалить</string>
+    <string name="goto_url">Сайт</string>
+    <string name="favorites">Закладки</string>
+
+    <string name="editfeed_title">Правка ленты</string>
+    <string name="contextmenu_edit">Правка</string>
+    <string name="contextmenu_refresh">Обновить</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="contextmenu_markasread">Прочитано</string>
+    <string name="contextmenu_markasunread">Непрочитано</string>
+    <string name="contextmenu_hideread">Фильтр</string>
+    <string name="contextmenu_showread">Показать все</string>
+    <string name="contextmenu_copyurl">Копировать ссылку</string>
+    <string name="contextmenu_deleteread">Очистить</string>
+    <string name="contextmenu_deleteallentries">Очистить все</string>
+    <string name="menu_allread">Прочитано</string>
+    <string name="menu_import">Импорт из OPML</string>
+    <string name="menu_export">Экспорт в OPML</string>
+    <string name="menu_about">About</string>
+    <string name="menu_enablefeedsort">Сортировка</string>
+    <string name="menu_disablefeedsort">Назад</string>
+
+    <string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://code.google.com/p/sparserss</string>
+
+    <string name="settings_category_refresh">Автообновление</string>
+    <string name="settings_enabled">Включить</string>
+    <string name="settings_refreshenabled_description">Выполнять автообновление всех лент</string>
+    <string name="settings_refreshinterval">Интервал</string>
+    <string name="settings_refreshinterval_description">Промежуток времени между попытками автообновления</string>
+
+    <string name="settings_category_notofications">Уведомления</string>
+    <string name="settings_notificationsenabled_description">Сопровождать появление новостей уведомлением</string>
+    <string name="settings_notificationsringtone">Мелодия</string>
+    <string name="settings_notificationsringtone_description">Выберите мелодию для уведомления</string>
+    <string name="settings_notificationsvibrate">Вибрация</string>
+    <string name="settings_notificationsvibrate_description">Использовать вибрацию для уведомления</string>
+
+    <string name="settings_category_contentpresentation">Интерфейс</string>
+    <string name="settings_prioritize">По группам</string>
+    <string name="settings_prioritize_description">Располагать прочитанные новости ниже непрочитанных</string>
+    <string name="settings_keeptime">Автоочистка</string>
+    <string name="settings_keeptime_description">Промежуток времени, спустя который новости будут удалены</string>
+    <string name="settings_disablepictures">Отключить картинки</string>
+    <string name="settings_disablepictures_description">Не загружать и не отображать картинки</string>
+    <string name="settings_fetchpictures">Сохранять картинки</string>
+    <string name="settings_fetchpictures_description">Сохранять все картинки на карте</string>
+    <string name="settings_lighttheme">Светлая тема</string>
+    <string name="settings_lighttheme_description">Использовать светлую тему оформления</string>
+    <string name="settings_blacktextwhite">Чёрным по белому</string>
+    <string name="settings_blacktextwhite_description">Отображать открытую новость чёрным текстом на белом фоне</string>
+    <string name="settings_fontsize">Размер шрифта</string>
+    <string name="settings_fontsize_description">Размер шрифта открытой новости</string>
+
+    <string name="settings_refreshonopen">При запуске</string>
+    <string name="settings_refreshonopen_description">Обновлять все ленты при запуске Sparse RSS</string>
+
+	<string name="settings_overridewifionly">Не только по Wi-Fi</string>
+	<string name="settings_overridewifionly_description">Разрешать ручное обновление ленты с отметкой \"Только по Wi-Fi\" через сотовую сеть</string>
+	
+    <string name="settings_hideread">Скрывать прочитанное</string>
+    <string name="settings_hideread_description">Скрывать прочитанное на виджете</string>
+    <string name="settings_entrysettings">Настройки новостей</string>
+    <string name="settings_visiblefeeds">Отображаемые ленты</string>
+    <string name="settings_showtabs">Вкладки</string>
+    <string name="settings_showtabs_description">Использовать интерфейс с вкладками</string>
+
+    <string name="settings_category_network">Сеть</string>
+    <string name="settings_standarduseragent">Сменить user-agent</string>
+    <string name="settings_standarduseragent_description">Использовать стандартное значение user-agent</string>
+    <string name="settings_httphttpsredirects">Редирект http-https</string>
+    <string name="settings_httphttpsredirects_description">Использовать автоматическое перенаправление с http на https и обратно</string>
+    <string name="settings_proxy_wifionly">Для Wi-Fi</string>
+    <string name="settings_proxy_wifionly_description">Использовать только для Wi-Fi</string>
+    <string name="settings_proxy_host">Адрес</string>
+    <string name="settings_proxy_port">Порт</string>
+
+    <string name="never">Никогда</string>
+    <string name="update">Обновлено</string>
+    <string name="colon">:\u00A0</string>
+    <string name="unread">новых</string>
+    <string name="newentries">новости</string>
+    <string name="rss_feeds">Ленты RSS</string>
+    <string name="error">Ошибка</string>
+    <string name="priority">Приоритет</string>
+    <string name="select_feeds">Выбранные ленты</string>
+    <string name="all_feeds">Все ленты (и будущие)</string>
+    <string name="all">Новости</string>
+    <string name="overview">Ленты</string>
+
+    <string name="error_feedurlexists">Лента с таким адресом уже существует.</string>
+    <string name="error_feedimport">Импорт невозможен.</string>
+    <string name="error_feedexport">Экспорт не выполнен. Убедитесь, что карта подключена и не защищена от записи.</string>
+    <string name="error_invalidimportfile">Неправильный формат файла.</string>
+    <string name="error_externalstoragenotavailable">Карта недоступна.</string>
+
+    <string name="feed_url">Адрес</string>
+    <string name="optional">(необязательно)</string>
+    <string name="websiteorfeed">(сайта или ленты)</string>
+    <string name="feed_title">Название</string>
+    <string name="select_file">Выберите файл в корне карты</string>
+    <string name="refreshonwifionly">Только по Wi-Fi</string>
+    <string name="changelog">Changelog</string>
+
+    <string name="question_deletefeed">Лента и новости будут удалены. Продолжить?</string>
+	<string name="question_refreshwowifi">Обновить ленту через сотовую сеть?</string>
+	<string name="question_areyousure">Продолжить?</string>
+	
+    <string name="button_accept">Принять</string>
+    <string name="button_decline">Отклонить</string>
+    <string name="button_alwaysokforall">Да для всех</string>
+    
+    <string name="message_exportedto">Экспорт выполнен в %s.</string>
+
+    <string name="dialog_licenseagreement">License agreement</string>
+    <string name="dialog_hint">Совет</string>
+
+    <string-array name="settings_intervals">
+        <item>1 минута</item>
+        <item>5 минут</item>
+        <item>15 минут</item>
+        <item>30 минут</item>
+        <item>1 час</item>
+        <item>2 часа</item>
+        <item>6 часов</item>
+        <item>1 сутки</item>
+    </string-array>
+
+    <string-array name="settings_keeptimes">
+        <item>1 сутки</item>
+        <item>2 суток</item>
+        <item>4 суток</item>
+        <item>1 неделя</item>
+        <item>2 недели</item>
+        <item>1 месяц</item>
+        <item>2 месяца</item>
+        <item>3 месяца</item>
+        <item>Никогда</item>
+    </string-array>
+
+    <string-array name="settings_fontsizes">
+        <item>Обычный</item>
+        <item>+1</item>
+        <item>+2</item>
+        <item>+3</item>
+    </string-array>
+</resources>
