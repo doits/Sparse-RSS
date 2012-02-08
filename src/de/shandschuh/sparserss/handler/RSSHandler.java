@@ -184,6 +184,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private long realLastUpdate;
 	
+	private long now;
+	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
 		this.context = context;
@@ -233,6 +235,7 @@ public class RSSHandler extends DefaultHandler {
 		pubDateTagEntered = false;
 		dateTagEntered = false;
 		lastUpdateDateTagEntered = false;
+		now = System.currentTimeMillis();
 	}
 
 	@Override
@@ -397,7 +400,7 @@ public class RSSHandler extends DefaultHandler {
 				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					if (entryDate == null) {
-						values.put(FeedData.EntryColumns.DATE, System.currentTimeMillis());
+						values.put(FeedData.EntryColumns.DATE, now--);
 					} else {
 						values.remove(FeedData.EntryColumns.READDATE);
 					}
