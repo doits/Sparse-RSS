@@ -19,6 +19,12 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
+ 
+ 
+ Note for translators: only include the strings that differ from the 
+ English version. Translations will only be included in the Sparse RSS 
+ program, if they are licensed under the MIT license.
+ 
 -->
 <resources>
     <string name="app_name">Sparse rss</string>

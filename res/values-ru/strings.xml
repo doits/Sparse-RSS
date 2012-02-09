@@ -82,7 +82,6 @@
 
     <string name="never">Никогда</string>
     <string name="update">Обновлено</string>
-    <string name="colon">:\u00A0</string>
     <string name="unread">новых</string>
     <string name="newentries">новости</string>
     <string name="rss_feeds">Ленты RSS</string>
