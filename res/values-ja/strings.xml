@@ -19,6 +19,10 @@
     <string name="contextmenu_markasunread">未読の印をつける</string>
     <string name="contextmenu_hideread">既読の記事を表示しない</string>
     <string name="contextmenu_showread">既読の記事を表示</string>
+    <string name="contextmenu_copyurl">リンクをコピー</string>
+    <string name="contextmenu_deleteread">既読済みを削除</string>
+    <string name="contextmenu_deleteallentries">全てを削除</string>
+    
     <string name="menu_allread">全て既読</string>
     <string name="menu_import">OPMLからインポート</string>
     <string name="menu_export">OPMLへエクスポート</string>
@@ -71,7 +75,7 @@
 
     <string name="update">更新</string>
     <string name="never">決してしない</string>
-    <string name="unread">未既読</string>
+    <string name="unread">未読</string>
     <string name="newentries">新着記事</string>
     <string name="rss_feeds">RSSフィード</string>
     <string name="error">エラー</string>
