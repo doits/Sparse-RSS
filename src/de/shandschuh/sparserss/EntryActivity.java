@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -43,17 +43,24 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
+import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ViewFlipper;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntryActivity extends Activity {
@@ -111,6 +118,10 @@ public class EntryActivity extends Activity {
 	
 	private String _id;
 	
+	private String _nextId;
+	
+	private String _previousId;
+	
 	private Uri uri;
 	
 	private int feedId;
@@ -124,6 +135,14 @@ public class EntryActivity extends Activity {
 	private byte[] iconBytes;
 	
 	private WebView webView;
+	
+	private WebView webView0; // onyl needed for the animation
+	
+	private ViewFlipper viewFlipper;
+	
+	private Button nextButton;
+	
+	private Button previousButton;
 	
 	int scrollX;
 	
@@ -173,8 +192,50 @@ public class EntryActivity extends Activity {
 		if (RSSOverview.notificationManager == null) {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
-		webView = (WebView) findViewById(R.id.entry_abstract);
-		webView.setOnKeyListener(new OnKeyListener() {
+		
+		viewFlipper = (ViewFlipper) findViewById(R.id.content_flipper);
+		
+		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
+			public boolean onDown(MotionEvent e) {
+				return false;
+			}
+
+			public boolean onFling(MotionEvent e1, MotionEvent e2,
+					float velocityX, float velocityY) {
+				if (velocityX > 800) {
+					if (previousButton.isEnabled()) {
+						previousEntry(true);
+					}
+				} else if (velocityX < -800) {
+					if (nextButton.isEnabled()) {
+						nextEntry(true);
+					}
+				}
+				return false;
+			}
+
+			public void onLongPress(MotionEvent e) {
+			}
+
+			public boolean onScroll(MotionEvent e1, MotionEvent e2,
+					float distanceX, float distanceY) {
+				return false;
+			}
+
+			public void onShowPress(MotionEvent e) {
+				
+			}
+
+			public boolean onSingleTapUp(MotionEvent e) {
+				return false;
+			}
+			
+		});
+		webView = new WebView(this);
+		
+		viewFlipper.addView(webView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		
+		OnKeyListener onKeyEventListener = new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN) {
 					if (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == 94) {
@@ -187,9 +248,25 @@ public class EntryActivity extends Activity {
 				}
 				return false;
 			}
-		});
+		};
+		webView.setOnKeyListener(onKeyEventListener);
+		
+		OnTouchListener onTouchListener = new OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				return gestureDetector.onTouchEvent(event);
+			}
+		};
+		webView.setOnTouchListener(onTouchListener);
+		
+		webView0 = new WebView(this);
+		webView0.setOnKeyListener(onKeyEventListener);
+		webView0.setOnTouchListener(onTouchListener);
+		
 		scrollX = 0;
 		scrollY = 0;
+		
+		nextButton = (Button) findViewById(R.id.next_button);
+		previousButton = (Button) findViewById(R.id.prev_button);
 	}
 
 	@Override
@@ -320,8 +397,8 @@ public class EntryActivity extends Activity {
 				}
 				
 				entryCursor.close();
-				setupButton(R.id.prev_button, false, date);
-				setupButton(R.id.next_button, true, date);
+				setupButton(previousButton, false, date);
+				setupButton(nextButton, true, date);
 				webView.scrollTo(scrollX, scrollY); // resets the scrolling
 			}
 		} else {
@@ -336,7 +413,7 @@ public class EntryActivity extends Activity {
 		*/
 	}
 
-	private void setupButton(int buttonId, boolean successor, long date) {
+	private void setupButton(Button button, final boolean successor, long date) {
 		StringBuilder queryString = new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(date).append(AND_ID).append(successor ? '>' : '<').append(_id).append(')').append(OR_DATE).append(successor ? '<' : '>').append(date).append(')');
 		
 		if (!showRead) {
@@ -345,26 +422,61 @@ public class EntryActivity extends Activity {
 
 		Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns._ID}, queryString.toString() , null, successor ? DESC : ASC);
 		
-		Button button = (Button) findViewById(buttonId);
-		
 		if (cursor.moveToFirst()) {
 			button.setEnabled(true);
 			
 			final String id = cursor.getString(0);
+			
+			if (successor) {
+				_nextId = id;
+			} else {
+				_previousId = id;
+			}
 			button.setOnClickListener(new OnClickListener() {
-
-				public void onClick(View arg0) {
-					uri = FeedData.EntryColumns.ENTRY_CONTENT_URI(id);
-					getIntent().setData(uri);
-					scrollX = 0;
-					scrollY = 0;
-					reload();
+				public void onClick(View view) {
+					if (successor) {
+						nextEntry(false);
+					} else {
+						previousEntry(false);
+					}
 				}
 			});
 		} else {
 			button.setEnabled(false);
 		}
 		cursor.close();
+	}
+	
+	private void switchEntry(String id, boolean animate, Animation inAnimation, Animation outAnimation) {
+		uri = FeedData.EntryColumns.ENTRY_CONTENT_URI(id);
+		getIntent().setData(uri);
+		scrollX = 0;
+		scrollY = 0;
+		
+		if (animate) {
+			WebView dummy = webView; // switch reference
+			
+			webView = webView0;
+			webView0 = dummy;
+		}
+		
+		reload();
+		
+		if (animate) {
+			viewFlipper.setInAnimation(inAnimation);
+			viewFlipper.setOutAnimation(outAnimation);
+			viewFlipper.addView(webView, 1);
+			viewFlipper.showNext();
+			viewFlipper.removeViewAt(0);
+		}
+	}
+	
+	private void nextEntry(boolean animate) {
+		switchEntry(_nextId, animate, Animations.SLIDE_IN_RIGHT, Animations.SLIDE_OUT_LEFT);
+	}
+	
+	private void previousEntry(boolean animate) {
+		switchEntry(_previousId, animate, Animations.SLIDE_IN_LEFT, Animations.SLIDE_OUT_RIGHT);
 	}
 	
 	@Override
