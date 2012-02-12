@@ -113,7 +113,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 			
-			if (bitmap.getHeight() > 16) {
+			if (bitmap != null && bitmap.getHeight() > 16) {
 				bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
 			}
 			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null, null);

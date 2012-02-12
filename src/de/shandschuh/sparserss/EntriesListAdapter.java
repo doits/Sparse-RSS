@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -168,11 +168,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			if (iconBytes != null && iconBytes.length > 0) {
 				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 				
-				if (bitmap.getHeight() > 16) {
+				if (bitmap != null && bitmap.getHeight() > 16) {
 					bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
 				}
-				textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null, null);
-				
 				dateTextView.setText(" "+DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null,  null);
 			} else {
