@@ -102,7 +102,7 @@
     <string name="button_decline">許可しない</string>
 
     <string name="message_exportedto">データ %s エクスポート</string>
-    
+
     <string name="dialog_licenseagreement">認可</string>
     <string-array name="settings_intervals">
         <item>１分</item>
@@ -134,4 +134,3 @@
         <item>+3</item>
     </string-array>
 </resources>
-

@@ -114,9 +114,9 @@
     <string name="settings_refreshonopen">Refresh feeds on open</string>
     <string name="settings_refreshonopen_description">Refreshes all feeds after opening the application</string>
 
-	<string name="settings_overridewifionly">Override \"refresh on wifi only\"</string>
-	<string name="settings_overridewifionly_description">Allow manual refreshing of single \"wifi-only\" feeds</string>
-	
+    <string name="settings_overridewifionly">Override \"refresh on wifi only\"</string>
+    <string name="settings_overridewifionly_description">Allow manual refreshing of single \"wifi-only\" feeds</string>
+
     <string name="settings_hideread">Hide read entries</string>
     <string name="settings_hideread_description">Hide entries from the widget if they have been read</string>
     <string name="settings_entrysettings">Entry settings</string>
@@ -162,13 +162,13 @@
     <string name="changelog">Changelog</string>
 
     <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
-	<string name="question_refreshwowifi">Do you really want to refresh this feed while not being on wifi?</string>
-	<string name="question_areyousure">Are you sure?</string>
-	
+    <string name="question_refreshwowifi">Do you really want to refresh this feed while not being on wifi?</string>
+    <string name="question_areyousure">Are you sure?</string>
+
     <string name="button_accept">Accept</string>
     <string name="button_decline">Decline</string>
     <string name="button_alwaysokforall">Always ok for all</string>
-    
+
     <string name="message_exportedto">Exported into %s.</string>
 
     <string name="dialog_licenseagreement">License</string>

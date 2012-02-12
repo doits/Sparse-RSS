@@ -22,7 +22,7 @@
     <string name="contextmenu_copyurl">Kopiere Link in Zwischenablage</string>
     <string name="contextmenu_deleteread">Alle gelesenen Einträge löschen</string>
     <string name="contextmenu_deleteallentries">Alle Einträge löschen</string>
-    
+
     <string name="menu_allread">Alle gelesen</string>
     <string name="menu_import">Importiere von OPML</string>
     <string name="menu_export">Exportiere nach OPML</string>
@@ -62,9 +62,9 @@
     <string name="settings_refreshonopen">Aktualisiere bei Start</string>
     <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
 
-	<string name="settings_overridewifionly">Überschreibe \"Nur mit WLan aktualisieren\"</string>
-	<string name="settings_overridewifionly_description">Erlaube manuelles Aktualisieren einzelner \"nur WLan\" Feeds</string>
-	
+    <string name="settings_overridewifionly">Überschreibe \"Nur mit WLan aktualisieren\"</string>
+    <string name="settings_overridewifionly_description">Erlaube manuelles Aktualisieren einzelner \"nur WLan\" Feeds</string>
+
     <string name="settings_hideread">Verstecke gelesene Einträge</string>
     <string name="settings_hideread_description">Verstecke Einträge, wenn sie gelesen wurden</string>
     <string name="settings_entrysettings">Einträgeeinstellungen</string>
@@ -75,7 +75,7 @@
     <string name="settings_category_network">Netzwerk</string>
     <string name="settings_standarduseragent">Standard user-agent</string>
     <string name="settings_standarduseragent_description">Benutze den Standard-user-agent Namen</string>
-        <string name="settings_httphttpsredirects">Folge http &lt;-&gt; https Weiterleitungen</string>
+    <string name="settings_httphttpsredirects">Folge http &lt;-&gt; https Weiterleitungen</string>
     <string name="settings_httphttpsredirects_description">Folge automatisch http zu https (und umgekehrt) Weiterleitungen</string>
     <string name="settings_proxy_wifionly">Nur WLan</string>
     <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
@@ -111,7 +111,7 @@
     <string name="button_accept">Akzeptieren</string>
     <string name="button_decline">Ablehnen</string>
     <string name="button_alwaysokforall">Immer Ok für alle</string>
-    
+
     <string name="message_exportedto">In Datei %s exportiert.</string>
 
     <string name="dialog_licenseagreement">Lizenz</string>

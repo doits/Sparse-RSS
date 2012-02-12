@@ -14,10 +14,7 @@
     <string name="contextmenu_refresh">Vernieuwen</string>
     <string name="menu_settings">Instellingen</string>
     <string name="contextmenu_markasread">Markeer als gelezen</string>
-    <plurals name="contextmenu_markasunread">
-        <item quantity="one">Markeer als ongelezen</item>
-        <item quantity="other">Markeer als ongelezen</item>
-    </plurals>
+    <string name="contextmenu_markasunread">Markeer als ongelezen</string>
     <string name="contextmenu_hideread">Verberg gelezen artikelen</string>
     <string name="contextmenu_showread">Toon gelezen artikelen</string>
     <string name="menu_allread">Alles als gelezen markeren</string>
@@ -26,7 +23,7 @@
     <string name="menu_about">Over</string>
     <string name="menu_enablefeedsort">Sorteer activeren</string>
     <string name="menu_disablefeedsort">Sort off</string>
-    
+
     <string name="license_intro">De software wordt verspreid onder de MIT open source licentie en de broncode is beschikbaar via http://code.google.com/p/sparserss</string>
 
     <string name="settings_category_refresh">Automatisch vernieuwen</string>

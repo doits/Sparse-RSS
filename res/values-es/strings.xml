@@ -23,7 +23,7 @@
     <string name="menu_about">Acerca de</string>
     <string name="menu_enablefeedsort">Ordenar activar</string>
     <string name="menu_disablefeedsort">Ordenar off</string>
-    
+
     <string name="license_intro">Este software se distribuye bajo licencia de código abierto MIT y el código fuente está disponible en http://code.google.com/p/sparserss</string>
 
     <string name="settings_category_refresh">Ajustes de actualizaciones</string>

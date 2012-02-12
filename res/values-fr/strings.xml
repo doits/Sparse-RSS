@@ -111,7 +111,7 @@
 
     <string name="dialog_licenseagreement">Licence</string>
     <string name="dialog_hint">Conseil</string>
-    
+
     <string-array name="settings_intervals">
         <item>1 minute</item>
         <item>5 minutes</item>
