@@ -109,14 +109,17 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		byte[] iconBytes = cursor.getBlob(iconPosition);
 		
 		if (iconBytes != null && iconBytes.length > 0) {
-			textView.setText(" " + (cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition)));
+			
 			
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 			
 			if (bitmap != null && bitmap.getHeight() > 16) {
 				bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
+				textView.setText(" " + (cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition)));
+				textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null, null);
+			} else {
+				textView.setText(cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition));
 			}
-			textView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null, null);
 		} else {
 			view.setTag(null);
 			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);

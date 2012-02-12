@@ -170,8 +170,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 				
 				if (bitmap != null && bitmap.getHeight() > 16) {
 					bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
+					dateTextView.setText(" "+DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
+				} else {
+					dateTextView.setText(DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn));
 				}
-				dateTextView.setText(" "+DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null,  null);
 			} else {
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
