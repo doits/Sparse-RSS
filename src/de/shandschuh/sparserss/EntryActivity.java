@@ -31,6 +31,7 @@ import java.util.Date;
 import android.R.color;
 import android.app.Activity;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -136,7 +137,7 @@ public class EntryActivity extends Activity {
 	
 	private WebView webView;
 	
-	private WebView webView0; // onyl needed for the animation
+	private WebView webView0; // only needed for the animation
 	
 	private ViewFlipper viewFlipper;
 	
@@ -548,5 +549,17 @@ public class EntryActivity extends Activity {
 			webView.pageDown(false);
 		}
 	}
-	
+
+	/**
+	 * Works around android issue 6191
+	 */
+	@Override
+	public void unregisterReceiver(BroadcastReceiver receiver) {
+		try {
+			super.unregisterReceiver(receiver);
+		} catch (Exception e) {
+			// do nothing
+		}
+	}
+
 }
