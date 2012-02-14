@@ -85,9 +85,11 @@ public class EntryActivity extends Activity {
 	
 	private static final String DESC = "date desc, _id asc limit 1";
 	
-	private static final String FONT_START = "<body link=\"#97ACE5\" text=\"#D0D0D0\">";
+	private static final String CSS = "<head><style type=\"text/css\">img {max-width: 100%;}</style></head>";
 	
-	private static final String FONT_FONTSIZE_START = "<body link=\"#97ACE5\" text=\"#D0D0D0\"><font size=\"+";
+	private static final String FONT_START = CSS+"<body link=\"#97ACE5\" text=\"#D0D0D0\">";
+	
+	private static final String FONT_FONTSIZE_START = CSS+"<body link=\"#97ACE5\" text=\"#D0D0D0\"><font size=\"+";
 	
 	private static final String FONTSIZE_START = "<font size=\"+";
 	
@@ -203,13 +205,15 @@ public class EntryActivity extends Activity {
 
 			public boolean onFling(MotionEvent e1, MotionEvent e2,
 					float velocityX, float velocityY) {
-				if (velocityX > 800) {
-					if (previousButton.isEnabled()) {
-						previousEntry(true);
-					}
-				} else if (velocityX < -800) {
-					if (nextButton.isEnabled()) {
-						nextEntry(true);
+				if (Math.abs(velocityY) < 500) {
+					if (velocityX > 800) {
+						if (previousButton.isEnabled()) {
+							previousEntry(true);
+						}
+					} else if (velocityX < -800) {
+						if (nextButton.isEnabled()) {
+							nextEntry(true);
+						}
 					}
 				}
 				return false;
