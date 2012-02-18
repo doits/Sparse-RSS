@@ -47,7 +47,7 @@
         <receiver android:name=".widget.SparseRSSAppWidgetProvider" >
 		    <intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		        <action android:name="de.shandschuh.sparserss.widget.UPDATE" />
+		        <action android:name="de.shandschuh.sparserss.FEEDUPDATED" />
 		    </intent-filter>
 		    <meta-data android:name="android.appwidget.provider"
 		               android:resource="@xml/widgetinfo" />
