@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -433,7 +433,7 @@ public class FetcherService extends IntentService {
 		cursor.close();
 		
 		if (result > 0) {
-			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET));
+			context.sendBroadcast(new Intent(Strings.ACTION_UPDATEWIDGET).putExtra(Strings.COUNT, result));
 		}
 		return result;
 	}
