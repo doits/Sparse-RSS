@@ -417,13 +417,19 @@ public class RSSHandler extends DefaultHandler {
 					}
 				}
 				
+				String enclosureString = null;
+				
+				StringBuilder existanceStringBuilder = new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG);
+				
 				if (enclosure != null) {
-					values.put(FeedData.EntryColumns.ENCLOSURE, enclosure.toString());
+					enclosureString = enclosure.toString();
+					values.put(FeedData.EntryColumns.ENCLOSURE, enclosureString);
+					existanceStringBuilder.append(Strings.DB_AND).append(FeedData.EntryColumns.ENCLOSURE).append(Strings.DB_ARG);
 				}
 				
 				String entryLinkString = entryLink.toString().trim();
 
-				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
+				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), enclosureString != null ? new String[] {entryLinkString, enclosureString} : new String[] {entryLinkString}) == 0) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					if (entryDate == null) {
 						values.put(FeedData.EntryColumns.DATE, now--);
