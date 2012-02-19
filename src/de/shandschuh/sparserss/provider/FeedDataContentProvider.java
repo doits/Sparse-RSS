@@ -48,7 +48,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
-	private static final int DATABASE_VERSION = 8;
+	private static final int DATABASE_VERSION = 9;
 	
 	private static final int URI_FEEDS = 1;
 	
@@ -163,9 +163,10 @@ public class FeedDataContentProvider extends ContentProvider {
 			if (oldVersion < 7) {
 				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.WIFIONLY).append(' ').append(FeedData.TYPE_BOOLEAN).toString());
 			}
-			if (oldVersion < 8) {
-				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.ENCODED).append(' ').append(FeedData.TYPE_TEXT).toString());
-			}
+			// we simply leave the "encoded" column untouched
+			if (oldVersion < 9) {
+				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.ENCLOSURE).append(' ').append(FeedData.TYPE_TEXT).toString());
+			} 
 		}
 
 		@Override

@@ -58,6 +58,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	public static final String AMP = "&";
 	
+	private static final String MARKER = "[@]";
+	
 	private static final String TAG_RSS = "rss";
 	
 	private static final String TAG_RDF = "rdf";
@@ -97,6 +99,10 @@ public class RSSHandler extends DefaultHandler {
 	private static final String ATTRIBUTE_URL = "url";
 	
 	private static final String ATTRIBUTE_HREF = "href";
+	
+	private static final String ATTRIBUTE_TYPE = "type";
+	
+	private static final String ATTRIBUTE_LENGTH = "length";
 	
 	private static final String[] TIMEZONES = {"MEST", "EST", "PST"};
 	
@@ -160,6 +166,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private StringBuilder description;
 	
+	private StringBuilder enclosure;
+	
 	private Uri feedEntiresUri;
 	
 	private int newCount;
@@ -219,6 +227,7 @@ public class RSSHandler extends DefaultHandler {
 		this.dateStringBuilder = null;
 		this.entryLink = null;
 		this.description = null;
+		this.enclosure = null;
 		inputStream = null;
 		reader = null;
 		entryDate = null;
@@ -310,9 +319,22 @@ public class RSSHandler extends DefaultHandler {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_ENCLOSURE.equals(localName)) {
-			if (entryLink == null) {
-				entryLink = new StringBuilder(attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
-			} // otherwise, use the already existing link which is more reliable
+			if (enclosure == null) { // fetch the first enclosure only
+				enclosure = new StringBuilder(attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
+				
+				enclosure.append(MARKER);
+				
+				String value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_TYPE);
+				
+				if (value != null) {
+					enclosure.append(value);
+				}
+				enclosure.append(MARKER);
+				value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_LENGTH);
+				if (value != null) {
+					enclosure.append(value);
+				}
+			}
 		}
 	}
 
@@ -395,6 +417,10 @@ public class RSSHandler extends DefaultHandler {
 					}
 				}
 				
+				if (enclosure != null) {
+					values.put(FeedData.EntryColumns.ENCLOSURE, enclosure.toString());
+				}
+				
 				String entryLinkString = entryLink.toString().trim();
 
 				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG).toString(), new String[] {entryLinkString}) == 0) {
@@ -433,6 +459,7 @@ public class RSSHandler extends DefaultHandler {
 			}
 			description = null;
 			title = null;
+			enclosure = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
 		}
