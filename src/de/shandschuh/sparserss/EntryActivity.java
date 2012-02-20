@@ -59,6 +59,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -98,6 +99,8 @@ public class EntryActivity extends Activity {
 	private static final String FONTSIZE_END = "</font>";
 	
 	private static final String FONT_END = "</font></body>";
+	
+	private static final String BODY_START = "<body>";
 	
 	private static final String BODY_END = "</body>";
 	
@@ -143,9 +146,11 @@ public class EntryActivity extends Activity {
 	
 	private ViewFlipper viewFlipper;
 	
-	private Button nextButton;
+	private ImageButton nextButton;
 	
-	private Button previousButton;
+	private ImageButton urlButton;
+	
+	private ImageButton previousButton;
 	
 	int scrollX;
 	
@@ -164,7 +169,7 @@ public class EntryActivity extends Activity {
 		canShowIcon = requestWindowFeature(Window.FEATURE_LEFT_ICON);
 
 		setContentView(R.layout.entry);
-		
+
 		try {
 			TextView titleTextView = (TextView) findViewById(android.R.id.title);
 			
@@ -205,7 +210,7 @@ public class EntryActivity extends Activity {
 
 			public boolean onFling(MotionEvent e1, MotionEvent e2,
 					float velocityX, float velocityY) {
-				if (Math.abs(velocityY) < 500) {
+				if (Math.abs(velocityY) < Math.abs(velocityX)) {
 					if (velocityX > 800) {
 						if (previousButton.isEnabled()) {
 							previousEntry(true);
@@ -270,8 +275,10 @@ public class EntryActivity extends Activity {
 		scrollX = 0;
 		scrollY = 0;
 		
-		nextButton = (Button) findViewById(R.id.next_button);
-		previousButton = (Button) findViewById(R.id.prev_button);
+		nextButton = (ImageButton) findViewById(R.id.next_button);
+		urlButton = ((ImageButton) findViewById(R.id.url_button));
+		urlButton.setAlpha(160);
+		previousButton = (ImageButton) findViewById(R.id.prev_button);
 	}
 
 	@Override
@@ -375,7 +382,7 @@ public class EntryActivity extends Activity {
 					if (fontsize > 0) {
 						webView.loadDataWithBaseURL(null, new StringBuilder(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONTSIZE_END).toString(), TEXT_HTML, UTF8, null);
 					} else {
-						webView.loadDataWithBaseURL(null, abstractText, TEXT_HTML, UTF8, null);
+						webView.loadDataWithBaseURL(null, new StringBuilder(CSS).append(BODY_START).append(abstractText).append(BODY_END).toString(), TEXT_HTML, UTF8, null);
 					}
 				} else {
 					if (fontsize > 0) {
@@ -387,8 +394,6 @@ public class EntryActivity extends Activity {
 				}
 				
 				link = entryCursor.getString(linkPosition);
-				
-				Button urlButton = ((Button) findViewById(R.id.url_button));
 				
 				if (link != null && link.length() > 0) {
 					urlButton.setEnabled(true);
@@ -418,7 +423,7 @@ public class EntryActivity extends Activity {
 		*/
 	}
 
-	private void setupButton(Button button, final boolean successor, long date) {
+	private void setupButton(ImageButton button, final boolean successor, long date) {
 		StringBuilder queryString = new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(date).append(AND_ID).append(successor ? '>' : '<').append(_id).append(')').append(OR_DATE).append(successor ? '<' : '>').append(date).append(')');
 		
 		if (!showRead) {
@@ -429,6 +434,7 @@ public class EntryActivity extends Activity {
 		
 		if (cursor.moveToFirst()) {
 			button.setEnabled(true);
+			button.setAlpha(90);
 			
 			final String id = cursor.getString(0);
 			
@@ -448,6 +454,7 @@ public class EntryActivity extends Activity {
 			});
 		} else {
 			button.setEnabled(false);
+			button.setAlpha(30);
 		}
 		cursor.close();
 	}

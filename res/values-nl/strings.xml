@@ -6,7 +6,6 @@
     <string name="noentries">Geen artikelen</string>
     <string name="menu_refresh">Vernieuwen</string>
     <string name="contextmenu_delete">Verwijder</string>
-    <string name="goto_url">Ga naar link</string>
     <string name="favorites">Favorieten</string>
 
     <string name="editfeed_title">Wijzig feed</string>

@@ -6,7 +6,6 @@
     <string name="noentries">Aucun message</string>
     <string name="menu_refresh">Actualiser</string>
     <string name="contextmenu_delete">Effacer</string>
-    <string name="goto_url">Suivre le lien</string>
     <string name="favorites">Favoris</string>
 
     <string name="editfeed_title">Éditer le flux</string>

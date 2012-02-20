@@ -6,7 +6,6 @@
     <string name="noentries">Keine Einträge</string>
     <string name="menu_refresh">Aktualisieren</string>
     <string name="contextmenu_delete">Löschen</string>
-    <string name="goto_url">Link aufrufen</string>
     <string name="favorites">Favoriten</string>
 
     <string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://code.google.com/p/sparserss</string>

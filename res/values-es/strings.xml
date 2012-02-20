@@ -6,7 +6,6 @@
     <string name="noentries">No hay entradas</string>
     <string name="menu_refresh">Actualizar</string>
     <string name="contextmenu_delete">Eliminar</string>
-    <string name="goto_url">Ir al enlace</string>
     <string name="favorites">Favoritos</string>
 
     <string name="editfeed_title">Editar canal</string>

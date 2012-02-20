@@ -5,7 +5,6 @@
     <string name="noentries">Нет новостей</string>
     <string name="menu_refresh">Обновить</string>
     <string name="contextmenu_delete">Удалить</string>
-    <string name="goto_url">Сайт</string>
     <string name="favorites">Закладки</string>
 
     <string name="editfeed_title">Правка ленты</string>
