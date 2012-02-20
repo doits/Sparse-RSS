@@ -6,7 +6,6 @@
     <string name="noentries">Hiçbir mesaj yok</string>
     <string name="menu_refresh">Tazele</string>
     <string name="contextmenu_delete">Sil</string>
-    <string name="goto_url">Bağlantıya git</string>
     <string name="favorites">Favoriler</string>
 
     <string name="editfeed_title">Besleme düzenle</string>
