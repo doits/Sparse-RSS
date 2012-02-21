@@ -86,7 +86,7 @@ public class EntryActivity extends Activity {
 	
 	private static final String DESC = "date desc, _id asc limit 1";
 	
-	private static final String CSS = "<head><style type=\"text/css\">img {max-width: 100%;}</style></head>";
+	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%}\nimg {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
 	
 	private static final String FONT_START = CSS+"<body link=\"#97ACE5\" text=\"#D0D0D0\">";
 	
@@ -171,7 +171,7 @@ public class EntryActivity extends Activity {
 		canShowIcon = requestWindowFeature(Window.FEATURE_LEFT_ICON);
 
 		setContentView(R.layout.entry);
-
+		
 		try {
 			TextView titleTextView = (TextView) findViewById(android.R.id.title);
 			
@@ -364,7 +364,6 @@ public class EntryActivity extends Activity {
 						
 						values.put(FeedData.EntryColumns.FAVORITE, favorite ? 1 : 0);
 						getContentResolver().update(uri, values, null, null);
-					
 					}
 				});
 				// loadData does not recognize the encoding without correct html-header
