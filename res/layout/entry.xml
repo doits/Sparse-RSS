@@ -34,7 +34,7 @@
         <ViewFlipper
             android:id="@+id/content_flipper"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:layout_gravity="fill"
             android:layout_weight="1" />
         <LinearLayout

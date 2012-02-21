@@ -28,7 +28,6 @@ package de.shandschuh.sparserss;
 import java.text.DateFormat;
 import java.util.Date;
 
-import android.R.color;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -38,6 +37,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -96,13 +96,13 @@ public class EntryActivity extends Activity {
 	
 	private static final String FONTSIZE_MIDDLE = "\">";
 	
-	private static final String FONTSIZE_END = "</font>";
+	private static final String FONTSIZE_END = "</font><br/><br/>";
 	
-	private static final String FONT_END = "</font></body>";
+	private static final String FONT_END = "</font><br/><br/></body>";
 	
 	private static final String BODY_START = "<body>";
 	
-	private static final String BODY_END = "</body>";
+	private static final String BODY_END = "<br/><br/></body>";
 	
 	private static final int MENU_COPYURL_ID = 1;
 	
@@ -157,6 +157,8 @@ public class EntryActivity extends Activity {
 	int scrollY;
 	
 	private String link;
+	
+	private LayoutParams layoutParams;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -241,9 +243,12 @@ public class EntryActivity extends Activity {
 			}
 			
 		});
+		
+		layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		
 		webView = new WebView(this);
 		
-		viewFlipper.addView(webView, new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+		viewFlipper.addView(webView, layoutParams);
 		
 		OnKeyListener onKeyEventListener = new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -266,6 +271,7 @@ public class EntryActivity extends Activity {
 				return gestureDetector.onTouchEvent(event);
 			}
 		};
+		
 		webView.setOnTouchListener(onTouchListener);
 		
 		webView0 = new WebView(this);
@@ -390,7 +396,7 @@ public class EntryActivity extends Activity {
 					} else {
 						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_START).append(abstractText).append(BODY_END).toString(), TEXT_HTML, UTF8, null);
 					}
-					webView.setBackgroundColor(color.black);
+					webView.setBackgroundColor(Color.BLACK);
 				}
 				
 				link = entryCursor.getString(linkPosition);
@@ -434,7 +440,7 @@ public class EntryActivity extends Activity {
 		
 		if (cursor.moveToFirst()) {
 			button.setEnabled(true);
-			button.setAlpha(90);
+			button.setAlpha(140);
 			
 			final String id = cursor.getString(0);
 			
@@ -454,7 +460,7 @@ public class EntryActivity extends Activity {
 			});
 		} else {
 			button.setEnabled(false);
-			button.setAlpha(30);
+			button.setAlpha(50);
 		}
 		cursor.close();
 	}
@@ -477,7 +483,7 @@ public class EntryActivity extends Activity {
 		if (animate) {
 			viewFlipper.setInAnimation(inAnimation);
 			viewFlipper.setOutAnimation(outAnimation);
-			viewFlipper.addView(webView, 1);
+			viewFlipper.addView(webView, layoutParams);
 			viewFlipper.showNext();
 			viewFlipper.removeViewAt(0);
 		}
