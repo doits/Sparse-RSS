@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -321,6 +321,7 @@ public class RSSOverview extends ListActivity {
 					};
 					
 					if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false)) {
+						intent.putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, true);
 						thread.start();
 					} else {
 						Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.WIFIONLY}, null, null, null);
@@ -344,6 +345,7 @@ public class RSSOverview extends ListActivity {
 							builder.setNeutralButton(R.string.button_alwaysokforall, new DialogInterface.OnClickListener() {
 					            public void onClick(DialogInterface dialog, int which) {
 					            	PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).edit().putBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, true).commit();
+					            	intent.putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, true);
 					            	thread.start();
 					            }
 					        });

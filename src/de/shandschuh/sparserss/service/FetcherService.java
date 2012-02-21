@@ -134,7 +134,7 @@ public class FetcherService extends IntentService {
 				proxy = null;
 			}
 
-			int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo, intent.getBooleanExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, false) || preferences.getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false));
+			int newCount = FetcherService.refreshFeedsStatic(FetcherService.this, intent.getStringExtra(Strings.FEEDID), networkInfo, intent.getBooleanExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, false));
 					
 			if (newCount > 0) {
 				if (preferences.getBoolean(Strings.SETTINGS_NOTIFICATIONSENABLED, false)) {
