@@ -289,7 +289,7 @@ public class RSSOverview extends ListActivity {
 			case MENU_REFRESH_ID: {
 				new Thread() {
 					public void run() {
-						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
+						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false)));
 					}
 				}.start();
 				break;
