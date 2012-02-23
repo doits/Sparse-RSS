@@ -204,7 +204,7 @@ public class EntryActivity extends Activity {
 		
 		nextButton = (ImageButton) findViewById(R.id.next_button);
 		urlButton = (ImageButton) findViewById(R.id.url_button);
-		urlButton.setAlpha(160);
+		urlButton.setAlpha(150);
 		previousButton = (ImageButton) findViewById(R.id.prev_button);
 		
 		viewFlipper = (ViewFlipper) findViewById(R.id.content_flipper);
