@@ -58,7 +58,6 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -96,13 +95,13 @@ public class EntryActivity extends Activity {
 	
 	private static final String FONTSIZE_MIDDLE = "\">";
 	
-	private static final String FONTSIZE_END = "</font><br/><br/>";
+	private static final String FONTSIZE_END = "</font><br/><br/><br/>";
 	
-	private static final String FONT_END = "</font><br/><br/></body>";
+	private static final String FONT_END = "</font><br/><br/><br/></body>";
 	
 	private static final String BODY_START = "<body>";
 	
-	private static final String BODY_END = "<br/><br/></body>";
+	private static final String BODY_END = "<br/><br/><br/></body>";
 	
 	private static final int MENU_COPYURL_ID = 1;
 	
@@ -522,12 +521,12 @@ public class EntryActivity extends Activity {
 			case MENU_DELETE_ID: {
 				getContentResolver().delete(uri, null, null);
 				
-				Button button = (Button) findViewById(R.id.next_button);
+				ImageButton button = (ImageButton) findViewById(R.id.next_button);
 				
 				if (button.isEnabled()) {
 					button.performClick();
 				} else {
-					button = (Button) findViewById(R.id.prev_button);
+					button = (ImageButton) findViewById(R.id.prev_button);
 					if (button.isEnabled()) {
 						button.performClick();
 					} else {
