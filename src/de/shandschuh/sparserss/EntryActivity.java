@@ -202,6 +202,11 @@ public class EntryActivity extends Activity {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 		
+		nextButton = (ImageButton) findViewById(R.id.next_button);
+		urlButton = (ImageButton) findViewById(R.id.url_button);
+		urlButton.setAlpha(160);
+		previousButton = (ImageButton) findViewById(R.id.prev_button);
+		
 		viewFlipper = (ViewFlipper) findViewById(R.id.content_flipper);
 		
 		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
@@ -279,11 +284,6 @@ public class EntryActivity extends Activity {
 		
 		scrollX = 0;
 		scrollY = 0;
-		
-		nextButton = (ImageButton) findViewById(R.id.next_button);
-		urlButton = ((ImageButton) findViewById(R.id.url_button));
-		urlButton.setAlpha(160);
-		previousButton = (ImageButton) findViewById(R.id.prev_button);
 	}
 
 	@Override
@@ -521,14 +521,11 @@ public class EntryActivity extends Activity {
 			case MENU_DELETE_ID: {
 				getContentResolver().delete(uri, null, null);
 				
-				ImageButton button = (ImageButton) findViewById(R.id.next_button);
-				
-				if (button.isEnabled()) {
-					button.performClick();
+				if (nextButton.isEnabled()) {
+					nextButton.performClick();
 				} else {
-					button = (ImageButton) findViewById(R.id.prev_button);
-					if (button.isEnabled()) {
-						button.performClick();
+					if (previousButton.isEnabled()) {
+						previousButton.performClick();
 					} else {
 						finish();
 					}
