@@ -50,7 +50,7 @@
                 android:background="#7C000000"
                 android:src="@android:drawable/ic_media_previous"/>
             <ImageButton 
-                android:layout_height="32dip"
+                android:layout_height="wrap_content"
                 android:id="@+id/url_button"
                 android:layout_width="fill_parent"
                 android:layout_gravity="fill"
