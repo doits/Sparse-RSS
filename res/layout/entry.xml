@@ -38,6 +38,7 @@
             android:layout_gravity="fill"
             android:layout_weight="1" />
         <LinearLayout
+            android:id="@+id/button_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -56,6 +57,12 @@
                 android:layout_weight="1"
                 android:background="#7C000000"
                 android:src="@android:drawable/ic_menu_view"/>
+            <ImageButton 
+                android:layout_height="fill_parent"
+                android:id="@+id/play_button"
+                android:layout_width="wrap_content"
+                android:background="#7C000000"
+                android:src="@android:drawable/ic_media_play"/>
             <ImageButton 
                 android:layout_height="fill_parent"
                 android:id="@+id/next_button"
