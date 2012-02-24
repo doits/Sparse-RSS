@@ -261,14 +261,12 @@ public class EntryActivity extends Activity {
 			}
 
 			public void onShowPress(MotionEvent e) {
-				showButtons();
+
 			}
 
 			public boolean onSingleTapUp(MotionEvent e) {
-				showButtons();
 				return false;
 			}
-			
 		});
 		
 		layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
