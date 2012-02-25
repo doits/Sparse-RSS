@@ -298,6 +298,12 @@ public class EntryActivity extends Activity {
 		};
 		
 		webView.setOnTouchListener(onTouchListener);
+		findViewById(R.id.entry_content).setOnTouchListener(new OnTouchListener() {
+			public boolean onTouch(View v, MotionEvent event) {
+				gestureDetector.onTouchEvent(event);
+				return true; // different to the above one!
+			}
+		});
 		
 		webView0 = new WebView(this);
 		webView0.setOnKeyListener(onKeyEventListener);
@@ -337,7 +343,9 @@ public class EntryActivity extends Activity {
 		return new SimpleTask() {
 			@Override
 			public void runControlled() {
-				buttonPanel.setVisibility(View.GONE);
+				if (webView.getContentHeight() > buttonPanel.getTop()) {
+					buttonPanel.setVisibility(View.GONE);
+				}
 			}
 			
 		};
