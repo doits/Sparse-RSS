@@ -87,7 +87,7 @@ public class EntryActivity extends Activity {
 	
 	private static final String DESC = "date desc, _id asc limit 1";
 	
-	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%}\nimg {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
+	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%}\nimg {max-width: 100%; height: auto;}\npre {white-space: pre-wrap;}</style></head>";
 	
 	private static final String FONT_START = CSS+"<body link=\"#97ACE5\" text=\"#D0D0D0\">";
 	
