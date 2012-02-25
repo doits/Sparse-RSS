@@ -105,6 +105,10 @@ public class EntryActivity extends Activity {
 	
 	private static final String BODY_END = "</body>";
 	
+	private static final String ATTRIBUTE_STYLE = " style=";
+	
+	private static final String ATTRIBUTE_IGNORE = " ignoreit=";
+	
 	private static final int MENU_COPYURL_ID = 1;
 	
 	private static final int MENU_DELETE_ID = 2;
@@ -424,6 +428,8 @@ public class EntryActivity extends Activity {
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
 					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
 				}
+				
+				abstractText = abstractText.replace(ATTRIBUTE_STYLE, ATTRIBUTE_IGNORE); // remove all styles
 				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
 				
