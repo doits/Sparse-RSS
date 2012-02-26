@@ -190,7 +190,7 @@ public class EntryActivity extends Activity {
 			
 			titleTextView.setSingleLine(true);
 			titleTextView.setHorizontallyScrolling(true);
-			titleTextView.setMarqueeRepeatLimit(-1);
+			titleTextView.setMarqueeRepeatLimit(1);
 			titleTextView.setEllipsize(TextUtils.TruncateAt.MARQUEE);
 			titleTextView.setFocusable(true);
 			titleTextView.setFocusableInTouchMode(true);
