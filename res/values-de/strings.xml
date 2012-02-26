@@ -106,6 +106,7 @@
     <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
     <string name="question_refreshwowifi">Wollen sie wirklich diesen Feed ohne WLan aktualisieren?</string>
     <string name="question_areyousure">Sind Sie sicher?</string>
+    <string name="question_playenclosure">Wollen Sie die Datei %1$s von angeblicher Größe von %2$s herunterladen und abspielen?\nDas kann sehr viel Datenvolumen verbrauchen!</string>
 
     <string name="button_accept">Akzeptieren</string>
     <string name="button_decline">Ablehnen</string>

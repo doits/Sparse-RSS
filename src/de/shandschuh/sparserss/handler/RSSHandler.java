@@ -58,8 +58,6 @@ public class RSSHandler extends DefaultHandler {
 	
 	public static final String AMP = "&";
 	
-	private static final String MARKER = "[@]";
-	
 	private static final String TAG_RSS = "rss";
 	
 	private static final String TAG_RDF = "rdf";
@@ -322,14 +320,14 @@ public class RSSHandler extends DefaultHandler {
 			if (enclosure == null) { // fetch the first enclosure only
 				enclosure = new StringBuilder(attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
 				
-				enclosure.append(MARKER);
+				enclosure.append(Strings.ENCLOSURE_SEPARATOR);
 				
 				String value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_TYPE);
 				
 				if (value != null) {
 					enclosure.append(value);
 				}
-				enclosure.append(MARKER);
+				enclosure.append(Strings.ENCLOSURE_SEPARATOR);
 				value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_LENGTH);
 				if (value != null) {
 					enclosure.append(value);

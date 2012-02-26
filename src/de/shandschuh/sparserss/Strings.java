@@ -151,5 +151,7 @@ public final class Strings {
 	public static final String READDATE_GREATERZERO = FeedData.EntryColumns.READDATE+">0";
 
 	public static final String COUNT = "count";
+	
+	public static final String ENCLOSURE_SEPARATOR = "[@]";  // exactly three characters!
 
 }

@@ -29,7 +29,7 @@
 
     <string name="settings_category_refresh">Автообновление</string>
     <string name="settings_enabled">Включить</string>
-    <string name="settings_refreshenabled_description">Выполнять автообновление всех лент</string>
+    <string name="settings_refreshenabled_description">Обновлять все ленты автоматически</string>
     <string name="settings_refreshinterval">Интервал</string>
     <string name="settings_refreshinterval_description">Промежуток времени между попытками автообновления</string>
 
@@ -41,14 +41,14 @@
     <string name="settings_notificationsvibrate_description">Использовать вибрацию для уведомления</string>
 
     <string name="settings_category_contentpresentation">Интерфейс</string>
-    <string name="settings_prioritize">По группам</string>
+    <string name="settings_prioritize">Группы</string>
     <string name="settings_prioritize_description">Располагать прочитанные новости ниже непрочитанных</string>
     <string name="settings_keeptime">Автоочистка</string>
     <string name="settings_keeptime_description">Промежуток времени, спустя который новости будут удалены</string>
     <string name="settings_disablepictures">Отключить графику</string>
-    <string name="settings_disablepictures_description">Не загружать и не отображать изображения</string>
+    <string name="settings_disablepictures_description">Не загружать и не показывать изображения</string>
     <string name="settings_fetchpictures">Сохранять графику</string>
-    <string name="settings_fetchpictures_description">Сохранять все изображения на карте</string>
+    <string name="settings_fetchpictures_description">Сохранять все изображения на карте памяти</string>
     <string name="settings_lighttheme">Светлая тема</string>
     <string name="settings_lighttheme_description">Использовать светлую тему оформления</string>
     <string name="settings_blacktextwhite">Чёрным по белому</string>
@@ -59,7 +59,7 @@
     <string name="settings_refreshonopen">При запуске</string>
     <string name="settings_refreshonopen_description">Обновлять все ленты при запуске Sparse rss</string>
     <string name="settings_overridewifionly">Не только по Wi-Fi</string>
-    <string name="settings_overridewifionly_description">Разрешать ручное обновление ленты с отметкой \"Только по Wi-Fi\" через сотовую сеть</string>
+    <string name="settings_overridewifionly_description">Разрешать принудительное обновление ленты с отметкой \"Только по Wi-Fi\" через сотовую сеть</string>
 
     <string name="settings_hideread">Скрывать прочитанное</string>
     <string name="settings_hideread_description">Скрывать прочитанное на виджете</string>
@@ -81,7 +81,7 @@
     <string name="never">никогда</string>
     <string name="update">Обновлено</string>
     <string name="unread">новых</string>
-    <string name="newentries">новости</string>
+    <string name="newentries">новых</string>
     <string name="rss_feeds">Ленты RSS</string>
     <string name="error">Ошибка</string>
     <string name="priority">Приоритет</string>
@@ -93,7 +93,7 @@
     <string name="error_feedurlexists">Лента с таким адресом уже существует</string>
     <string name="error_feedimport">Импорт невозможен</string>
     <string name="error_feedexport">Экспорт не выполнен. Убедитесь, что карта подключена и не защищена от записи</string>
-    <string name="error_invalidimportfile">Неправильный формат файла</string>
+    <string name="error_invalidimportfile">Неправильный формат OPML-файла</string>
     <string name="error_externalstoragenotavailable">Карта недоступна</string>
 
     <string name="feed_url">Адрес</string>

@@ -29,10 +29,13 @@ import java.text.DateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
+import android.app.AlertDialog.Builder;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -63,6 +66,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewFlipper;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -467,6 +471,49 @@ public class EntryActivity extends Activity {
 				
 				if (enclosure != null && enclosure.length() > 6) {
 					playButton.setVisibility(View.VISIBLE);
+					playButton.setOnClickListener(new OnClickListener() {
+						public void onClick(View v) {
+							final int position1 = enclosure.indexOf(Strings.ENCLOSURE_SEPARATOR);
+							
+							final int position2 = enclosure.indexOf(Strings.ENCLOSURE_SEPARATOR, position1+3);
+							
+							final Uri uri = Uri.parse(enclosure.substring(0, position1));
+							
+							Builder builder = new AlertDialog.Builder(EntryActivity.this);
+							
+							builder.setTitle(R.string.question_areyousure);
+							builder.setIcon(android.R.drawable.ic_dialog_alert);
+							if (position2+4 > enclosure.length()) {
+								builder.setMessage(getString(R.string.question_playenclosure, uri, position2+4 > enclosure.length() ? "'??'" : enclosure.substring(position2+3)));
+							} else {
+								try {
+									builder.setMessage(getString(R.string.question_playenclosure, uri, (Integer.parseInt(enclosure.substring(position2+3)) / 1024f)+"kb"));
+								} catch (Exception e) {
+									builder.setMessage(getString(R.string.question_playenclosure, uri, enclosure.substring(position2+3)));
+								}
+							}
+							builder.setCancelable(true);
+							builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									try {
+										startActivityForResult(new Intent(Intent.ACTION_VIEW).setDataAndType(uri, enclosure.substring(position1+3, position2)), 0);
+									} catch (Exception e) {
+										try {
+											startActivityForResult(new Intent(Intent.ACTION_VIEW, uri), 0); // fallbackmode - let the browser handle this
+										} catch (Throwable t) {
+											Toast.makeText(EntryActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+										}
+									}
+								}
+							});
+							builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.dismiss();
+								}
+							});
+							builder.show();
+						}
+					});
 				} else {
 					playButton.setVisibility(View.GONE);
 				}
