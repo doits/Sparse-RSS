@@ -153,5 +153,9 @@ public final class Strings {
 	public static final String COUNT = "count";
 	
 	public static final String ENCLOSURE_SEPARATOR = "[@]";  // exactly three characters!
+	
+	public static final String KB = "kb";
+	
+	public static final String QUESTIONMARKS = "'??'";
 
 }

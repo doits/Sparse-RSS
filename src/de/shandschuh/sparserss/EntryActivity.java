@@ -484,10 +484,10 @@ public class EntryActivity extends Activity {
 							builder.setTitle(R.string.question_areyousure);
 							builder.setIcon(android.R.drawable.ic_dialog_alert);
 							if (position2+4 > enclosure.length()) {
-								builder.setMessage(getString(R.string.question_playenclosure, uri, position2+4 > enclosure.length() ? "'??'" : enclosure.substring(position2+3)));
+								builder.setMessage(getString(R.string.question_playenclosure, uri, position2+4 > enclosure.length() ? Strings.QUESTIONMARKS : enclosure.substring(position2+3)));
 							} else {
 								try {
-									builder.setMessage(getString(R.string.question_playenclosure, uri, (Integer.parseInt(enclosure.substring(position2+3)) / 1024f)+"kb"));
+									builder.setMessage(getString(R.string.question_playenclosure, uri, (Integer.parseInt(enclosure.substring(position2+3)) / 1024f)+Strings.KB));
 								} catch (Exception e) {
 									builder.setMessage(getString(R.string.question_playenclosure, uri, enclosure.substring(position2+3)));
 								}
