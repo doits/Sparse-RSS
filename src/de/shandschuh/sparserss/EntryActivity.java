@@ -347,7 +347,7 @@ public class EntryActivity extends Activity {
 		return new SimpleTask() {
 			@Override
 			public void runControlled() {
-				if (webView.getContentHeight() > buttonPanel.getTop()) {
+				if (webView.getBottom() > buttonPanel.getTop()) {
 					buttonPanel.setVisibility(View.GONE);
 				}
 			}
