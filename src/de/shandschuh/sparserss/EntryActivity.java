@@ -114,6 +114,8 @@ public class EntryActivity extends Activity {
 	private static final int MENU_DELETE_ID = 2;
 	
 	private static final int BUTTON_ALPHA = 160;
+
+	private static final String IMAGE_ENCLOSURE = "[@]image/";
 	
 	private int titlePosition;
 	
@@ -469,7 +471,7 @@ public class EntryActivity extends Activity {
 				
 				final String enclosure = entryCursor.getString(enclosurePosition);
 				
-				if (enclosure != null && enclosure.length() > 6) {
+				if (enclosure != null && enclosure.length() > 6 && enclosure.indexOf(IMAGE_ENCLOSURE) == -1) {
 					playButton.setVisibility(View.VISIBLE);
 					playButton.setOnClickListener(new OnClickListener() {
 						public void onClick(View v) {
