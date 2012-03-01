@@ -179,6 +179,8 @@ public class EntryActivity extends Activity {
 	
 	private SimpleTask buttonHideTask;
 	
+	private View content;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if (MainTabActivity.isLightTheme(this)) {
@@ -304,7 +306,9 @@ public class EntryActivity extends Activity {
 		};
 		
 		webView.setOnTouchListener(onTouchListener);
-		findViewById(R.id.entry_content).setOnTouchListener(new OnTouchListener() {
+		
+		content = findViewById(R.id.entry_content);
+		content.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				gestureDetector.onTouchEvent(event);
 				return true; // different to the above one!
@@ -447,6 +451,8 @@ public class EntryActivity extends Activity {
 					} else {
 						webView.loadDataWithBaseURL(null, new StringBuilder(CSS).append(BODY_START).append(abstractText).append(BODY_END).toString(), TEXT_HTML, UTF8, null);
 					}
+					webView.setBackgroundColor(Color.WHITE);
+					content.setBackgroundColor(Color.WHITE);
 				} else {
 					if (fontsize > 0) {
 						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONT_END).toString(), TEXT_HTML, UTF8, null);
@@ -454,6 +460,7 @@ public class EntryActivity extends Activity {
 						webView.loadDataWithBaseURL(null, new StringBuilder(FONT_START).append(abstractText).append(BODY_END).toString(), TEXT_HTML, UTF8, null);
 					}
 					webView.setBackgroundColor(Color.BLACK);
+					content.setBackgroundColor(Color.BLACK);
 				}
 				
 				link = entryCursor.getString(linkPosition);
