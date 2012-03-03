@@ -654,16 +654,16 @@ public class RSSOverview extends ListActivity {
 				public void onClick(DialogInterface dialog, int which) {
 					String url = urlEditText.getText().toString();
 					
+					if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
+						url = Strings.HTTP+url;
+					}
+					
 					Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
 					
 					if (cursor.moveToFirst()) {
 						showDialog(DIALOG_ERROR_FEEDURLEXISTS);
 					} else {
 						ContentValues values = new ContentValues();
-						
-						if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
-							url = Strings.HTTP+url;
-						}
 						
 						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
 						values.put(FeedData.FeedColumns.URL, url);
