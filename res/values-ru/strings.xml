@@ -55,16 +55,24 @@
     <string name="settings_blacktextwhite_description">Отображать открытую новость чёрным текстом на белом фоне</string>
     <string name="settings_fontsize">Размер шрифта</string>
     <string name="settings_fontsize_description">Размер шрифта открытой новости</string>
+    <string name="settings_gestures">Жесты</string>
+    <string name="settings_gestures_description">Перелистывать новости жестами</string>
 
     <string name="settings_refreshonopen">При запуске</string>
     <string name="settings_refreshonopen_description">Обновлять все ленты при запуске Sparse rss</string>
+
     <string name="settings_overridewifionly">Не только по Wi-Fi</string>
     <string name="settings_overridewifionly_description">Разрешать принудительное обновление ленты с отметкой \"Только по Wi-Fi\" через сотовую сеть</string>
+
+    <string name="settings_enclosuredownloadwarning">Подтверждать загрузку</string>
+    <string name="settings_enclosuredownloadwarning_description">Предупреждать перед загрузкой и открытием вложенных файлов</string>
 
     <string name="settings_hideread">Скрывать прочитанное</string>
     <string name="settings_hideread_description">Скрывать прочитанное на виджете</string>
     <string name="settings_entrysettings">Настройки новостей</string>
     <string name="settings_visiblefeeds">Отображаемые ленты</string>
+    <string name="settings_widgetentrycount">Количество новостей</string>
+    <string name="settings_widgetentrycount_description">Количество новостей, отображаемых на виджете</string>
     <string name="settings_showtabs">Вкладки</string>
     <string name="settings_showtabs_description">Использовать интерфейс с вкладками</string>
 
@@ -107,6 +115,7 @@
     <string name="question_deletefeed">Лента и новости будут удалены. Продолжить?</string>
     <string name="question_refreshwowifi">Обновить ленту через сотовую сеть?</string>
     <string name="question_areyousure">Продолжить?</string>
+    <string name="question_playenclosure">Загрузить и открыть файл %1$s, примерный размер %2$s?/nВозможен приём большого объёма данных!</string>
 
     <string name="button_accept">Принять</string>
     <string name="button_decline">Отклонить</string>

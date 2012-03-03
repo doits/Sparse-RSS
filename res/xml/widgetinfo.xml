@@ -1,8 +1,7 @@
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-	android:minWidth="294dp"
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="294dp"
     android:minHeight="147dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/homescreenwidget"
-    android:configure="de.shandschuh.sparserss.widget.WidgetConfigActivity" >
-    >
-</appwidget-provider>
+    android:configure="de.shandschuh.sparserss.widget.WidgetConfigActivity"/>

@@ -113,7 +113,7 @@ public class EntryActivity extends Activity {
 	
 	private static final int MENU_DELETE_ID = 2;
 	
-	private static final int BUTTON_ALPHA = 160;
+	private static final int BUTTON_ALPHA = 180;
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
 	
@@ -181,6 +181,8 @@ public class EntryActivity extends Activity {
 	
 	private View content;
 	
+	private SharedPreferences preferences;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if (MainTabActivity.isLightTheme(this)) {
@@ -229,53 +231,14 @@ public class EntryActivity extends Activity {
 		buttonPanel = (LinearLayout) findViewById(R.id.button_panel);
 		nextButton = (ImageButton) findViewById(R.id.next_button);
 		urlButton = (ImageButton) findViewById(R.id.url_button);
-		urlButton.setAlpha(BUTTON_ALPHA+20);
+		urlButton.setAlpha(BUTTON_ALPHA+30);
 		previousButton = (ImageButton) findViewById(R.id.prev_button);
 		playButton = (ImageButton) findViewById(R.id.play_button);
 		playButton.setAlpha(BUTTON_ALPHA);
 		
 		viewFlipper = (ViewFlipper) findViewById(R.id.content_flipper);
 		
-		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
-			public boolean onDown(MotionEvent e) {
-				showButtons();
-				return false;
-			}
-
-			public boolean onFling(MotionEvent e1, MotionEvent e2,
-					float velocityX, float velocityY) {
-				if (Math.abs(velocityY) < Math.abs(velocityX)) {
-					if (velocityX > 800) {
-						if (previousButton.isEnabled()) {
-							previousEntry(true);
-						}
-					} else if (velocityX < -800) {
-						if (nextButton.isEnabled()) {
-							nextEntry(true);
-						}
-					}
-				}
-				return false;
-			}
-
-			public void onLongPress(MotionEvent e) {
-				showButtons();
-			}
-
-			public boolean onScroll(MotionEvent e1, MotionEvent e2,
-					float distanceX, float distanceY) {
-				showButtons();
-				return false;
-			}
-
-			public void onShowPress(MotionEvent e) {
-
-			}
-
-			public boolean onSingleTapUp(MotionEvent e) {
-				return false;
-			}
-		});
+		
 		
 		layoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 		
@@ -299,6 +262,58 @@ public class EntryActivity extends Activity {
 		};
 		webView.setOnKeyListener(onKeyEventListener);
 		
+		content = findViewById(R.id.entry_content);
+		
+		webView0 = new WebView(this);
+		webView0.setOnKeyListener(onKeyEventListener);
+		
+		preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		final boolean gestures = preferences.getBoolean(Strings.SETTINGS_GESTURESENABLED, true);
+		
+		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
+			public boolean onDown(MotionEvent e) {
+				showButtons();
+				return false;
+			}
+	
+			public boolean onFling(MotionEvent e1, MotionEvent e2,
+					float velocityX, float velocityY) {
+				if (gestures) {
+					if (Math.abs(velocityY) < Math.abs(velocityX)) {
+						if (velocityX > 800) {
+							if (previousButton.isEnabled()) {
+								previousEntry(true);
+							}
+						} else if (velocityX < -800) {
+							if (nextButton.isEnabled()) {
+								nextEntry(true);
+							}
+						}
+					}
+				}
+				return false;
+			}
+	
+			public void onLongPress(MotionEvent e) {
+				showButtons();
+			}
+	
+			public boolean onScroll(MotionEvent e1, MotionEvent e2,
+					float distanceX, float distanceY) {
+				showButtons();
+				return false;
+			}
+	
+			public void onShowPress(MotionEvent e) {
+	
+			}
+	
+			public boolean onSingleTapUp(MotionEvent e) {
+				return false;
+			}
+		});
+		
 		OnTouchListener onTouchListener = new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				return gestureDetector.onTouchEvent(event);
@@ -307,7 +322,6 @@ public class EntryActivity extends Activity {
 		
 		webView.setOnTouchListener(onTouchListener);
 		
-		content = findViewById(R.id.entry_content);
 		content.setOnTouchListener(new OnTouchListener() {
 			public boolean onTouch(View v, MotionEvent event) {
 				gestureDetector.onTouchEvent(event);
@@ -315,8 +329,6 @@ public class EntryActivity extends Activity {
 			}
 		});
 		
-		webView0 = new WebView(this);
-		webView0.setOnKeyListener(onKeyEventListener);
 		webView0.setOnTouchListener(onTouchListener);
 		
 		scrollX = 0;
@@ -345,7 +357,7 @@ public class EntryActivity extends Activity {
 		if (buttonHideTask != null) {
 			buttonHideTask.cancel();
 		}
-		buttonHideTask = generateHideTimerTask();		
+		buttonHideTask = generateHideTimerTask();
 		handler.postDelayed(buttonHideTask, 2000);
 	}
 	
@@ -357,7 +369,6 @@ public class EntryActivity extends Activity {
 					buttonPanel.setVisibility(View.GONE);
 				}
 			}
-			
 		};
 	}
 
@@ -429,8 +440,6 @@ public class EntryActivity extends Activity {
 				// loadData does not recognize the encoding without correct html-header
 				abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
 
-				SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-				
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
 					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
 				}
@@ -488,39 +497,41 @@ public class EntryActivity extends Activity {
 							
 							final Uri uri = Uri.parse(enclosure.substring(0, position1));
 							
-							Builder builder = new AlertDialog.Builder(EntryActivity.this);
-							
-							builder.setTitle(R.string.question_areyousure);
-							builder.setIcon(android.R.drawable.ic_dialog_alert);
-							if (position2+4 > enclosure.length()) {
-								builder.setMessage(getString(R.string.question_playenclosure, uri, position2+4 > enclosure.length() ? Strings.QUESTIONMARKS : enclosure.substring(position2+3)));
-							} else {
-								try {
-									builder.setMessage(getString(R.string.question_playenclosure, uri, (Integer.parseInt(enclosure.substring(position2+3)) / 1024f)+Strings.KB));
-								} catch (Exception e) {
-									builder.setMessage(getString(R.string.question_playenclosure, uri, enclosure.substring(position2+3)));
-								}
-							}
-							builder.setCancelable(true);
-							builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int which) {
+							if (preferences.getBoolean(Strings.SETTINGS_ENCLOSUREWARNINGSENABLED, true)) {
+								Builder builder = new AlertDialog.Builder(EntryActivity.this);
+								
+								builder.setTitle(R.string.question_areyousure);
+								builder.setIcon(android.R.drawable.ic_dialog_alert);
+								if (position2+4 > enclosure.length()) {
+									builder.setMessage(getString(R.string.question_playenclosure, uri, position2+4 > enclosure.length() ? Strings.QUESTIONMARKS : enclosure.substring(position2+3)));
+								} else {
 									try {
-										startActivityForResult(new Intent(Intent.ACTION_VIEW).setDataAndType(uri, enclosure.substring(position1+3, position2)), 0);
+										builder.setMessage(getString(R.string.question_playenclosure, uri, (Integer.parseInt(enclosure.substring(position2+3)) / 1024f)+getString(R.string.kb)));
 									} catch (Exception e) {
-										try {
-											startActivityForResult(new Intent(Intent.ACTION_VIEW, uri), 0); // fallbackmode - let the browser handle this
-										} catch (Throwable t) {
-											Toast.makeText(EntryActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-										}
+										builder.setMessage(getString(R.string.question_playenclosure, uri, enclosure.substring(position2+3)));
 									}
 								}
-							});
-							builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
-								}
-							});
-							builder.show();
+								builder.setCancelable(true);
+								builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+										showEnclosure(uri, enclosure, position1, position2);
+									}
+								});
+								builder.setNeutralButton(R.string.button_alwaysokforall, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+										preferences.edit().putBoolean(Strings.SETTINGS_ENCLOSUREWARNINGSENABLED, false).commit();
+										showEnclosure(uri, enclosure, position1, position2);
+									}
+								});
+								builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int which) {
+										dialog.dismiss();
+									}
+								});
+								builder.show();
+							} else {
+								showEnclosure(uri, enclosure, position1, position2);
+							}
 						}
 					});
 				} else {
@@ -543,6 +554,18 @@ public class EntryActivity extends Activity {
 			}
 		}.start();
 		*/
+	}
+	
+	private void showEnclosure(Uri uri, String enclosure, int position1, int position2) {
+		try {
+			startActivityForResult(new Intent(Intent.ACTION_VIEW).setDataAndType(uri, enclosure.substring(position1+3, position2)), 0);
+		} catch (Exception e) {
+			try {
+				startActivityForResult(new Intent(Intent.ACTION_VIEW, uri), 0); // fallbackmode - let the browser handle this
+			} catch (Throwable t) {
+				Toast.makeText(EntryActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 
 	private void setupButton(ImageButton button, final boolean successor, long date) {

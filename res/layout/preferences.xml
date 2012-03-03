@@ -28,6 +28,11 @@
             android:defaultValue="false"
             android:summary="@string/settings_overridewifionly_description"
             android:key="overridewifionly" />
+        <CheckBoxPreference
+            android:title="@string/settings_enclosuredownloadwarning"
+            android:defaultValue="true"
+            android:summary="@string/settings_enclosuredownloadwarning_description"
+            android:key="enclosurewarnings.enabled" />
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/settings_category_notofications">
@@ -101,6 +106,11 @@
             android:numeric="integer"
             android:entries="@array/settings_fontsizes"
             android:entryValues="@array/settings_fontsizevalues"/>
+        <CheckBoxPreference
+            android:title="@string/settings_gestures"
+            android:defaultValue="true"
+            android:summary="@string/settings_gestures_description"
+            android:key="gestures.enabled"/>
     </PreferenceCategory>
     <PreferenceCategory 
         android:title="@string/settings_category_network">

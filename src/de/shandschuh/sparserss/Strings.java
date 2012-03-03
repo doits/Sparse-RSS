@@ -72,6 +72,10 @@ public final class Strings {
 	
 	public static final String SETTINGS_OVERRIDEWIFIONLY = "overridewifionly";
 	
+	public static final String SETTINGS_GESTURESENABLED = "gestures.enabled";
+	
+	public static final String SETTINGS_ENCLOSUREWARNINGSENABLED = "enclosurewarnings.enabled";
+	
 	public static final String ACTION_REFRESHFEEDS = "de.shandschuh.sparserss.REFRESH";
 	
 	public static final String ACTION_UPDATEWIDGET = "de.shandschuh.sparserss.FEEDUPDATED";
@@ -153,8 +157,6 @@ public final class Strings {
 	public static final String COUNT = "count";
 	
 	public static final String ENCLOSURE_SEPARATOR = "[@]";  // exactly three characters!
-	
-	public static final String KB = "kb";
 	
 	public static final String QUESTIONMARKS = "'??'";
 

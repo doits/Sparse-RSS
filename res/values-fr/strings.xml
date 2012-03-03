@@ -51,17 +51,24 @@
     <string name="settings_blacktextwhite_description">Affiche le contenu en noir sur un fond blanc</string>
     <string name="settings_fontsize">Taille de la police</string>
     <string name="settings_fontsize_description">Taille de la police pour le contenu</string>
+    <string name="settings_gestures">Gestes</string>
+    <string name="settings_gestures_description">utiliser les gestes pour basculer d\'un message à l\'autre</string>
 
     <string name="settings_refreshonopen">Actualiser à l\'ouverture</string>
     <string name="settings_refreshonopen_description">Actualise tous les flux à l\'ouverture de l\'application</string>
 
     <string name="settings_overridewifionly">Ignorer \"rafraîchir uniquementvia Wifi\"</string>
-	<string name="settings_overridewifionly_description">Autoriser le rafraîchissement des flux \"wifi seul\"</string>
+    <string name="settings_overridewifionly_description">Autoriser le rafraîchissement des flux \"wifi seul\"</string>
+
+    <string name="settings_enclosuredownloadwarning">Avertissement pour les pièces jointes</string>
+    <string name="settings_enclosuredownloadwarning_description">Afficher un avertissement avant de télécharger/ouvrir des pièces jointes</string>
 	
     <string name="settings_hideread">Cacher le contenu lu</string>
     <string name="settings_hideread_description">Cache le contenu déjà lu dans le widget</string>
     <string name="settings_entrysettings">Réglages du contenu</string>
     <string name="settings_visiblefeeds">Flux visibles</string>
+    <string name="settings_widgetentrycount">Nombre d\'entrées</string>
+    <string name="settings_widgetentrycount_description">Nombre d\'entrées à afficher dans le widget</string>
     <string name="settings_showtabs">Montrer les onglets</string>
     <string name="settings_showtabs_description">Onglets additionnels pour les favoris et l\'ensemble des flux</string>
 
@@ -85,6 +92,7 @@
     <string name="all_feeds">Tous les flux (y compris ceux à venir)</string>
     <string name="all">Tous</string>
     <string name="overview">Mes flux</string>
+    <string name="kb">ko</string>
 
     <string name="error_feedurlexists">L\'URL existe déjà.</string>
     <string name="error_feedimport">Le fichier sélectionné n\'a pu être importé.</string>
@@ -101,11 +109,12 @@
     <string name="question_deletefeed">Voulez-vous vraiment effacer ce flux et tout son contenu\u00A0?</string>
     <string name="question_refreshwowifi">Êtes-vous sûr de vouloir rafraîchir ce flux alors que vous n\'êtes pas sur wifi\u00A0?</string>
     <string name="question_areyousure">Êtes-vous sûr\u00A0?</string>
+    <string name="question_playenclosure">Voulez-vous télécharger et lire le fichier %1$s d\'une taille présumée de %2$s ?\nCela peut consommer beaucoup de bande passante\u00A0!</string>
 
     <string name="button_accept">Accepter</string>
     <string name="button_decline">Refuser</string>
     <string name="button_alwaysokforall">Toujours Oui pour tout</string>
-    
+
     <string name="message_exportedto">Exporté vers %s.</string>
 
     <string name="dialog_licenseagreement">Licence</string>

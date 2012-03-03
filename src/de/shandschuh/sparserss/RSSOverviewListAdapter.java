@@ -34,6 +34,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Handler;
 import android.view.View;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
@@ -60,15 +61,34 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	
 	private int iconPosition;
 	
-	public RSSOverviewListAdapter(Activity context) {
-		super(context, R.layout.listitem, context.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
+	private Handler handler;
+	
+	private SimpleTask updateTask;
+	
+	public RSSOverviewListAdapter(Activity activity) {
+		super(activity, R.layout.listitem, activity.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
 		nameColumnPosition = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
 		lastUpdateColumn = getCursor().getColumnIndex(FeedData.FeedColumns.LASTUPDATE);
 		idPosition = getCursor().getColumnIndex(FeedData.FeedColumns._ID);
 		linkPosition = getCursor().getColumnIndex(FeedData.FeedColumns.URL);
 		errorPosition = getCursor().getColumnIndex(FeedData.FeedColumns.ERROR);
 		iconPosition = getCursor().getColumnIndex(FeedData.FeedColumns.ICON);
-		COLON = context.getString(R.string.colon);
+		COLON = activity.getString(R.string.colon);
+		handler = new Handler();
+		updateTask = new SimpleTask() {
+			@Override
+			public void runControlled() {
+				RSSOverviewListAdapter.super.onContentChanged();
+				cancel(); // cancel the task such that it does not run more than once without explicit intention
+			}
+			
+			@Override
+			public void postRun() {
+				if (getPostCount() > 1) { // enforce second run even if task is canceled
+					handler.postDelayed(updateTask, 1500);
+				}
+			}
+		};
 	}
 
 	@Override
@@ -126,6 +146,26 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			view.setTag(null);
 			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 			textView.setText(cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition));
+		}
+	}
+
+	@Override
+	protected synchronized void onContentChanged() {
+		/*
+		 * we delay the second(!) content change by 1.5 second such that it gets called at most once per 1.5 seconds 
+		 * to take stress away from the UI and avoid not needed updates
+		 */
+		if (!updateTask.isPosted()) {
+			super.onContentChanged();
+			updateTask.post(2); // we post 2 tasks
+			handler.postDelayed(updateTask, 1500); // waits one second until the task gets unposted
+			updateTask.cancel(); // put the canceled task in the queue to enable it again optionally
+		} else {
+			if (updateTask.getPostCount() < 2) {
+				updateTask.post(); // enables the task and adds a new one
+			} else {
+				updateTask.enable();
+			}
 		}
 	}
 }

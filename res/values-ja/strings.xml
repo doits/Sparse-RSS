@@ -21,7 +21,7 @@
     <string name="contextmenu_copyurl">リンクをコピー</string>
     <string name="contextmenu_deleteread">既読済みを削除</string>
     <string name="contextmenu_deleteallentries">全てを削除</string>
-    
+
     <string name="menu_allread">全て既読</string>
     <string name="menu_import">OPMLからインポート</string>
     <string name="menu_export">OPMLへエクスポート</string>
@@ -55,14 +55,24 @@
     <string name="settings_blacktextwhite_description">白色背景に黒い文字</string>
     <string name="settings_fontsize">文字の大きさ</string>
     <string name="settings_fontsize_description">個々の記事の文字の大きさ</string>
+    <string name="settings_gestures">スライド</string>
+    <string name="settings_gestures_description">記事をスライドさせる</string>
 
     <string name="settings_refreshonopen">スタート時に更新する</string>
     <string name="settings_refreshonopen_description">プログラム開始時に全てのフィードを更新する</string>
+
+    <string name="settings_overridewifionly">「ワイヤレス接続のみ」を無視する</string>
+    <string name="settings_overridewifionly_description">手動で個々の「ワイヤレス接続のみ」のフィードの更新を許可する</string>
+
+    <string name="settings_enclosuredownloadwarning">添付ファイルダウンロードの確認</string>
+    <string name="settings_enclosuredownloadwarning_description">記事の添付ファイルをダウンロードする前に確認メッセージを出す</string>
 
     <string name="settings_hideread">既読の記事を表示しない</string>
     <string name="settings_hideread_description">既読の記事を表示しない</string>
     <string name="settings_entrysettings">記事設定</string>
     <string name="settings_visiblefeeds">表示されているフィード</string>
+    <string name="settings_widgetentrycount">記事数</string>
+    <string name="settings_widgetentrycount_description">ウィジェットに表示する記事数</string>
     <string name="settings_showtabs">タブを表示する</string>
     <string name="settings_showtabs_description">お気に入りと全ての記事のためのタブを追加</string>
 
@@ -96,6 +106,9 @@
     <string name="websiteorfeed">(ウェブサイト又はフィード)</string>
 
     <string name="question_deletefeed">本当にこのフィードとフィード内の全ての記事を消去しますか?</string>
+    <string name="question_refreshwowifi">ワイヤレスの無い環境でも更新しますか？</string>
+    <string name="question_areyousure">確認</string>
+    <string name="question_playenclosure">%1$sというファイル(大きさは%2$sらしい）をダウンロードしますか？\nデータ量を多く必要とするかもしれません！</string>
     
     <string name="button_accept">許可する</string>
     <string name="button_decline">許可しない</string>

@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010 Stefan Handschuh
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.ListPreference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.view.View;
@@ -61,7 +62,9 @@ public class WidgetConfigActivity extends PreferenceActivity {
         addPreferencesFromResource(R.layout.widgetpreferences);
         setContentView(R.layout.widgetconfig);
         
-        final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) getPreferenceScreen().getPreference(0); // change to 1 on hideread usage
+        final ListPreference entryCountPreference = (ListPreference) getPreferenceScreen().getPreference(0);
+        
+        final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) getPreferenceScreen().getPreference(1);
         
 		
 		Cursor cursor = this.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, NAMECOLUMN}, null, null, null);
@@ -113,9 +116,13 @@ public class WidgetConfigActivity extends PreferenceActivity {
 					
 					String feedIds = builder.toString();
 					
+					String entryCount = entryCountPreference.getValue();
+					
 					preferences.putString(widgetId+".feeds", feedIds);
+					preferences.putString(widgetId+".entrycount", entryCount);
 					preferences.commit();
-					SparseRSSAppWidgetProvider.updateAppWidget(WidgetConfigActivity.this, widgetId, hideRead, feedIds);
+					
+					SparseRSSAppWidgetProvider.updateAppWidget(WidgetConfigActivity.this, widgetId, hideRead, entryCount, feedIds);
 					setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
 					finish();
 				}

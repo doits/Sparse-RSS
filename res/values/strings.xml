@@ -109,6 +109,8 @@
     <string name="settings_blacktextwhite_description">Present rss entries in black text on white background</string>
     <string name="settings_fontsize">Font size</string>
     <string name="settings_fontsize_description">Font size for single entries</string>
+    <string name="settings_gestures">Gestures</string>
+    <string name="settings_gestures_description">Use gestures to switch entries</string>
 
     <string name="settings_refreshonopen">Refresh feeds on open</string>
     <string name="settings_refreshonopen_description">Refreshes all feeds after opening the application</string>
@@ -116,10 +118,15 @@
     <string name="settings_overridewifionly">Override \"refresh on wifi only\"</string>
     <string name="settings_overridewifionly_description">Allow manual refreshing of single \"wifi-only\" feeds</string>
 
+    <string name="settings_enclosuredownloadwarning">Enclosure download warning</string>
+    <string name="settings_enclosuredownloadwarning_description">Show warning before opening opening/downloading attached files</string>
+
     <string name="settings_hideread">Hide read entries</string>
     <string name="settings_hideread_description">Hide entries from the widget if they have been read</string>
     <string name="settings_entrysettings">Entry settings</string>
     <string name="settings_visiblefeeds">Visible feeds</string>
+    <string name="settings_widgetentrycount">Entry count</string>
+    <string name="settings_widgetentrycount_description">Number of entries that are shown in the widget</string>
     <string name="settings_showtabs">Show tabs</string>
     <string name="settings_showtabs_description">Additional tabs for favorite and all feed-entries</string>
 
@@ -145,6 +152,7 @@
     <string name="all_feeds">All feeds (incl. future)</string>
     <string name="all">All</string>
     <string name="overview">Overview</string>
+    <string name="kb">kb</string>
 
     <string name="error_feedurlexists">The URL already exists.</string>
     <string name="error_feedimport">The selected file could not be imported.</string>

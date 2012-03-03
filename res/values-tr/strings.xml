@@ -51,6 +51,8 @@
     <string name="settings_blacktextwhite_description">RSS mesajlarını siyah metin olarak beyaz bir zemin üzerinde göster</string>
     <string name="settings_fontsize">Yazı tipi boyutu</string>
     <string name="settings_fontsize_description">Mesajlar için yazı tipi boyutu</string>
+    <string name="settings_gestures">Hareketler</string>
+    <string name="settings_gestures_description">Hareketlerle mesajlar arası geçiş yapmayı etkinleştir</string>
 
     <string name="settings_refreshonopen">Açılışta beslemeleri tazele</string>
     <string name="settings_refreshonopen_description">Tüm beslemeleri uygulama açıldığında tazele</string>
@@ -58,10 +60,15 @@
     <string name="settings_overridewifionly">\"sadece wifi vasıtasıyla tazele\" ayarını görmezden gel</string>
     <string name="settings_overridewifionly_description">\"sadece wifi\" beslemelerinin tek tek elle tazelenmesine izin ver</string>
 
+    <string name="settings_enclosuredownloadwarning">Ek dosya indirim uyarısı</string>
+    <string name="settings_enclosuredownloadwarning_description">Ek dosya indirimi/açılışı öncesinde bir uyarı göster</string>
+
     <string name="settings_hideread">Okunmuş tüm mesajları sakla</string>
     <string name="settings_hideread_description">Okunmuş mesajları widget\'ten sakla</string>
     <string name="settings_entrysettings">Mesaj ayarları</string>
     <string name="settings_visiblefeeds">Gösterilen beslemeler</string>
+    <string name="settings_widgetentrycount">Unsur sayısı</string>
+    <string name="settings_widgetentrycount_description">Widget üzerinde gösterilecek unsur sayısı</string>
     <string name="settings_showtabs">Sekmeleri göster</string>
     <string name="settings_showtabs_description">Favori ve tüm beslemeler için ek sekmeler</string>
 
@@ -100,6 +107,7 @@
     <string name="question_deletefeed">Bu beslemeyi ve tüm mesajlarını silmek istediğinizden emin misiniz?</string>
     <string name="question_refreshwowifi">Bu beslemeyi wifi vasıtasıyla bağlanmadığınız hâlde tazelemek istediğinizden emin misiniz?</string>
     <string name="question_areyousure">Emin misiniz?</string>
+    <string name="question_playenclosure">Boyutu %2$s varsayılan %1$s dosyasını indirip okumak istediğinizden emin misiniz?\nBu yüksek ağ trafiğine yol açabilir!</string>
 
     <string name="button_accept">Tamam</string>
     <string name="button_decline">İptal</string>

@@ -57,17 +57,24 @@
     <string name="settings_blacktextwhite_description">Präsentiere rss-Einträge mit schwarzem Text auf weißem Hintergrund</string>
     <string name="settings_fontsize">Schriftgröße</string>
     <string name="settings_fontsize_description">Schriftgröße für einzelne Einträge</string>
-
+    <string name="settings_gestures">Gesten</string>
+    <string name="settings_gestures_description">Wechseln von Artikeln mittels Gesten</string>
+    
     <string name="settings_refreshonopen">Aktualisiere bei Start</string>
     <string name="settings_refreshonopen_description">Aktualisiere alle Feeds, wenn das Programm startet</string>
 
     <string name="settings_overridewifionly">Überschreibe \"Nur mit WLan aktualisieren\"</string>
     <string name="settings_overridewifionly_description">Erlaube manuelles Aktualisieren einzelner \"nur WLan\" Feeds</string>
 
+    <string name="settings_enclosuredownloadwarning">Anhang-Download-Warnung</string>
+    <string name="settings_enclosuredownloadwarning_description">Zeige eine Warnung vor dem öffnen/herunterladen von angehangenen Dateien</string>
+
     <string name="settings_hideread">Verstecke gelesene Einträge</string>
     <string name="settings_hideread_description">Verstecke Einträge, wenn sie gelesen wurden</string>
     <string name="settings_entrysettings">Einträgeeinstellungen</string>
     <string name="settings_visiblefeeds">Sichtbare Feeds</string>
+    <string name="settings_widgetentrycount">Eintragsanzahl</string>
+    <string name="settings_widgetentrycount_description">Anzahl an Einträgen die im Widget gezeigt werden</string>
     <string name="settings_showtabs">Zeige Tabs</string>
     <string name="settings_showtabs_description">Zusätzliche Tabs für Favoriten und alle Einträge</string>
 
@@ -104,7 +111,7 @@
     <string name="websiteorfeed">(Webseite oder Feed)</string>
 
     <string name="question_deletefeed">Wollen Sie wirklich diesen Feed und all seine Einträge löschen?</string>
-    <string name="question_refreshwowifi">Wollen sie wirklich diesen Feed ohne WLan aktualisieren?</string>
+    <string name="question_refreshwowifi">Wollen Sie wirklich diesen Feed ohne WLan aktualisieren?</string>
     <string name="question_areyousure">Sind Sie sicher?</string>
     <string name="question_playenclosure">Wollen Sie die Datei %1$s von angeblicher Größe von %2$s herunterladen und abspielen?\nDas kann sehr viel Datenvolumen verbrauchen!</string>
 

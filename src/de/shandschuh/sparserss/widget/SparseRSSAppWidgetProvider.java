@@ -43,7 +43,7 @@ import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
-	private static final String LIMIT = " limit 10";
+	private static final String LIMIT = " limit ";
 	
 	private static final int[] IDS = {R.id.news_1, R.id.news_2, R.id.news_3, R.id.news_4, R.id.news_5, R.id.news_6, R.id.news_7, R.id.news_8, R.id.news_9, R.id.news_10};
 	
@@ -60,15 +60,15 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 		SharedPreferences preferences = context.getSharedPreferences(SparseRSSAppWidgetProvider.class.getName(), 0);
 		
 		for (int n = 0, i = appWidgetIds.length; n < i; n++) {
-			updateAppWidget(context, appWidgetManager, appWidgetIds[n], preferences.getBoolean(appWidgetIds[n]+".hideread", false), preferences.getString(appWidgetIds[n]+".feeds", Strings.EMPTY));
+			updateAppWidget(context, appWidgetManager, appWidgetIds[n], preferences.getBoolean(appWidgetIds[n]+".hideread", false), preferences.getString(appWidgetIds[n]+".entrycount", "10"), preferences.getString(appWidgetIds[n]+".feeds", Strings.EMPTY));
 		}
     }
 	
-	static void updateAppWidget(Context context, int appWidgetId, boolean hideRead, String feedIds) {
-		updateAppWidget(context, AppWidgetManager.getInstance(context), appWidgetId, hideRead, feedIds);
+	static void updateAppWidget(Context context, int appWidgetId, boolean hideRead, String entryCount, String feedIds) {
+		updateAppWidget(context, AppWidgetManager.getInstance(context), appWidgetId, hideRead, entryCount, feedIds);
 	}
 	
-	private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, boolean hideRead, String feedIds) {
+	private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId, boolean hideRead, String entryCount, String feedIds) {
 		StringBuilder selection = new StringBuilder();
 		
 		if (hideRead) {
@@ -82,7 +82,7 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
 			selection.append(FeedData.EntryColumns.FEED_ID).append(" IN ("+feedIds).append(')');
 		}
 
-		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID, FeedData.FeedColumns.ICON}, selection.toString(), null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT).toString());
+		Cursor cursor = context.getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns.TITLE, FeedData.EntryColumns._ID, FeedData.FeedColumns.ICON}, selection.toString(), null, new StringBuilder(FeedData.EntryColumns.DATE).append(Strings.DB_DESC).append(LIMIT).append(entryCount).toString());
         
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.homescreenwidget);
 
@@ -91,6 +91,7 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
         int k = 0;
         
         while (cursor.moveToNext() && k < IDS.length) {
+        	views.setViewVisibility(IDS[k], View.VISIBLE);
 			if (!cursor.isNull(2)) {
 				try {
 					byte[] iconBytes = cursor.getBlob(2);
@@ -122,6 +123,8 @@ public class SparseRSSAppWidgetProvider extends AppWidgetProvider {
         }
         cursor.close();
         for (; k < IDS.length; k++) {
+        	views.setViewVisibility(ICON_IDS[k], View.GONE);
+        	views.setViewVisibility(IDS[k], View.GONE);
         	views.setTextViewText(IDS[k], Strings.EMPTY);
         }
         appWidgetManager.updateAppWidget(appWidgetId, views);

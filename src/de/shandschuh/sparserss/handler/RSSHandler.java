@@ -426,7 +426,7 @@ public class RSSHandler extends DefaultHandler {
 				}
 				
 				String entryLinkString = entryLink.toString().trim();
-
+				
 				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), enclosureString != null ? new String[] {entryLinkString, enclosureString} : new String[] {entryLinkString}) == 0) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					if (entryDate == null) {
@@ -454,6 +454,7 @@ public class RSSHandler extends DefaultHandler {
 							}
 						}
 					}
+					
 					newCount++;
 				} else if (entryDate == null) {
 					cancel();
