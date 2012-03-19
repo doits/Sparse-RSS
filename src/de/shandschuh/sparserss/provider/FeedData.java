@@ -112,6 +112,10 @@ public class FeedData {
 			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append("/entries/").append(entryId).toString());
 		}
 		
+		public static Uri PARENT_URI(String path) {
+			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append(path.substring(0, path.lastIndexOf('/'))).toString());
+		}
+		
 	}
 	
 

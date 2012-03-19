@@ -30,8 +30,8 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.NotificationManager;
 import android.app.AlertDialog.Builder;
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -48,18 +48,19 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.widget.ImageButton;
@@ -83,7 +84,7 @@ public class EntryActivity extends Activity {
 	
 	private static final String OR_DATE = " or date ";
 	
-	private static final String AND_DATE = " and ((date=";
+	private static final String DATE = "(date=";
 	
 	private static final String AND_ID = " and _id";
 	
@@ -140,6 +141,8 @@ public class EntryActivity extends Activity {
 	private String _previousId;
 	
 	private Uri uri;
+	
+	private Uri parentUri;
 	
 	private int feedId;
 	
@@ -209,6 +212,8 @@ public class EntryActivity extends Activity {
 		}
 		
 		uri = getIntent().getData();
+		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
+		Log.d("URI", parentUri+"");
 		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
 		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
 		
@@ -342,9 +347,10 @@ public class EntryActivity extends Activity {
 		super.onResume();
 		RSSOverview.notificationManager.cancel(0);
 		uri = getIntent().getData();
+		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
 		reload();
 	}
-
+	
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -399,7 +405,13 @@ public class EntryActivity extends Activity {
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
 			} else {
 				setTitle(entryCursor.getString(titlePosition));
-				feedId = entryCursor.getInt(feedIdPosition);
+				
+				int _feedId = entryCursor.getInt(feedIdPosition);
+				
+				if (feedId != _feedId) {
+					feedId = _feedId;
+					iconBytes = null; // triggers re-fetch of the icon
+				}
 				
 				if (canShowIcon) {
 					if (iconBytes != null && iconBytes.length > 0) {
@@ -569,13 +581,13 @@ public class EntryActivity extends Activity {
 	}
 
 	private void setupButton(ImageButton button, final boolean successor, long date) {
-		StringBuilder queryString = new StringBuilder(FeedData.EntryColumns.FEED_ID).append('=').append(feedId).append(AND_DATE).append(date).append(AND_ID).append(successor ? '>' : '<').append(_id).append(')').append(OR_DATE).append(successor ? '<' : '>').append(date).append(')');
+		StringBuilder queryString = new StringBuilder(DATE).append(date).append(AND_ID).append(successor ? '>' : '<').append(_id).append(')').append(OR_DATE).append(successor ? '<' : '>').append(date);
 		
 		if (!showRead) {
 			queryString.append(Strings.DB_AND).append(EntriesListAdapter.READDATEISNULL);
 		}
 
-		Cursor cursor = getContentResolver().query(FeedData.EntryColumns.CONTENT_URI, new String[] {FeedData.EntryColumns._ID}, queryString.toString() , null, successor ? DESC : ASC);
+		Cursor cursor = getContentResolver().query(parentUri, new String[] {FeedData.EntryColumns._ID}, queryString.toString() , null, successor ? DESC : ASC);
 		
 		if (cursor.moveToFirst()) {
 			button.setEnabled(true);
