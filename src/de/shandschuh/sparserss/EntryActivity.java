@@ -48,7 +48,6 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
@@ -213,7 +212,6 @@ public class EntryActivity extends Activity {
 		
 		uri = getIntent().getData();
 		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
-		Log.d("URI", parentUri+"");
 		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
 		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
 		
