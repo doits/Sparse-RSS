@@ -139,16 +139,16 @@ public class FeedDataContentProvider extends ContentProvider {
 		@Override
 		public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
 			if (oldVersion < 2) {
-				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.PRIORITY).append(' ').append(FeedData.TYPE_INT).toString());
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.PRIORITY).append(' ').append(FeedData.TYPE_INT).toString());
 			}
 			if (oldVersion < 3) {
-				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.FAVORITE).append(' ').append(FeedData.TYPE_BOOLEAN).toString());
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.FAVORITE).append(' ').append(FeedData.TYPE_BOOLEAN).toString());
 			}
 			if (oldVersion < 4) {
-				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.FETCHMODE).append(' ').append(FeedData.TYPE_INT).toString());
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.FETCHMODE).append(' ').append(FeedData.TYPE_INT).toString());
 			}
 			if (oldVersion < 5) {
-				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REALLASTUPDATE).append(' ').append(FeedData.TYPE_DATETIME).toString());
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.REALLASTUPDATE).append(' ').append(FeedData.TYPE_DATETIME).toString());
 			} 
 			if (oldVersion < 6) {
 				Cursor cursor = database.query(TABLE_FEEDS, new String[] {FeedData.FeedColumns._ID}, null, null, null, null, FeedData.FeedColumns._ID);
@@ -156,17 +156,25 @@ public class FeedDataContentProvider extends ContentProvider {
 				int count = 0;
 				
 				while (cursor.moveToNext()) {
-					database.execSQL(new StringBuilder("UPDATE ").append(TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(count++).append(" WHERE _ID=").append(cursor.getLong(0)).toString());
+					executeCatchedSQL(database, new StringBuilder("UPDATE ").append(TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(count++).append(" WHERE _ID=").append(cursor.getLong(0)).toString());
 				}
 				cursor.close();
 			} 
 			if (oldVersion < 7) {
-				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.WIFIONLY).append(' ').append(FeedData.TYPE_BOOLEAN).toString());
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_FEEDS).append(ADD).append(FeedData.FeedColumns.WIFIONLY).append(' ').append(FeedData.TYPE_BOOLEAN).toString());
 			}
 			// we simply leave the "encoded" column untouched
 			if (oldVersion < 9) {
-				database.execSQL(new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.ENCLOSURE).append(' ').append(FeedData.TYPE_TEXT).toString());
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.ENCLOSURE).append(' ').append(FeedData.TYPE_TEXT).toString());
 			} 
+		}
+		
+		private void executeCatchedSQL(SQLiteDatabase database, String query) {
+			try {
+				database.execSQL(query);
+			} catch (Exception e) {
+				
+			}
 		}
 
 		@Override
