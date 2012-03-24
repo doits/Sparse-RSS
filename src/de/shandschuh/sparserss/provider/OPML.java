@@ -1,7 +1,7 @@
 /**
  * Sparse rss
  * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Xml;
 import de.shandschuh.sparserss.Strings;
 
@@ -115,9 +116,9 @@ public class OPML {
 		
 		while(cursor.moveToNext()) {
 			builder.append(OUTLINE_TITLE);
-			builder.append(cursor.isNull(1) ? Strings.EMPTY : cursor.getString(1));
+			builder.append(cursor.isNull(1) ? Strings.EMPTY : TextUtils.htmlEncode(cursor.getString(1)));
 			builder.append(OUTLINE_XMLURL);
-			builder.append(cursor.getString(2).replace(Strings.AND_CHAR, Strings.AND_HTML));
+			builder.append(TextUtils.htmlEncode(cursor.getString(2)));
 			if (cursor.getInt(3) == 1) {
 				builder.append(OUTLINE_CATEGORY);
 				builder.append(ATTRIBUTE_CATEGORY_VALUE);
