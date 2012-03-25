@@ -146,6 +146,8 @@ public class OPML {
 		
 		private boolean bodyTagEntered;
 		
+		private boolean probablyValidElement = false;
+		
 		private Context context;
 		
 		private SQLiteDatabase database;
@@ -155,6 +157,7 @@ public class OPML {
 			if (!bodyTagEntered) {
 				if (TAG_BODY.equals(localName)) {
 					bodyTagEntered = true;
+					probablyValidElement = true;
 				}
 			} else if (TAG_OUTLINE.equals(localName)) {
 				String url = attributes.getValue(Strings.EMPTY, ATTRIBUTE_XMLURL);
@@ -188,6 +191,17 @@ public class OPML {
 				bodyTagEntered = false;
 			}
 		}
+
+		@Override
+		public void endDocument() throws SAXException {
+			if (!probablyValidElement) {
+				throw new SAXException();
+			} else {
+				super.endDocument();
+			}
+		}
+		
+		
 		
 	}
 }

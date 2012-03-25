@@ -29,10 +29,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.NotificationManager;
-import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -46,15 +46,15 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
 import android.view.View.OnTouchListener;
+import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
@@ -68,12 +68,6 @@ import de.shandschuh.sparserss.provider.OPML;
 import de.shandschuh.sparserss.service.RefreshService;
 
 public class RSSOverview extends ListActivity {	
-	private static final String EXTENSION_OPML = ".opml";
-	
-	private static final String EXTENSION_XML = ".xml";
-	
-	private static final String EXTENSION_PHP = ".php";
-	
 	private static final int DIALOG_ADDFEED_ID = 1;
 	
 	private static final int DIALOG_ERROR_FEEDURLEXISTS = 2;
@@ -453,7 +447,7 @@ public class RSSOverview extends ListActivity {
 					try {
 						final String[] fileNames = Environment.getExternalStorageDirectory().list(new FilenameFilter() {
 							public boolean accept(File dir, String filename) {
-								return filename.endsWith(EXTENSION_OPML) || filename.endsWith(EXTENSION_XML) || filename.endsWith(EXTENSION_PHP);
+								return new File(dir, filename).isFile();
 							}
 						});
 						builder.setItems(fileNames, new DialogInterface.OnClickListener()  {
