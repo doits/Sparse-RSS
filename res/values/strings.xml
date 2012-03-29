@@ -213,5 +213,7 @@
     </string-array>
 
     <string name="permission_readfeeds">Read feed data</string>
+    <string name="permission_readfeeds_description">Allows the application to read Sparse RSS feeds and entries.</string>
     <string name="permission_writefeeds">Write feed data</string>
+    <string name="permission_writefeeds_description">Allows the application to write Sparse RSS feeds and entries.</string>
 </resources>

@@ -12,11 +12,13 @@
     <permission
         android:name="de.shandschuh.sparserss.READFEEDS"
         android:protectionLevel="normal"
-        android:label="@string/permission_readfeeds" />
+        android:label="@string/permission_readfeeds"
+        android:description="@string/permission_readfeeds_description"/>
     <permission
         android:name="de.shandschuh.sparserss.WRITEFEEDS"
         android:protectionLevel="normal"
-        android:label="@string/permission_writefeeds" />
+        android:label="@string/permission_writefeeds"
+        android:description="@string/permission_writefeeds_description"/>
     <application 
         android:icon="@drawable/icon" 
         android:label="@string/app_name" 
