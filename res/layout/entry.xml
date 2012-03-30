@@ -1,30 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout 
-    android:orientation="vertical" 
-    android:layout_width="fill_parent" 
-    android:layout_height="fill_parent" 
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     xmlns:android="http://schemas.android.com/apk/res/android" >
     <LinearLayout
-        android:paddingLeft="4pt" 
+        android:paddingLeft="4pt"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
-        android:layout_alignParentTop="true">
-        <TextView 
+        android:layout_width="fill_parent">
+        <TextView
             android:paddingTop="2pt"
-            android:layout_height="wrap_content" 
-            android:id="@+id/entry_date" 
-            android:layout_width="wrap_content" 
-            android:layout_gravity="fill" 
+            android:layout_height="wrap_content"
+            android:id="@+id/entry_date"
+            android:layout_width="wrap_content"
+            android:layout_gravity="fill"
             android:layout_weight="1" />
         <ImageView
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content" 
-            android:layout_height="wrap_content" 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@android:id/icon"/>
     </LinearLayout>
     <View 
-        android:background="@android:drawable/title_bar" 
-        android:layout_width="fill_parent" 
+        android:background="@android:drawable/title_bar"
+        android:layout_width="fill_parent"
         android:layout_height="1dp" />
     <RelativeLayout
         android:id="@+id/entry_content"
@@ -36,8 +34,7 @@
             android:id="@+id/content_flipper"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="fill"
-            android:layout_weight="1" />
+            android:layout_gravity="fill"/>
         <LinearLayout
             android:id="@+id/button_panel"
             android:layout_width="fill_parent"
