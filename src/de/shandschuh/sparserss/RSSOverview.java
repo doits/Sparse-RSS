@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -408,7 +408,12 @@ public class RSSOverview extends ListActivity {
 					public void run() {
 						String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
 						
-						if (getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI(id), Strings.READDATE_GREATERZERO+Strings.DB_AND+" ("+Strings.DB_EXCUDEFAVORITE+")", null) > 0) {
+						Uri uri = FeedData.EntryColumns.CONTENT_URI(id);
+						
+						String selection = Strings.READDATE_GREATERZERO+Strings.DB_AND+" ("+Strings.DB_EXCUDEFAVORITE+")";
+						
+						FeedData.deletePicturesOfFeed(RSSOverview.this, uri, selection);
+						if (getContentResolver().delete(uri, selection, null) > 0) {
 							getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI(id), null);
 						}
 					}
@@ -459,7 +464,7 @@ public class RSSOverview extends ListActivity {
 								}
 							}
 						});
-						builder.create().show();
+						builder.show();
 					} catch (Exception e) {
 						showDialog(DIALOG_ERROR_FEEDIMPORT);
 					}
@@ -489,6 +494,7 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case MENU_DELETEREAD_ID: {
+				FeedData.deletePicturesOfFeedAsync(this, FeedData.EntryColumns.CONTENT_URI, Strings.READDATE_GREATERZERO);
 				getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI, Strings.READDATE_GREATERZERO, null);
 				((RSSOverviewListAdapter) getListAdapter()).notifyDataSetChanged();
 				break;
@@ -674,8 +680,7 @@ public class RSSOverview extends ListActivity {
 				}
 			});
 		}
-		builder.setView(view); 
-		
+		builder.setView(view);
 		
 		builder.setNegativeButton(android.R.string.cancel, null);
 		return builder.create();
@@ -701,6 +706,7 @@ public class RSSOverview extends ListActivity {
             public void onClick(DialogInterface dialog, int which) {
             	new Thread() {
 					public void run() {
+						FeedData.deletePicturesOfFeed(context, uri, Strings.DB_EXCUDEFAVORITE);
 						if (context.getContentResolver().delete(uri, Strings.DB_EXCUDEFAVORITE, null) > 0) {
 							context.getContentResolver().notifyChange(FeedData.FeedColumns.CONTENT_URI, null);
 						}

@@ -30,8 +30,8 @@ import android.app.Dialog;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnKeyListener;
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -61,7 +61,7 @@ public class MainTabActivity extends TabActivity {
 	public static boolean isLightTheme(Context context) {
 		if (LIGHTTHEME == null) {
 			LIGHTTHEME = PreferenceManager.getDefaultSharedPreferences(context).getBoolean(Strings.SETTINGS_LIGHTTHEME, false);
-		} 
+		}
 		return LIGHTTHEME;
 	}
 	

@@ -1,6 +1,6 @@
 /**
  * Sparse rss
- * 
+ *
  * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -138,7 +138,7 @@ public class RSSHandler extends DefaultHandler {
 	
 	private Date lastUpdateDate;
 	
-	private String id;
+	String id;
 
 	private boolean titleTagEntered;
 	
@@ -197,27 +197,19 @@ public class RSSHandler extends DefaultHandler {
 		this.context = context;
 	}
 	
-	public void init(Date lastUpdateDate, String id, String title) {
+	public void init(Date lastUpdateDate, final String id, String title) {
 		final long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis()-KEEP_TIME : 0;
 		
 		keepDateBorder = new Date(keepDateBorderTime);
 		this.lastUpdateDate = lastUpdateDate;
 		this.id = id;
 		feedEntiresUri = FeedData.EntryColumns.CONTENT_URI(id);
-		context.getContentResolver().delete(feedEntiresUri, new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(keepDateBorderTime).append(DB_FAVORITE).toString(), null);
-		if (fetchImages) {
-			new Thread() { // delete images
-				public void run() {
-					File[] files = new File(FeedDataContentProvider.IMAGEFOLDER).listFiles();
-					
-					for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
-						if (files[n].lastModified() < keepDateBorderTime) {
-							files[n].delete();
-						}
-					}
-				}
-			}.start();
-		}
+		
+		final String query = new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(keepDateBorderTime).append(DB_FAVORITE).toString();
+		
+		FeedData.deletePicturesOfFeedAsync(context, feedEntiresUri, query);
+		
+		context.getContentResolver().delete(feedEntiresUri, query, null);
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;
@@ -231,7 +223,7 @@ public class RSSHandler extends DefaultHandler {
 		entryDate = null;
 		lastBuildDate = null;
 		realLastUpdate = lastUpdateDate.getTime();
-
+		
 		done = false;
 		cancelled = false;
 		
@@ -435,7 +427,7 @@ public class RSSHandler extends DefaultHandler {
 						values.remove(FeedData.EntryColumns.READDATE);
 					}
 					
-					String id = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
+					String entryId = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
 					
 					if (fetchImages) {
 						new File(FeedDataContentProvider.IMAGEFOLDER).mkdir(); // create images dir
@@ -445,7 +437,7 @@ public class RSSHandler extends DefaultHandler {
 								
 								byte[] data = FetcherService.getBytes(new URL(images.get(n)).openStream());
 								
-								FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGEFOLDER).append(id).append(Strings.IMAGEFILE_IDSEPARATOR).append(match.substring(match.lastIndexOf('/')+1)).toString());
+								FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGEFOLDER).append(id).append(Strings.IMAGEFILE_IDSEPARATOR).append(entryId).append(Strings.IMAGEFILE_IDSEPARATOR).append(match.substring(match.lastIndexOf('/')+1)).toString());
 								
 								fos.write(data);
 								fos.close();

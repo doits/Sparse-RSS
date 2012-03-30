@@ -25,6 +25,12 @@
 
 package de.shandschuh.sparserss.provider;
 
+import java.io.File;
+
+import de.shandschuh.sparserss.handler.PictureFilenameFilter;
+
+import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -116,6 +122,43 @@ public class FeedData {
 			return Uri.parse(new StringBuilder(CONTENT).append(AUTHORITY).append(path.substring(0, path.lastIndexOf('/'))).toString());
 		}
 		
+	}
+		
+	private static String[] IDPROJECTION = new String[] {FeedData.EntryColumns._ID};
+	
+	public static void deletePicturesOfFeedAsync(final Context context, final Uri entriesUri, final String selection) {
+		new Thread() {
+			public void run() {
+				deletePicturesOfFeed(context, entriesUri, selection);
+			}
+		}.start();
+	}
+	
+	public static synchronized void deletePicturesOfFeed(Context context, Uri entriesUri, String selection) {
+		PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
+		
+		Cursor cursor = context.getContentResolver().query(entriesUri, IDPROJECTION, selection, null, null);
+		
+		while (cursor.moveToNext()) {
+			filenameFilter.setEntryId(cursor.getString(0));
+			
+			File[] files = new File(FeedDataContentProvider.IMAGEFOLDER).listFiles(filenameFilter);
+			
+			for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
+				files[n].delete();
+			}
+		}
+		cursor.close();
+	}
+	
+	public static synchronized void deletePicturesOfEntry(String entryId) {
+		PictureFilenameFilter filenameFilter = new PictureFilenameFilter(entryId);
+		
+		File[] files = new File(FeedDataContentProvider.IMAGEFOLDER).listFiles(filenameFilter);
+		
+		for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
+			files[n].delete();
+		}
 	}
 	
 

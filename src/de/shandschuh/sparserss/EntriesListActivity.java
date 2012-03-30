@@ -1,7 +1,7 @@
 /**
  * Sparse rss
- * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ *
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -204,7 +204,10 @@ public class EntriesListActivity extends ListActivity {
 			case MENU_DELETEREAD_ID: {
 				new Thread() { // the delete process takes some time
 					public void run() {
-						getContentResolver().delete(uri, Strings.READDATE_GREATERZERO+Strings.DB_AND+" ("+Strings.DB_EXCUDEFAVORITE+")", null);
+						String selection = Strings.READDATE_GREATERZERO+Strings.DB_AND+" ("+Strings.DB_EXCUDEFAVORITE+")";
+						
+						getContentResolver().delete(uri, selection, null);
+						FeedData.deletePicturesOfFeed(EntriesListActivity.this, uri, selection);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								entriesListAdapter.getCursor().requery();
@@ -253,7 +256,10 @@ public class EntriesListActivity extends ListActivity {
 				break;
 			}
 			case CONTEXTMENU_DELETE_ID: {
-				getContentResolver().delete(ContentUris.withAppendedId(uri, ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id), null, null);
+				long id = ((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id;
+				
+				getContentResolver().delete(ContentUris.withAppendedId(uri, id), null, null);
+				FeedData.deletePicturesOfEntry(Long.toString(id));
 				entriesListAdapter.getCursor().requery(); // he have no other choice
 				break;
 			}

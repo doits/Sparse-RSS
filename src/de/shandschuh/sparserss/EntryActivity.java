@@ -185,6 +185,8 @@ public class EntryActivity extends Activity {
 	
 	private SharedPreferences preferences;
 	
+	private boolean localPictures;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if (MainTabActivity.isLightTheme(this)) {
@@ -214,6 +216,7 @@ public class EntryActivity extends Activity {
 		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
 		showRead = getIntent().getBooleanExtra(EntriesListActivity.EXTRA_SHOWREAD, true);
 		iconBytes = getIntent().getByteArrayExtra(FeedData.FeedColumns.ICON);
+		feedId = 0;
 		
 		Cursor entryCursor = getContentResolver().query(uri, null, null, null, null);
 		
@@ -407,8 +410,10 @@ public class EntryActivity extends Activity {
 				int _feedId = entryCursor.getInt(feedIdPosition);
 				
 				if (feedId != _feedId) {
+					if (feedId != 0) {
+						iconBytes = null; // triggers re-fetch of the icon
+					}
 					feedId = _feedId;
-					iconBytes = null; // triggers re-fetch of the icon
 				}
 				
 				if (canShowIcon) {
@@ -448,7 +453,11 @@ public class EntryActivity extends Activity {
 					}
 				});
 				// loadData does not recognize the encoding without correct html-header
-				abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
+				localPictures = abstractText.indexOf(Strings.IMAGEID_REPLACEMENT) > -1;
+				
+				if (localPictures) {
+					abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
+				}
 
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
 					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
@@ -671,6 +680,9 @@ public class EntryActivity extends Activity {
 			}
 			case MENU_DELETE_ID: {
 				getContentResolver().delete(uri, null, null);
+				if (localPictures) {
+					FeedData.deletePicturesOfEntry(_id);
+				}
 				
 				if (nextButton.isEnabled()) {
 					nextButton.performClick();
