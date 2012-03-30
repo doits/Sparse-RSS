@@ -142,7 +142,7 @@ public class FeedData {
 		while (cursor.moveToNext()) {
 			filenameFilter.setEntryId(cursor.getString(0));
 			
-			File[] files = new File(FeedDataContentProvider.IMAGEFOLDER).listFiles(filenameFilter);
+			File[] files = FeedDataContentProvider.IMAGEFOLDER_FILE.listFiles(filenameFilter);
 			
 			for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
 				files[n].delete();
@@ -154,7 +154,7 @@ public class FeedData {
 	public static synchronized void deletePicturesOfEntry(String entryId) {
 		PictureFilenameFilter filenameFilter = new PictureFilenameFilter(entryId);
 		
-		File[] files = new File(FeedDataContentProvider.IMAGEFOLDER).listFiles(filenameFilter);
+		File[] files = FeedDataContentProvider.IMAGEFOLDER_FILE.listFiles(filenameFilter);
 		
 		for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
 			files[n].delete();

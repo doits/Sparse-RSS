@@ -34,8 +34,6 @@ import de.shandschuh.sparserss.provider.FeedDataContentProvider;
 public class PictureFilenameFilter implements FilenameFilter {
 	private static final String REGEX = "__[^\\.]*\\.[A-Za-z]*";
 	
-	private final File PICUTRES_DIR = new File(FeedDataContentProvider.IMAGEFOLDER);
-	
 	private Pattern pattern;
 	
 	public PictureFilenameFilter(String entryId) {
@@ -51,7 +49,7 @@ public class PictureFilenameFilter implements FilenameFilter {
 	}
 
 	public boolean accept(File dir, String filename) {
-		if (dir != null && dir.equals(PICUTRES_DIR)) { // this should be always true but lets check it anyway
+		if (dir != null && dir.equals(FeedDataContentProvider.IMAGEFOLDER_FILE)) { // this should be always true but lets check it anyway
 			return pattern.matcher(filename).find();
 		} else {
 			return false;

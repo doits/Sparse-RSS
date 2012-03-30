@@ -25,7 +25,6 @@
 
 package de.shandschuh.sparserss.handler;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -430,7 +429,7 @@ public class RSSHandler extends DefaultHandler {
 					String entryId = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
 					
 					if (fetchImages) {
-						new File(FeedDataContentProvider.IMAGEFOLDER).mkdir(); // create images dir
+						FeedDataContentProvider.IMAGEFOLDER_FILE.mkdir(); // create images dir
 						for (int n = 0, i = images != null ? images.size() : 0; n < i; n++) {
 							try {
 								String match = images.get(n);
