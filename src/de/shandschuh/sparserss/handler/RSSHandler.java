@@ -122,12 +122,15 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final DateFormat[] UPDATE_DATEFORMATS = {
 		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ"),
-		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"),
 		new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSz", Locale.US),
 		
 	};
 	
-	private static final int DATEFORMAT_COUNT = 3;
+	private static final int DATEFORMAT_COUNT = 2;
+	
+	private static final String Z = "Z";
+	
+	private static final String GMT = "GMT";
 	
 	private static final StringBuilder DB_FAVORITE  = new StringBuilder(" AND (").append(Strings.DB_EXCUDEFAVORITE).append(')');
 
@@ -506,6 +509,7 @@ public class RSSHandler extends DefaultHandler {
 	}
 	
 	private static Date parseUpdateDate(String string) {
+		string = string.replace(Z, GMT);
 		for (int n = 0; n < DATEFORMAT_COUNT; n++) {
 			try {
 				return UPDATE_DATEFORMATS[n].parse(string);
