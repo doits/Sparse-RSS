@@ -39,7 +39,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -686,14 +685,11 @@ public class RSSOverview extends ListActivity {
 		ScrollView scrollView = new ScrollView(this);
 		
 		scrollView.addView(view);
+		builder.setView(scrollView);
+		builder.setNegativeButton(android.R.string.cancel, null);
 		if (MainTabActivity.isLightTheme(this)) {
-			view.setBackgroundColor(Color.WHITE);
-			scrollView.setBackgroundColor(Color.WHITE);
 			builder.setInverseBackgroundForced(true);
 		}
-		builder.setView(scrollView);
-		
-		builder.setNegativeButton(android.R.string.cancel, null);
 		return builder.create();
 	}
 	
