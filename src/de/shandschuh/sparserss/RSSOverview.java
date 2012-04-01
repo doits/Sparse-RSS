@@ -39,6 +39,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -61,6 +62,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.shandschuh.sparserss.provider.FeedData;
@@ -680,7 +682,16 @@ public class RSSOverview extends ListActivity {
 				}
 			});
 		}
-		builder.setView(view);
+		
+		ScrollView scrollView = new ScrollView(this);
+		
+		scrollView.addView(view);
+		if (MainTabActivity.isLightTheme(this)) {
+			view.setBackgroundColor(Color.WHITE);
+			scrollView.setBackgroundColor(Color.WHITE);
+			builder.setInverseBackgroundForced(true);
+		}
+		builder.setView(scrollView);
 		
 		builder.setNegativeButton(android.R.string.cancel, null);
 		return builder.create();
