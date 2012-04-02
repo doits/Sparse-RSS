@@ -1,7 +1,7 @@
 /**
  * Sparse rss
- * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ *
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -37,6 +37,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.util.Linkify;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TabHost;
@@ -115,6 +117,16 @@ public class MainTabActivity extends TabActivity {
 			}
 		});
 		return builder.create();
+	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		return getCurrentActivity().onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		return getCurrentActivity().onMenuItemSelected(featureId, item);
 	}
 	
 	private void setContent() {
