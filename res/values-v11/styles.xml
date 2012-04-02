@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.Light" parent="android:Theme.Holo.Light"/>
+    <style name="ButtonBar" parent="android:Holo.ButtonBar.AlertDialog"/>
+    <style name="Theme.Dialog" parent="android:Theme.Holo.Dialog"/>
+    <style name="Widget.Button.Dialog" parent="@android:style/Widget.Holo.Button.Borderless"/>
+</resources>

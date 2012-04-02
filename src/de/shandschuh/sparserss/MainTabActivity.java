@@ -69,7 +69,7 @@ public class MainTabActivity extends TabActivity {
 	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isLightTheme(this)) {
-	    	setTheme(android.R.style.Theme_Light);
+	    	setTheme(R.style.Theme_Light);
 	    }
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.tabs);

@@ -125,9 +125,8 @@ public class RSSOverview extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	if (MainTabActivity.isLightTheme(this)) {
-    		setTheme(android.R.style.Theme_Light);
+    		setTheme(R.style.Theme_Light);
     	}
-    	
         super.onCreate(savedInstanceState);
 
     	if (notificationManager == null) {
@@ -267,6 +266,7 @@ public class RSSOverview extends ListActivity {
 		return true;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onMenuItemSelected(int featureId, final MenuItem item) {
 		switch (item.getItemId()) {
