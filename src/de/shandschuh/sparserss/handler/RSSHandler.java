@@ -108,7 +108,7 @@ public class RSSHandler extends DefaultHandler {
 	private static final int TIMEZONES_COUNT = 3;
 
 	
-	private static long KEEP_TIME = 172800000l; // 2 days
+	private static long KEEP_TIME = 345600000l; // 4 days
 	
 	
 	private static final DateFormat[] PUBDATE_DATEFORMATS = {

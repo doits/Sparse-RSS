@@ -70,7 +70,7 @@
             android:title="@string/settings_keeptime"
             android:key="keeptime" 
             android:numeric="integer"
-            android:defaultValue="2"
+            android:defaultValue="4"
             android:entries="@array/settings_keeptimes"
             android:entryValues="@array/settings_keeptimevalues" />
         <CheckBoxPreference
