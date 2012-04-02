@@ -57,22 +57,15 @@ import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import de.shandschuh.sparserss.provider.FeedData;
 import de.shandschuh.sparserss.provider.OPML;
 import de.shandschuh.sparserss.service.RefreshService;
 
-public class RSSOverview extends ListActivity {	
-	private static final int DIALOG_ADDFEED_ID = 1;
-	
-	private static final int DIALOG_ERROR_FEEDURLEXISTS = 2;
-	
+public class RSSOverview extends ListActivity {
 	private static final int DIALOG_ERROR_FEEDIMPORT = 3;
 	
 	private static final int DIALOG_ERROR_FEEDEXPORT = 4;
@@ -278,7 +271,7 @@ public class RSSOverview extends ListActivity {
 	public boolean onMenuItemSelected(int featureId, final MenuItem item) {
 		switch (item.getItemId()) {
 			case MENU_ADDFEED_ID: {
-				showDialog(DIALOG_ADDFEED_ID);
+				startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedData.FeedColumns.CONTENT_URI));
 				break;
 			}
 			case MENU_REFRESH_ID: {
@@ -290,13 +283,7 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case CONTEXTMENU_EDIT_ID: {
-				String id = Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id);
-				
-				Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(id), new String[] {FeedData.FeedColumns.NAME, FeedData.FeedColumns.URL, FeedData.FeedColumns.WIFIONLY}, null, null, null);
-				
-				cursor.moveToFirst();
-				createURLDialog(cursor.getString(0), cursor.getString(1), id, cursor.getInt(2) == 1).show();
-				cursor.close();
+				startActivity(new Intent(Intent.ACTION_EDIT).setData(FeedData.FeedColumns.CONTENT_URI(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)));
 				break;
 			}
 			case CONTEXTMENU_REFRESH_ID: {
@@ -539,14 +526,6 @@ public class RSSOverview extends ListActivity {
 		Dialog dialog;
 
 		switch (id) {
-			case DIALOG_ADDFEED_ID: {
-				dialog = createURLDialog(null, null, null, false);
-				break;
-			}
-			case DIALOG_ERROR_FEEDURLEXISTS: {
-				dialog = createErrorDialog(R.string.error_feedurlexists);
-				break;
-			}
 			case DIALOG_ERROR_FEEDIMPORT: {
 				dialog = createErrorDialog(R.string.error_feedimport);
 				break;
@@ -584,113 +563,6 @@ public class RSSOverview extends ListActivity {
 			default: dialog = null;
 		}
 		return dialog;
-	}
-	
-	@Override
-	protected void onPrepareDialog(int id, Dialog dialog) {
-		if (id == DIALOG_ADDFEED_ID) {
-			EditText editText = (EditText) dialog.findViewById(R.id.feed_url);
-			
-			editText.setText(Strings.EMPTY);
-			((EditText) dialog.findViewById(R.id.feed_title)).setText(Strings.EMPTY);
-		}
-		super.onPrepareDialog(id, dialog);
-	}
-
-	private Dialog createURLDialog(String title, String url, final String id, boolean refreshOnlyWifi) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-		View view = getLayoutInflater().inflate(R.layout.feedsettings, null);
-		
-		final EditText nameEditText = (EditText) view.findViewById(R.id.feed_title);
-		
-		final EditText urlEditText = (EditText) view.findViewById(R.id.feed_url);
-		
-		final CheckBox refreshOnlyWifiCheckBox = (CheckBox) view.findViewById(R.id.wifionlycheckbox);
-		
-		if (title != null) {
-			builder.setTitle(title);
-			nameEditText.setText(title);
-		} else {
-			builder.setTitle(R.string.editfeed_title);
-		}
-		if (url != null) { // indicates an edit
-			urlEditText.setText(url);
-			refreshOnlyWifiCheckBox.setChecked(refreshOnlyWifi);
-			
-			int urlLength = url.length();
-			
-			if (urlLength > 0) {
-				urlEditText.setSelection(urlLength-1);
-			}
-			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					String url = urlEditText.getText().toString();
-					
-					Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID}, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
-					
-					if (cursor.moveToFirst() && !id.equals(cursor.getString(0))) {
-						showDialog(DIALOG_ERROR_FEEDURLEXISTS);
-					} else {
-						ContentValues values = new ContentValues();
-						
-						if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
-							url = Strings.HTTP+url;
-						}
-						values.put(FeedData.FeedColumns.URL, url);
-						
-						String name = nameEditText.getText().toString();
-						
-						values.put(FeedData.FeedColumns.NAME, name.trim().length() > 0 ? name : null);
-						values.put(FeedData.FeedColumns.FETCHMODE, 0);
-						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
-						values.put(FeedData.FeedColumns.ERROR, (String) null);
-						getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);	
-					}
-					cursor.close();
-				}
-			});
-		} else {
-			builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int which) {
-					String url = urlEditText.getText().toString();
-					
-					if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
-						url = Strings.HTTP+url;
-					}
-					
-					Cursor cursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, null, new StringBuilder(FeedData.FeedColumns.URL).append(Strings.DB_ARG).toString(), new String[] {url}, null);
-					
-					if (cursor.moveToFirst()) {
-						showDialog(DIALOG_ERROR_FEEDURLEXISTS);
-					} else {
-						ContentValues values = new ContentValues();
-						
-						values.put(FeedData.FeedColumns.WIFIONLY, refreshOnlyWifiCheckBox.isChecked() ? 1 : 0);
-						values.put(FeedData.FeedColumns.URL, url);
-						values.put(FeedData.FeedColumns.ERROR, (String) null);
-						
-						String name = nameEditText.getText().toString();
-						
-						if (name.trim().length() > 0) {
-							values.put(FeedData.FeedColumns.NAME, name);
-						}
-						getContentResolver().insert(FeedData.FeedColumns.CONTENT_URI, values);
-					}
-					cursor.close();
-				}
-			});
-		}
-		
-		ScrollView scrollView = new ScrollView(this);
-		
-		scrollView.addView(view);
-		builder.setView(scrollView);
-		builder.setNegativeButton(android.R.string.cancel, null);
-		if (MainTabActivity.isLightTheme(this)) {
-			builder.setInverseBackgroundForced(true);
-		}
-		return builder.create();
 	}
 	
 	private Dialog createErrorDialog(int messageId) {
