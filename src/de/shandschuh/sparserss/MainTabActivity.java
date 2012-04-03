@@ -25,6 +25,7 @@
 
 package de.shandschuh.sparserss;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TabActivity;
@@ -130,17 +131,37 @@ public class MainTabActivity extends TabActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		this.menu = menu;
-		return getCurrentActivity().onCreateOptionsMenu(menu);
+
+		Activity activity = getCurrentActivity();
+		
+		if (activity != null) {
+			return activity.onCreateOptionsMenu(menu);
+		} else {
+			menu.add(Strings.EMPTY); // to let the menu be available
+			return true;
+		}
 	}
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		return getCurrentActivity().onMenuItemSelected(featureId, item);
+		Activity activity = getCurrentActivity();
+		
+		if (activity != null) {
+			return activity.onMenuItemSelected(featureId, item);
+		} else {
+			return super.onMenuItemSelected(featureId, item);
+		}
 	}
 	
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		return getCurrentActivity().onPrepareOptionsMenu(menu);
+		Activity activity = getCurrentActivity();
+		
+		if (activity != null) {
+			return activity.onPrepareOptionsMenu(menu);
+		} else {
+			return super.onPrepareOptionsMenu(menu);
+		}
 	}
 	
 	private void setContent() {
@@ -154,7 +175,6 @@ public class MainTabActivity extends TabActivity {
 		    tabsAdded = true;
 		    getTabWidget().setVisibility(View.VISIBLE);
 	    }
-	    
 	    if (POSTGINGERBREAD) {
 		    /* Change the menu also on ICS when tab is changed */
 		    tabHost.setOnTabChangedListener(new OnTabChangeListener() {
@@ -165,6 +185,10 @@ public class MainTabActivity extends TabActivity {
 					}
 				}
 		    });
+		    if (menu != null) {
+				menu.clear();
+				onCreateOptionsMenu(menu);
+			}
 	    }
 	}
 
