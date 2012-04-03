@@ -185,6 +185,8 @@ public class EntryActivity extends Activity {
 	
 	private boolean localPictures;
 	
+	private TextView titleTextView;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		if (MainTabActivity.isLightTheme(this)) {
@@ -193,13 +195,25 @@ public class EntryActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		
-		canShowIcon = requestWindowFeature(Window.FEATURE_LEFT_ICON);
-
-		setContentView(R.layout.entry);
+		int titleId = -1;
+		
+		if (MainTabActivity.POSTGINGERBREAD) {
+			canShowIcon = true;
+			setContentView(R.layout.entry);
+			try {
+				/* This is a trick as com.android.internal.R.id.action_bar_title is not directly accessible */
+				titleId = (Integer) Class.forName("com.android.internal.R$id").getField("action_bar_title").get(null);
+			} catch (Exception exception) {
+				
+			}
+		} else {
+			canShowIcon = requestWindowFeature(Window.FEATURE_LEFT_ICON);
+			setContentView(R.layout.entry);
+			titleId = android.R.id.title;
+		}
 		
 		try {
-			TextView titleTextView = (TextView) findViewById(android.R.id.title);
-			
+			titleTextView = (TextView) findViewById(titleId);
 			titleTextView.setSingleLine(true);
 			titleTextView.setHorizontallyScrolling(true);
 			titleTextView.setMarqueeRepeatLimit(1);
@@ -253,10 +267,10 @@ public class EntryActivity extends Activity {
 		OnKeyListener onKeyEventListener = new OnKeyListener() {
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (event.getAction() == KeyEvent.ACTION_DOWN) {
-					if (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == 94) {
+					if (keyCode == 92 || keyCode == 94) {
 						scrollUp();
 						return true;
-					} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN || keyCode == 95) {
+					} else if (keyCode == 93 || keyCode == 95) {
 						scrollDown();
 						return true;
 					}
@@ -404,6 +418,9 @@ public class EntryActivity extends Activity {
 				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
 			} else {
 				setTitle(entryCursor.getString(titlePosition));
+				if (titleTextView != null) {
+					titleTextView.requestFocus(); // restart ellipsize
+				}
 				
 				int _feedId = entryCursor.getInt(feedIdPosition);
 				
@@ -416,7 +433,11 @@ public class EntryActivity extends Activity {
 				
 				if (canShowIcon) {
 					if (iconBytes != null && iconBytes.length > 0) {
-						setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+						if (MainTabActivity.POSTGINGERBREAD) {
+							CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+						} else {
+							setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+						}
 					} else {
 						Cursor iconCursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.ICON}, null, null, null);
 						
@@ -424,7 +445,11 @@ public class EntryActivity extends Activity {
 							iconBytes = iconCursor.getBlob(1);
 							
 							if (iconBytes != null && iconBytes.length > 0) {
-								setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+								if (MainTabActivity.POSTGINGERBREAD) {
+									CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+								} else {
+									setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+								}
 							}
 						}
 						iconCursor.close();
@@ -705,10 +730,10 @@ public class EntryActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN) {
-			if (keyCode == KeyEvent.KEYCODE_PAGE_UP || keyCode == 94) {
+			if (keyCode == 92 || keyCode == 94) {
 				scrollUp();
 				return true;
-			} else if (keyCode == KeyEvent.KEYCODE_PAGE_DOWN || keyCode == 95) {
+			} else if (keyCode == 93 || keyCode == 95) {
 				scrollDown();
 				return true;
 			}

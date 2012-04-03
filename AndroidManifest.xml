@@ -9,6 +9,11 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    
+    <!-- Android 1.5 requires this  -->
+    <uses-permission android:name="de.shandschuh.sparserss.READFEEDS"/>
+    <uses-permission android:name="de.shandschuh.sparserss.WRITEFEEDS"/>
+    
     <permission
         android:name="de.shandschuh.sparserss.READFEEDS"
         android:protectionLevel="normal"

@@ -102,7 +102,7 @@ public class EntriesListActivity extends ListActivity {
 			cursor.close();
 		}
 
-		if (iconBytes != null && iconBytes.length > 0) { // we cannot insert the icon here because it would be overwritten, but we have to reserve the icon here
+		if (!MainTabActivity.POSTGINGERBREAD && iconBytes != null && iconBytes.length > 0) { // we cannot insert the icon here because it would be overwritten, but we have to reserve the icon here
 			if (!requestWindowFeature(Window.FEATURE_LEFT_ICON)) {
 				iconBytes = null;
 			}
@@ -119,7 +119,11 @@ public class EntriesListActivity extends ListActivity {
         	setTitle(title);
         }
         if (iconBytes != null && iconBytes.length > 0) {
-        	setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+        	if (MainTabActivity.POSTGINGERBREAD) {
+        		CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+        	} else {
+        		setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+        	}
         }
         RSSOverview.notificationManager.cancel(0);
         
