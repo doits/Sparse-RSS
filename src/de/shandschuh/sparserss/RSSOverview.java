@@ -211,7 +211,9 @@ public class RSSOverview extends ListActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		notificationManager.cancel(0);
+		if (RSSOverview.notificationManager != null) {
+			notificationManager.cancel(0);
+		}
 	}
 
 	@Override

@@ -125,7 +125,9 @@ public class EntriesListActivity extends ListActivity {
         		setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
         	}
         }
-        RSSOverview.notificationManager.cancel(0);
+        if (RSSOverview.notificationManager != null) {
+        	RSSOverview.notificationManager.cancel(0);
+        }
         
         getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 			public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {

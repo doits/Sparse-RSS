@@ -358,7 +358,9 @@ public class EntryActivity extends Activity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		RSSOverview.notificationManager.cancel(0);
+		if (RSSOverview.notificationManager != null) {
+			RSSOverview.notificationManager.cancel(0);
+		}
 		uri = getIntent().getData();
 		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
 		reload();
