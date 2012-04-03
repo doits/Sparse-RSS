@@ -28,6 +28,7 @@
     <string name="menu_about">Info</string>
     <string name="menu_enablefeedsort">Sortieren aktivieren</string>
     <string name="menu_disablefeedsort">Sortieren deaktivieren</string>
+    <string name="menu_share">Teilen</string>
 
     <string name="settings_category_refresh">Automatische Aktualisierung</string>
     <string name="settings_enabled">Aktiviert</string>
@@ -107,6 +108,7 @@
     <string name="feed_title">Titel</string>
     <string name="select_file">Datei auswählen (SD-Wurzel)</string>
     <string name="refreshonwifionly">Nur über WLan aktualisieren</string>
+    <string name="share_via">Teilen via &#8230;</string>
 
     <string name="websiteorfeed">(Webseite oder Feed)</string>
 

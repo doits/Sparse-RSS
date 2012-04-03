@@ -109,13 +109,11 @@ public class EntryActivity extends Activity {
 	
 	private static final String BODY_END = "</body>";
 	
-	private static final int MENU_COPYURL_ID = 1;
-	
-	private static final int MENU_DELETE_ID = 2;
-	
 	private static final int BUTTON_ALPHA = 180;
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
+	
+	private static final String TEXTPLAIN = "text/plain";
 	
 	private int titlePosition;
 	
@@ -664,21 +662,20 @@ public class EntryActivity extends Activity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, MENU_COPYURL_ID, Menu.NONE, R.string.contextmenu_copyurl).setIcon(android.R.drawable.ic_menu_share);
-		menu.add(0, MENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete).setIcon(android.R.drawable.ic_menu_delete);
+		getMenuInflater().inflate(R.menu.entry, menu);
 		return true;
 	}
 	
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_COPYURL_ID: {
+			case R.id.menu_copytoclipboard: {
 				if (link != null) {
 					((ClipboardManager) getSystemService(CLIPBOARD_SERVICE)).setText(link);
 				}
 				break;
 			}
-			case MENU_DELETE_ID: {
+			case R.id.menu_delete: {
 				getContentResolver().delete(uri, null, null);
 				if (localPictures) {
 					FeedData.deletePicturesOfEntry(_id);
@@ -692,6 +689,12 @@ public class EntryActivity extends Activity {
 					} else {
 						finish();
 					}
+				}
+				break;
+			}
+			case R.id.menu_share: {
+				if (link != null) {
+					startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(TEXTPLAIN), getString(R.string.share_via)));
 				}
 				break;
 			}

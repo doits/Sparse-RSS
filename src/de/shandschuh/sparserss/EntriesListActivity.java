@@ -26,8 +26,8 @@
 package de.shandschuh.sparserss;
 
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.app.AlertDialog.Builder;
+import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -39,28 +39,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.ClipboardManager;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnCreateContextMenuListener;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
 public class EntriesListActivity extends ListActivity {
-	private static final int MENU_MARKASREAD_ID = 1;
-	
-	private static final int MENU_MARKASUNREAD_ID = 2;
-	
-	private static final int MENU_HIDEREAD_ID = 3;
-	
-	private static final int MENU_DELETEREAD_ID = 4;
-	
-	private static final int MENU_DELETEALLENTRIES_ID = 5;
-	
 	private static final int CONTEXTMENU_MARKASREAD_ID = 6;
 	
 	private static final int CONTEXTMENU_MARKASUNREAD_ID = 7;
@@ -157,23 +147,19 @@ public class EntriesListActivity extends ListActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, MENU_MARKASREAD_ID, Menu.NONE, R.string.contextmenu_markasread).setIcon(android.R.drawable.ic_menu_revert);
-		menu.add(0, MENU_MARKASUNREAD_ID, Menu.NONE, R.string.contextmenu_markasunread).setIcon(android.R.drawable.ic_menu_set_as);
-		menu.add(1, MENU_HIDEREAD_ID, Menu.NONE, R.string.contextmenu_hideread).setCheckable(true).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-		menu.add(1, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread).setIcon(android.R.drawable.ic_menu_delete);
-		menu.add(1, MENU_DELETEALLENTRIES_ID, Menu.NONE, R.string.contextmenu_deleteallentries).setIcon(android.R.drawable.ic_menu_delete);
+		getMenuInflater().inflate(R.menu.entrylist, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.setGroupVisible(0, entriesListAdapter.getCount() > 0);
-		return super.onPrepareOptionsMenu(menu);
+		menu.setGroupVisible(R.id.menu_group_0, entriesListAdapter.getCount() > 0);
+		return true;
 	}
 
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_MARKASREAD_ID: {
+			case R.id.menu_markasread: {
 				new Thread() { // the update process takes some time
 					public void run() {
 						getContentResolver().update(uri, RSSOverview.getReadContentValues(), null, null);
@@ -182,7 +168,7 @@ public class EntriesListActivity extends ListActivity {
 				entriesListAdapter.markAsRead();
 				break;
 			}
-			case MENU_MARKASUNREAD_ID: {
+			case R.id.menu_markasunread: {
 				new Thread() { // the update process takes some time
 					public void run() {
 						getContentResolver().update(uri, RSSOverview.getUnreadContentValues(), null, null);
@@ -191,7 +177,7 @@ public class EntriesListActivity extends ListActivity {
 				entriesListAdapter.markAsUnread();
 				break;
 			}
-			case MENU_HIDEREAD_ID: {
+			case R.id.menu_hideread: {
 				if (item.isChecked()) {
 					item.setChecked(false).setTitle(R.string.contextmenu_hideread).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
 					entriesListAdapter.showRead(true);
@@ -201,7 +187,7 @@ public class EntriesListActivity extends ListActivity {
 				}
 				break;
 			}
-			case MENU_DELETEREAD_ID: {
+			case R.id.menu_deleteread: {
 				new Thread() { // the delete process takes some time
 					public void run() {
 						String selection = Strings.READDATE_GREATERZERO+Strings.DB_AND+" ("+Strings.DB_EXCUDEFAVORITE+")";
@@ -217,7 +203,7 @@ public class EntriesListActivity extends ListActivity {
 				}.start();
 				break;
 			}
-			case MENU_DELETEALLENTRIES_ID: {
+			case R.id.menu_deleteallentries: {
 				Builder builder = new AlertDialog.Builder(this);
 				
 				builder.setIcon(android.R.drawable.ic_dialog_alert);

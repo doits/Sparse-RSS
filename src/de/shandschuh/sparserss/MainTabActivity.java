@@ -129,6 +129,11 @@ public class MainTabActivity extends TabActivity {
 		return getCurrentActivity().onMenuItemSelected(featureId, item);
 	}
 	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		return getCurrentActivity().onPrepareOptionsMenu(menu);
+	}
+	
 	private void setContent() {
 	    TabHost tabHost = getTabHost();  
 

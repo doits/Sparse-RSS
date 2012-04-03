@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_copytoclipboard"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="@string/contextmenu_copyurl"/>
+    <item android:id="@+id/menu_share"
+        android:icon="@android:drawable/ic_menu_share"
+        android:title="@string/menu_share"/>
+    <item android:id="@+id/menu_delete"
+        android:icon="@android:drawable/ic_menu_delete"
+        android:title="@string/contextmenu_delete"
+        android:showAsAction="ifRoom"/>
+</menu>

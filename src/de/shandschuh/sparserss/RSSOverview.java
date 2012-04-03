@@ -76,10 +76,6 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int DIALOG_ABOUT = 7;
 	
-	private static final int MENU_ADDFEED_ID = 1;
-	
-	private static final int MENU_REFRESH_ID = 2;
-	
 	private static final int CONTEXTMENU_EDIT_ID = 3;
 	
 	private static final int CONTEXTMENU_REFRESH_ID = 4;
@@ -94,28 +90,9 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int CONTEXTMENU_DELETEALLENTRIES_ID = 9;
 	
-	private static final int MENU_SETTINGS_ID = 10;
-	
-	private static final int MENU_ALLREAD = 11;
-	
-	private static final int MENU_ABOUT_ID = 12;
-	
-	private static final int MENU_IMPORT_ID = 13;
-	
-	private static final int MENU_EXPORT_ID = 14;
-	
-	private static final int MENU_ENABLEFEEDSORT_ID = 15;
-	
-	private static final int MENU_DELETEREAD_ID = 16;
-	
-	private static final int MENU_DELETEALLENTRIES_ID = 17;
-	
-	private static final int MENU_DISABLEFEEDSORT_ID = 18;
-	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
 	private static final Uri CANGELOG_URI = Uri.parse("http://code.google.com/p/sparserss/wiki/Changelog");
-	
 	
 	static NotificationManager notificationManager; // package scope
 	
@@ -239,30 +216,14 @@ public class RSSOverview extends ListActivity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(0, MENU_ADDFEED_ID, Menu.NONE, R.string.menu_addfeed).setIcon(android.R.drawable.ic_menu_add);
-		menu.add(0, MENU_REFRESH_ID, Menu.NONE, R.string.menu_refresh).setIcon(android.R.drawable.ic_menu_rotate);
-		menu.add(0, MENU_SETTINGS_ID, Menu.NONE, R.string.menu_settings).setIcon(android.R.drawable.ic_menu_preferences);
-		menu.add(0, MENU_ALLREAD, Menu.NONE, R.string.menu_allread).setIcon(android.R.drawable.ic_menu_revert);
-		menu.add(0, MENU_ABOUT_ID, Menu.NONE, R.string.menu_about).setIcon(android.R.drawable.ic_menu_info_details);
-		
-		// no icons will be shown from here
-		menu.add(0, MENU_IMPORT_ID, Menu.NONE, R.string.menu_import);
-		menu.add(0, MENU_EXPORT_ID, Menu.NONE, R.string.menu_export);
-		menu.add(0, MENU_ENABLEFEEDSORT_ID, Menu.NONE, R.string.menu_enablefeedsort);
-		menu.add(0, MENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread);
-		menu.add(0, MENU_DELETEALLENTRIES_ID, Menu.NONE, R.string.contextmenu_deleteallentries);
-		
-		menu.add(1, MENU_DISABLEFEEDSORT_ID, Menu.NONE, R.string.menu_disablefeedsort).setIcon(android.R.drawable.ic_menu_close_clear_cancel);
-		
+		getMenuInflater().inflate(R.menu.feedoverview, menu);
 		return true;
 	}
 	
-	
-
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.setGroupVisible(0, !feedSort);
-		menu.setGroupVisible(1, feedSort);
+		menu.setGroupVisible(R.id.menu_group_0, !feedSort);
+		menu.setGroupVisible(R.id.menu_group_1, feedSort);
 		return true;
 	}
 
@@ -270,11 +231,13 @@ public class RSSOverview extends ListActivity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, final MenuItem item) {
 		switch (item.getItemId()) {
-			case MENU_ADDFEED_ID: {
+			case R.id.menu_addfeed: {
+				feedSort = false; // action bar may allow clicking on this while sorting
 				startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedData.FeedColumns.CONTENT_URI));
 				break;
 			}
-			case MENU_REFRESH_ID: {
+			case R.id.menu_refresh: {
+				feedSort = false; // action bar may allow clicking on this while sorting
 				new Thread() {
 					public void run() {
 						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false)));
@@ -413,11 +376,11 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 				
-			case MENU_SETTINGS_ID: {
+			case R.id.menu_settings: {
 				startActivityForResult(new Intent(this, ApplicationPreferencesActivity.class), ACTIVITY_APPLICATIONPREFERENCES_ID);
 				break;
 			}
-			case MENU_ALLREAD: {
+			case R.id.menu_allread: {
 				new Thread() {
 					public void run() {
 						if (getContentResolver().update(FeedData.EntryColumns.CONTENT_URI, getReadContentValues(), new StringBuilder(FeedData.EntryColumns.READDATE).append(Strings.DB_ISNULL).toString(), null) > 0) {
@@ -427,11 +390,11 @@ public class RSSOverview extends ListActivity {
 				}.start();
 				break;
 			}
-			case MENU_ABOUT_ID: {
+			case R.id.menu_about: {
 				showDialog(DIALOG_ABOUT);
 				break;
 			}
-			case MENU_IMPORT_ID: {
+			case R.id.menu_import: {
 				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ||Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
 					final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 					
@@ -462,7 +425,7 @@ public class RSSOverview extends ListActivity {
 				
 				break;
 			}
-			case MENU_EXPORT_ID: {
+			case R.id.menu_export: {
 				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) ||Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED_READ_ONLY)) {
 					try {
 						String filename = new StringBuilder(Environment.getExternalStorageDirectory().toString()).append("/sparse_rss_").append(System.currentTimeMillis()).append(".opml").toString();
@@ -477,21 +440,21 @@ public class RSSOverview extends ListActivity {
 				}
 				break;
 			}
-			case MENU_ENABLEFEEDSORT_ID: {
+			case R.id.menu_enablefeedsort: {
 				feedSort = true;
 				break;
 			}
-			case MENU_DELETEREAD_ID: {
+			case R.id.menu_deleteread: {
 				FeedData.deletePicturesOfFeedAsync(this, FeedData.EntryColumns.CONTENT_URI, Strings.READDATE_GREATERZERO);
 				getContentResolver().delete(FeedData.EntryColumns.CONTENT_URI, Strings.READDATE_GREATERZERO, null);
 				((RSSOverviewListAdapter) getListAdapter()).notifyDataSetChanged();
 				break;
 			}
-			case MENU_DELETEALLENTRIES_ID: {
+			case R.id.menu_deleteallentries: {
 				showDeleteAllEntriesQuestion(this, FeedData.EntryColumns.CONTENT_URI);
 				break;
 			}
-			case MENU_DISABLEFEEDSORT_ID: {
+			case R.id.menu_disablefeedsort: {
 				feedSort = false;
 				break;
 			}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/menu_group_0">
+        <item android:id="@+id/menu_markasread"
+            android:icon="@android:drawable/ic_menu_revert"
+            android:title="@string/contextmenu_markasread"/>
+        <item android:id="@+id/menu_markasunread"
+            android:icon="@android:drawable/ic_menu_set_as"
+            android:title="@string/contextmenu_markasunread"/>
+    </group>
+    <group android:id="@+id/menu_group_1">
+        <item android:id="@+id/menu_hideread"
+            android:icon="@android:drawable/ic_menu_close_clear_cancel"
+            android:title="@string/contextmenu_hideread"
+            android:checkable="true"/>
+        <item android:id="@+id/menu_deleteread"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="@string/contextmenu_deleteread"/>
+        <item android:id="@+id/menu_deleteallentries"
+            android:icon="@android:drawable/ic_menu_delete"
+            android:title="@string/contextmenu_deleteallentries"/>
+    </group>
+</menu>
