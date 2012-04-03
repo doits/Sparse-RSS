@@ -33,6 +33,7 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.util.Linkify;
@@ -42,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
 
@@ -58,6 +60,10 @@ public class MainTabActivity extends TabActivity {
 	
 	public static MainTabActivity INSTANCE;
 	
+	public static final boolean POSTGINGERBREAD = !Build.VERSION.RELEASE.startsWith("1") &&
+		!Build.VERSION.RELEASE.startsWith("2"); // this way around is future save
+	
+	
 	private static Boolean LIGHTTHEME;
 	
 	public static boolean isLightTheme(Context context) {
@@ -66,6 +72,8 @@ public class MainTabActivity extends TabActivity {
 		}
 		return LIGHTTHEME;
 	}
+	
+	private Menu menu;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isLightTheme(this)) {
@@ -121,6 +129,7 @@ public class MainTabActivity extends TabActivity {
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		this.menu = menu;
 		return getCurrentActivity().onCreateOptionsMenu(menu);
 	}
 	
@@ -135,16 +144,27 @@ public class MainTabActivity extends TabActivity {
 	}
 	
 	private void setContent() {
-	    TabHost tabHost = getTabHost();  
-
-	    tabHost.addTab(tabHost.newTabSpec(TAG_NORMAL).setIndicator(getString(R.string.overview)).setContent(new Intent().setClass(this, RSSOverview.class)));
+	    TabHost tabHost = getTabHost();
 	    
+	    tabHost.addTab(tabHost.newTabSpec(TAG_NORMAL).setIndicator(getString(R.string.overview)).setContent(new Intent().setClass(this, RSSOverview.class)));
 	    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_SHOWTABS, false)) {
 	    	tabHost.addTab(tabHost.newTabSpec(TAG_ALL).setIndicator(getString(R.string.all)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
 	    	
 		    tabHost.addTab(tabHost.newTabSpec(TAG_FAVORITE).setIndicator(getString(R.string.favorites), getResources().getDrawable(android.R.drawable.star_big_on)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.FAVORITES_CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true).putExtra(EntriesListActivity.EXTRA_AUTORELOAD, true)));
 		    tabsAdded = true;
 		    getTabWidget().setVisibility(View.VISIBLE);
+	    }
+	    
+	    if (POSTGINGERBREAD) {
+		    /* Change the menu also on ICS when tab is changed */
+		    tabHost.setOnTabChangedListener(new OnTabChangeListener() {
+				public void onTabChanged(String tabId) {
+					if (menu != null) {
+						menu.clear();
+						onCreateOptionsMenu(menu);
+					}
+				}
+		    });
 	    }
 	}
 
