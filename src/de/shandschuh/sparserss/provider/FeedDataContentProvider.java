@@ -259,7 +259,7 @@ public class FeedDataContentProvider extends ContentProvider {
 		}
 	}
 	
-	private SQLiteDatabase database;
+	private DatabaseHelper databaseHelper;
 	
 	private String[] MAXPRIORITY = new String[] {"MAX("+FeedData.FeedColumns.PRIORITY+")"};
 
@@ -270,6 +270,8 @@ public class FeedDataContentProvider extends ContentProvider {
 		String table = null;
 		
 		StringBuilder where = new StringBuilder();
+		
+		SQLiteDatabase database = databaseHelper.getWritableDatabase();
 		
 		switch(option) {
 			case URI_FEED : {
@@ -368,6 +370,8 @@ public class FeedDataContentProvider extends ContentProvider {
 		
 		int option = URI_MATCHER.match(uri);
 		
+		SQLiteDatabase database = databaseHelper.getWritableDatabase();
+		
 		switch (option) {
 			case URI_FEEDS : {
 				Cursor cursor = database.query(TABLE_FEEDS, MAXPRIORITY, null, null, null, null, null, null);
@@ -410,8 +414,8 @@ public class FeedDataContentProvider extends ContentProvider {
 		} catch (Exception e) {
 			
 		}
-		database = new DatabaseHelper(getContext(), DATABASE_NAME, DATABASE_VERSION).getWritableDatabase();
-		return database != null;
+		databaseHelper = new DatabaseHelper(getContext(), DATABASE_NAME, DATABASE_VERSION);
+		return true;
 	}
 
 	@Override
@@ -460,6 +464,9 @@ public class FeedDataContentProvider extends ContentProvider {
 				break;
 			}
 		}
+		
+		SQLiteDatabase database = databaseHelper.getReadableDatabase();
+		
 		Cursor cursor = queryBuilder.query(database, projection, selection, selectionArgs, null, null, sortOrder);
 
 		cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -473,6 +480,8 @@ public class FeedDataContentProvider extends ContentProvider {
 		String table = null;
 		
 		StringBuilder where = new StringBuilder();
+		
+		SQLiteDatabase database = databaseHelper.getWritableDatabase();
 		
 		switch(option) {
 			case URI_FEED : {
