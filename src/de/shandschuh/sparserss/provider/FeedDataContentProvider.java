@@ -48,7 +48,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
-	private static final int DATABASE_VERSION = 9;
+	private static final int DATABASE_VERSION = 10;
 	
 	private static final int URI_FEEDS = 1;
 	
@@ -168,7 +168,10 @@ public class FeedDataContentProvider extends ContentProvider {
 			// we simply leave the "encoded" column untouched
 			if (oldVersion < 9) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.ENCLOSURE).append(' ').append(FeedData.TYPE_TEXT).toString());
-			} 
+			}
+			if (oldVersion < 10) {
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.GUID).append(' ').append(FeedData.TYPE_TEXT).toString());
+			}
 		}
 		
 		private void executeCatchedSQL(SQLiteDatabase database, String query) {

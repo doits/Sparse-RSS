@@ -93,6 +93,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_ENCLOSURE = "enclosure";
 	
+	private static final String TAG_GUID = "guid";
+	
 	private static final String ATTRIBUTE_URL = "url";
 	
 	private static final String ATTRIBUTE_HREF = "href";
@@ -156,6 +158,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private boolean lastUpdateDateTagEntered;
 	
+	private boolean guidTagEntered;
+	
 	private StringBuilder title;
 	
 	private StringBuilder dateStringBuilder;
@@ -193,6 +197,8 @@ public class RSSHandler extends DefaultHandler {
 	private long realLastUpdate;
 	
 	private long now;
+	
+	private StringBuilder guid;
 	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
@@ -237,6 +243,7 @@ public class RSSHandler extends DefaultHandler {
 		dateTagEntered = false;
 		lastUpdateDateTagEntered = false;
 		now = System.currentTimeMillis();
+		guid = null;
 	}
 
 	@Override
@@ -327,6 +334,9 @@ public class RSSHandler extends DefaultHandler {
 					enclosure.append(value);
 				}
 			}
+		} else if (TAG_GUID.equals(localName)) {
+			guidTagEntered = true;
+			guid = new StringBuilder();
 		}
 	}
 
@@ -346,7 +356,9 @@ public class RSSHandler extends DefaultHandler {
 			dateStringBuilder.append(ch, start, length);
 		} else if (lastUpdateDateTagEntered) {
 			dateStringBuilder.append(ch, start, length);
-		} 
+		} else if (guidTagEntered) {
+			guid.append(ch, start, length);
+		}
 	}
 	
 	@Override
@@ -419,9 +431,19 @@ public class RSSHandler extends DefaultHandler {
 					existanceStringBuilder.append(Strings.DB_AND).append(FeedData.EntryColumns.ENCLOSURE).append(Strings.DB_ARG);
 				}
 				
+				String guidString = null;
+				
+				if (guid != null && guid.length() > 0) {
+					guidString = guid.toString();
+					values.put(FeedData.EntryColumns.GUID, guidString);
+					existanceStringBuilder.append(Strings.DB_AND).append(FeedData.EntryColumns.GUID).append(Strings.DB_ARG);
+				}
+				
 				String entryLinkString = entryLink.toString().trim();
 				
-				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), enclosureString != null ? new String[] {entryLinkString, enclosureString} : new String[] {entryLinkString}) == 0) {
+				String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] {entryLinkString, enclosureString, guidString}: new String[] {entryLinkString, enclosureString}) : (guidString != null ? new String[] {entryLinkString, guidString} : new String[] {entryLinkString});
+				
+				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					if (entryDate == null) {
 						values.put(FeedData.EntryColumns.DATE, now--);
@@ -459,8 +481,11 @@ public class RSSHandler extends DefaultHandler {
 			description = null;
 			title = null;
 			enclosure = null;
+			guid = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
+		} else if (TAG_GUID.equals(localName)) {
+			guidTagEntered = false;
 		}
 	}
 	
