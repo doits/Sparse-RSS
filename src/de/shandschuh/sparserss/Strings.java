@@ -128,8 +128,6 @@ public final class Strings {
 	
 	public static final String HTML_IMG_REGEX = "<[/]?[ ]?img(.|\n)*?>";
 	
-	public static final String HTML_STYLEATTRIBUTE_REGEX = "[ ]style=[\"][^\"]*[\"]";
-
 	public static final String ONE = "1";
 
 	public static final Object THREENEWLINES = "\n\n\n";

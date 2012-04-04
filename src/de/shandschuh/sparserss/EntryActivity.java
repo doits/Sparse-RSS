@@ -488,8 +488,6 @@ public class EntryActivity extends Activity {
 					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
 				}
 				
-				abstractText = abstractText.replaceAll(Strings.HTML_STYLEATTRIBUTE_REGEX, Strings.EMPTY); // remove all styles;
-				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
 				
 				/*
