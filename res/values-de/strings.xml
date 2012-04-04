@@ -11,6 +11,7 @@
     <string name="license_intro">Diese Software ist unter der MIT Open source Lizenz veröffentlicht und der Quellcode befindet sich unter http://code.google.com/p/sparserss</string>
 
     <string name="editfeed_title">Feed bearbeiten</string>
+    <string name="newfeed_title">Neuer Feed</string>
     <string name="contextmenu_edit">Bearbeiten</string>
     <string name="contextmenu_refresh">Aktualisieren</string>
     <string name="menu_settings">Einstellungen</string>

@@ -63,7 +63,7 @@ public class FeedConfigActivity extends Activity {
 		refreshOnlyWifiCheckBox = (CheckBox) findViewById(R.id.wifionlycheckbox);
 			
 		if (intent.getAction().equals(Intent.ACTION_INSERT)) {
-			setTitle("New Feed");
+			setTitle(R.string.newfeed_title);
 			restoreInstanceState(savedInstanceState);
 			((Button) findViewById(R.id.button_ok)).setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {

@@ -36,6 +36,7 @@
     <string name="favorites">Favorites</string>
 
     <string name="editfeed_title">Edit feed</string>
+    <string name="newfeed_title">New feed</string>
     <string name="contextmenu_edit">Edit</string>
     <string name="contextmenu_refresh">Refresh</string>
     <string name="menu_settings">Settings</string>
