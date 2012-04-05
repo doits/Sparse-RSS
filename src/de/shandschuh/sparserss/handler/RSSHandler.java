@@ -215,7 +215,7 @@ public class RSSHandler extends DefaultHandler {
 		
 		final String query = new StringBuilder(FeedData.EntryColumns.DATE).append('<').append(keepDateBorderTime).append(DB_FAVORITE).toString();
 		
-		FeedData.deletePicturesOfFeedAsync(context, feedEntiresUri, query);
+		FeedData.deletePicturesOfFeed(context, feedEntiresUri, query);
 		
 		context.getContentResolver().delete(feedEntiresUri, query, null);
 		newCount = 0;
@@ -461,7 +461,7 @@ public class RSSHandler extends DefaultHandler {
 								
 								byte[] data = FetcherService.getBytes(new URL(images.get(n)).openStream());
 								
-								FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGEFOLDER).append(id).append(Strings.IMAGEFILE_IDSEPARATOR).append(entryId).append(Strings.IMAGEFILE_IDSEPARATOR).append(match.substring(match.lastIndexOf('/')+1)).toString());
+								FileOutputStream fos = new FileOutputStream(new StringBuilder(FeedDataContentProvider.IMAGEFOLDER).append(entryId).append(Strings.IMAGEFILE_IDSEPARATOR).append(match.substring(match.lastIndexOf('/')+1)).toString());
 								
 								fos.write(data);
 								fos.close();

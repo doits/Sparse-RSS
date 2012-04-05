@@ -129,37 +129,43 @@ public class FeedData {
 	private static String[] IDPROJECTION = new String[] {FeedData.EntryColumns._ID};
 	
 	public static void deletePicturesOfFeedAsync(final Context context, final Uri entriesUri, final String selection) {
-		new Thread() {
-			public void run() {
-				deletePicturesOfFeed(context, entriesUri, selection);
-			}
-		}.start();
+		if (FeedDataContentProvider.IMAGEFOLDER_FILE.exists()) {
+			new Thread() {
+				public void run() {
+					deletePicturesOfFeed(context, entriesUri, selection);
+				}
+			}.start();
+		}
 	}
 	
 	public static synchronized void deletePicturesOfFeed(Context context, Uri entriesUri, String selection) {
-		PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
-		
-		Cursor cursor = context.getContentResolver().query(entriesUri, IDPROJECTION, selection, null, null);
-		
-		while (cursor.moveToNext()) {
-			filenameFilter.setEntryId(cursor.getString(0));
+		if (FeedDataContentProvider.IMAGEFOLDER_FILE.exists()) {
+			PictureFilenameFilter filenameFilter = new PictureFilenameFilter();
+			
+			Cursor cursor = context.getContentResolver().query(entriesUri, IDPROJECTION, selection, null, null);
+			
+			while (cursor.moveToNext()) {
+				filenameFilter.setEntryId(cursor.getString(0));
+				
+				File[] files = FeedDataContentProvider.IMAGEFOLDER_FILE.listFiles(filenameFilter);
+				
+				for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
+					files[n].delete();
+				}
+			}
+			cursor.close();
+		}
+	}
+	
+	public static synchronized void deletePicturesOfEntry(String entryId) {
+		if (FeedDataContentProvider.IMAGEFOLDER_FILE.exists()) {
+			PictureFilenameFilter filenameFilter = new PictureFilenameFilter(entryId);
 			
 			File[] files = FeedDataContentProvider.IMAGEFOLDER_FILE.listFiles(filenameFilter);
 			
 			for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
 				files[n].delete();
 			}
-		}
-		cursor.close();
-	}
-	
-	public static synchronized void deletePicturesOfEntry(String entryId) {
-		PictureFilenameFilter filenameFilter = new PictureFilenameFilter(entryId);
-		
-		File[] files = FeedDataContentProvider.IMAGEFOLDER_FILE.listFiles(filenameFilter);
-		
-		for (int n = 0, i = files != null ? files.length : 0; n < i; n++) {
-			files[n].delete();
 		}
 	}
 	
