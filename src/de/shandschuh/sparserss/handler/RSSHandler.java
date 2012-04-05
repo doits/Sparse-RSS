@@ -200,9 +200,12 @@ public class RSSHandler extends DefaultHandler {
 	
 	private StringBuilder guid;
 	
+	private boolean efficientFeedParsing;
+	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
 		this.context = context;
+		this.efficientFeedParsing = true;
 	}
 	
 	public void init(Date lastUpdateDate, final String id, String title) {
@@ -472,10 +475,10 @@ public class RSSHandler extends DefaultHandler {
 					}
 					
 					newCount++;
-				} else if (entryDate == null) {
+				} else if (entryDate == null && efficientFeedParsing) {
 					cancel();
 				}
-			} else {
+			} else if (efficientFeedParsing) {
 				cancel();
 			}
 			description = null;
@@ -553,6 +556,10 @@ public class RSSHandler extends DefaultHandler {
 			} catch (ParseException e) { } // just do nothing
 		}
 		return null;
+	}
+
+	public void setEfficientFeedParsing(boolean efficientFeedParsing) {
+		this.efficientFeedParsing = efficientFeedParsing;
 	}
 	
 }

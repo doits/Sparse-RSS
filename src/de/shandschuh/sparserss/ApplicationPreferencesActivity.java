@@ -1,7 +1,7 @@
 /**
  * Sparse rss
- * 
- * Copyright (c) 2010, 2011 Stefan Handschuh
+ *
+ * Copyright (c) 2010-2012 Stefan Handschuh
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,18 @@
 
 package de.shandschuh.sparserss;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
-import android.preference.Preference.OnPreferenceChangeListener;
 import de.shandschuh.sparserss.service.RefreshService;
 
 public class ApplicationPreferencesActivity extends PreferenceActivity {
@@ -82,7 +87,39 @@ public class ApplicationPreferencesActivity extends PreferenceActivity {
 				// this return statement will never be reached
 				return true;
 			}
-		});	
+		});
+		
+		preference = (Preference) findPreference(Strings.SETTINGS_EFFICIENTFEEDPARSING);
+		preference.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+			public boolean onPreferenceChange(final Preference preference, Object newValue) {
+				if (newValue.equals(Boolean.FALSE)) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(ApplicationPreferencesActivity.this);
+					
+					builder.setIcon(android.R.drawable.ic_dialog_alert);
+					builder.setTitle(android.R.string.dialog_alert_title);
+					builder.setPositiveButton(android.R.string.ok, new OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							Editor editor = PreferenceManager.getDefaultSharedPreferences(ApplicationPreferencesActivity.this).edit();
+							
+							editor.putBoolean(Strings.SETTINGS_EFFICIENTFEEDPARSING, Boolean.FALSE);
+							editor.commit();
+							((CheckBoxPreference) preference).setChecked(false);
+							dialog.dismiss();
+						}
+					});
+					builder.setNegativeButton(android.R.string.cancel, new OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+						}
+					});
+					builder.setMessage(R.string.warning_moretraffic);
+					builder.show();
+					return false;
+				} else {
+					return true;
+				}
+			}
+		});
 	}
 	
 }

@@ -214,6 +214,7 @@ public class FetcherService extends IntentService {
 		
 		RSSHandler handler = new RSSHandler(context);
 		
+		handler.setEfficientFeedParsing(preferences.getBoolean(Strings.SETTINGS_EFFICIENTFEEDPARSING, true));
 		handler.setFetchImages(preferences.getBoolean(Strings.SETTINGS_FETCHPICTURES, false));
 				
 		while(cursor.moveToNext()) {

@@ -85,6 +85,8 @@
     <string name="settings_standarduseragent_description">Benutze den Standard-user-agent Namen</string>
     <string name="settings_httphttpsredirects">Folge http &lt;-&gt; https Weiterleitungen</string>
     <string name="settings_httphttpsredirects_description">Folge automatisch http zu https (und umgekehrt) Weiterleitungen</string>
+    <string name="settings_enableefficientfeedparsing">Effiziente Feed-Auswertung</string>
+    <string name="settings_enableefficientfeedparsing_description">Auswertung des Feeds wird automatisch bei vorhandenen oder zu alten Einträgen gestoppt</string>
     <string name="settings_proxy_wifionly">Nur WLan</string>
     <string name="settings_proxy_wifionly_description">Benutze den Proxy nur für WLan Verbindungen</string>
 
@@ -117,6 +119,8 @@
     <string name="question_refreshwowifi">Wollen Sie wirklich diesen Feed ohne WLan aktualisieren?</string>
     <string name="question_areyousure">Sind Sie sicher?</string>
     <string name="question_playenclosure">Wollen Sie die Datei %1$s von angeblicher Größe von %2$s herunterladen und abspielen?\nDas kann sehr viel Datenvolumen verbrauchen!</string>
+
+    <string name="warning_moretraffic">Deaktivieren dieser Option verursacht mehr Datenverkehr (Traffic).</string>
 
     <string name="button_accept">Akzeptieren</string>
     <string name="button_decline">Ablehnen</string>

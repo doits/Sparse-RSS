@@ -124,6 +124,11 @@
             android:defaultValue="false"
             android:summary="@string/settings_httphttpsredirects_description"
             android:key="httphttpsredirects" />
+        <CheckBoxPreference
+            android:title="@string/settings_enableefficientfeedparsing"
+            android:defaultValue="true"
+            android:summary="@string/settings_enableefficientfeedparsing_description"
+            android:key="efficientfeedparsing" />
         <PreferenceScreen android:title="Proxy">
             <CheckBoxPreference
                 android:key="proxy.enabled"
