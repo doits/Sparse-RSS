@@ -86,6 +86,9 @@ public class MainTabActivity extends TabActivity {
         if (getPreferences(MODE_PRIVATE).getBoolean(Strings.PREFERENCE_LICENSEACCEPTED, false)) {
         	setContent();
         } else {
+        	/* Workaround for android issue 4499 on 1.5 devices */
+        	getTabHost().addTab(getTabHost().newTabSpec(Strings.EMPTY).setIndicator(Strings.EMPTY).setContent(new Intent(this, EmptyActivity.class)));
+        	
         	showDialog(DIALOG_LICENSEAGREEMENT);
         }
 	}
@@ -110,6 +113,9 @@ public class MainTabActivity extends TabActivity {
 				
 				editor.putBoolean(Strings.PREFERENCE_LICENSEACCEPTED, true);
 				editor.commit();
+				
+				/* Part of workaround for android issue 4499 on 1.5 devices */
+				getTabHost().clearAllTabs();
 				
 				/* we only want to invoke actions if the license is accepted */
 				setContent();
