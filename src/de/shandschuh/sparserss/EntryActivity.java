@@ -647,7 +647,7 @@ public class EntryActivity extends Activity {
 	}
 	
 	private void switchEntry(String id, boolean animate, Animation inAnimation, Animation outAnimation) {
-		uri = FeedData.EntryColumns.ENTRY_CONTENT_URI(id);
+		uri = parentUri.buildUpon().appendPath(id).build();
 		getIntent().setData(uri);
 		scrollX = 0;
 		scrollY = 0;
