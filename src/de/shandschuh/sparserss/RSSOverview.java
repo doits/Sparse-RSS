@@ -98,7 +98,7 @@ public class RSSOverview extends ListActivity {
 	
 	boolean feedSort;
 	
-	RSSOverviewListAdapter listAdapter;
+	private RSSOverviewListAdapter listAdapter;
 	
     /** Called when the activity is first created. */
     @Override
