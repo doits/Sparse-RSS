@@ -481,7 +481,7 @@ public class EntryActivity extends Activity {
 				localPictures = abstractText.indexOf(Strings.IMAGEID_REPLACEMENT) > -1;
 				
 				if (localPictures) {
-					abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, uri.getLastPathSegment()+Strings.IMAGEFILE_IDSEPARATOR);
+					abstractText = abstractText.replace(Strings.IMAGEID_REPLACEMENT, _id+Strings.IMAGEFILE_IDSEPARATOR);
 				}
 
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
