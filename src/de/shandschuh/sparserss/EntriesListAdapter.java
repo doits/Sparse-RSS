@@ -94,7 +94,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private Vector<Long> unfavorited;
 	
 	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo, boolean autoreload) {
-		super(context, R.layout.listitem, createManagedCursor(context, uri, true), autoreload);
+		super(context, R.layout.entrylistitem, createManagedCursor(context, uri, true), autoreload);
 		showRead = true;
 		this.context = context;
 		this.uri = uri;

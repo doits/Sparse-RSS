@@ -26,6 +26,7 @@
 package de.shandschuh.sparserss;
 
 import java.util.Date;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.content.Context;
@@ -65,8 +66,12 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	
 	private SimpleTask updateTask;
 	
+	private boolean feedSort;
+	
+	private Vector<View> sortViews;
+	
 	public RSSOverviewListAdapter(Activity activity) {
-		super(activity, R.layout.listitem, activity.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
+		super(activity, R.layout.feedlistitem, activity.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
 		nameColumnPosition = getCursor().getColumnIndex(FeedData.FeedColumns.NAME);
 		lastUpdateColumn = getCursor().getColumnIndex(FeedData.FeedColumns.LASTUPDATE);
 		idPosition = getCursor().getColumnIndex(FeedData.FeedColumns._ID);
@@ -89,6 +94,7 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 				}
 			}
 		};
+		sortViews = new Vector<View>();
 	}
 
 	@Override
@@ -147,6 +153,13 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			textView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
 			textView.setText(cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition));
 		}
+		
+		View sortView = view.findViewById(R.id.sortitem);
+		
+		if (!sortViews.contains(sortView)) { // as we are reusing views, this is fine
+			sortViews.add(sortView);
+		}
+		sortView.setVisibility(feedSort ? View.VISIBLE : View.GONE);
 	}
 
 	@Override
@@ -166,6 +179,17 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			} else {
 				updateTask.enable();
 			}
+		}
+	}
+
+	public void setFeedSortEnabled(boolean enabled) {
+		feedSort = enabled;
+		
+		/* we do not want to call notifyDataSetChanged as this requeries the cursor*/
+		int visibility = feedSort ? View.VISIBLE : View.GONE;
+		
+		for (View sortView : sortViews) {
+			sortView.setVisibility(visibility);
 		}
 	}
 }

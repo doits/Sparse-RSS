@@ -98,6 +98,8 @@ public class RSSOverview extends ListActivity {
 	
 	boolean feedSort;
 	
+	RSSOverviewListAdapter listAdapter;
+	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -110,7 +112,8 @@ public class RSSOverview extends ListActivity {
         	notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         }
         setContentView(R.layout.main);
-        setListAdapter(new RSSOverviewListAdapter(this));
+        listAdapter = new RSSOverviewListAdapter(this);
+        setListAdapter(listAdapter);
         getListView().setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 			public void onCreateContextMenu(ContextMenu menu, View view, ContextMenuInfo menuInfo) {
 				menu.setHeaderTitle(((TextView) ((AdapterView.AdapterContextMenuInfo) menuInfo).targetView.findViewById(android.R.id.text1)).getText());
@@ -152,14 +155,22 @@ public class RSSOverview extends ListActivity {
 									View item = listView.getChildAt(dragedItem - listView.getFirstVisiblePosition());
 									
 									if (item != null) {
-										item.setDrawingCacheEnabled(true);
-										dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
+										View sortView = item.findViewById(R.id.sortitem);
 										
-										layoutParams = new LayoutParams();
-										layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
-										layoutParams.gravity = Gravity.TOP;
-										layoutParams.y = (int) event.getY();
-										windowManager.addView(dragedView, layoutParams);
+										if (sortView.getLeft() <= event.getX()) {
+											item.setDrawingCacheEnabled(true);
+											dragedView.setImageBitmap(Bitmap.createBitmap(item.getDrawingCache()));
+											
+											layoutParams = new LayoutParams();
+											layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+											layoutParams.gravity = Gravity.TOP;
+											layoutParams.y = (int) event.getY();
+											windowManager.addView(dragedView, layoutParams);
+										} else {
+											dragedItem = -1;
+											return false; // do not comsume
+										}
+										
 									} else {
 										dragedItem = -1;
 									}
@@ -188,8 +199,10 @@ public class RSSOverview extends ListActivity {
 									getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(listView.getItemIdAtPosition(dragedItem)), values, null, null);
 								}
 								dragedItem = -1;
+								return true;
+							} else {
+								return false;
 							}
-							break;
 						}
 					}
 					return true;
@@ -232,14 +245,13 @@ public class RSSOverview extends ListActivity {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onMenuItemSelected(int featureId, final MenuItem item) {
+		setFeedSortEnabled(false);
 		switch (item.getItemId()) {
 			case R.id.menu_addfeed: {
-				feedSort = false; // action bar may allow clicking on this while sorting
 				startActivity(new Intent(Intent.ACTION_INSERT).setData(FeedData.FeedColumns.CONTENT_URI));
 				break;
 			}
 			case R.id.menu_refresh: {
-				feedSort = false; // action bar may allow clicking on this while sorting
 				new Thread() {
 					public void run() {
 						sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.SETTINGS_OVERRIDEWIFIONLY, PreferenceManager.getDefaultSharedPreferences(RSSOverview.this).getBoolean(Strings.SETTINGS_OVERRIDEWIFIONLY, false)));
@@ -443,7 +455,7 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case R.id.menu_enablefeedsort: {
-				feedSort = true;
+				setFeedSortEnabled(true);
 				break;
 			}
 			case R.id.menu_deleteread: {
@@ -457,7 +469,7 @@ public class RSSOverview extends ListActivity {
 				break;
 			}
 			case R.id.menu_disablefeedsort: {
-				feedSort = false;
+				// do nothing as the feed sort gets disabled anyway
 				break;
 			}
 		}
@@ -480,6 +492,8 @@ public class RSSOverview extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView listView, View view, int position, long id) {
+		setFeedSortEnabled(false);
+		
 		Intent intent = new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI(Long.toString(id)));
 		
 		intent.putExtra(FeedData.FeedColumns._ID, id);
@@ -560,6 +574,13 @@ public class RSSOverview extends ListActivity {
         });
 		builder.setNegativeButton(android.R.string.no, null);
 		builder.show();
+	}
+	
+	private void setFeedSortEnabled(boolean enabled) {
+		if (enabled != feedSort) {
+			listAdapter.setFeedSortEnabled(enabled);
+			feedSort = enabled;
+		}
 	}
     
 }
