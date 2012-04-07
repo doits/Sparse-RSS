@@ -247,6 +247,7 @@ public class RSSHandler extends DefaultHandler {
 		lastUpdateDateTagEntered = false;
 		now = System.currentTimeMillis();
 		guid = null;
+		guidTagEntered = false;
 	}
 
 	@Override
