@@ -62,9 +62,9 @@ public class WidgetConfigActivity extends PreferenceActivity {
         addPreferencesFromResource(R.layout.widgetpreferences);
         setContentView(R.layout.widgetconfig);
         
-        final ListPreference entryCountPreference = (ListPreference) getPreferenceScreen().getPreference(0);
+        final ListPreference entryCountPreference = (ListPreference) findPreference("widget.entrycount");
         
-        final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) getPreferenceScreen().getPreference(1);
+        final PreferenceCategory feedsPreferenceCategory = (PreferenceCategory) findPreference("widget.visiblefeeds");
         
 		
 		Cursor cursor = this.getContentResolver().query(FeedData.FeedColumns.CONTENT_URI, new String[] {FeedData.FeedColumns._ID, NAMECOLUMN}, null, null, null);
@@ -120,9 +120,13 @@ public class WidgetConfigActivity extends PreferenceActivity {
 					
 					preferences.putString(widgetId+".feeds", feedIds);
 					preferences.putString(widgetId+".entrycount", entryCount);
+					
+					int color = getPreferenceManager().getSharedPreferences().getInt("widget.background", SparseRSSAppWidgetProvider.STANDARD_BACKGROUND);
+
+					preferences.putInt(widgetId+".background", color);
 					preferences.commit();
 					
-					SparseRSSAppWidgetProvider.updateAppWidget(WidgetConfigActivity.this, widgetId, hideRead, entryCount, feedIds);
+					SparseRSSAppWidgetProvider.updateAppWidget(WidgetConfigActivity.this, widgetId, hideRead, entryCount, feedIds, color);
 					setResult(RESULT_OK, new Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId));
 					finish();
 				}

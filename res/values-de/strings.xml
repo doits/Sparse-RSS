@@ -77,6 +77,8 @@
     <string name="settings_visiblefeeds">Sichtbare Feeds</string>
     <string name="settings_widgetentrycount">Eintragsanzahl</string>
     <string name="settings_widgetentrycount_description">Anzahl an Einträgen die im Widget gezeigt werden</string>
+    <string name="settings_widgetbackground">Hintergrund</string>
+    <string name="settings_widgetbackground_description">Farbe und Transparenz des Widgethintergrundes</string>
     <string name="settings_showtabs">Zeige Tabs</string>
     <string name="settings_showtabs_description">Zusätzliche Tabs für Favoriten und alle Einträge</string>
 
@@ -112,6 +114,11 @@
     <string name="select_file">Datei auswählen (SD-Wurzel)</string>
     <string name="refreshonwifionly">Nur über WLan aktualisieren</string>
     <string name="share_via">Teilen via &#8230;</string>
+
+    <string name="red">Rot</string>
+    <string name="green">Grün</string>
+    <string name="blue">Blau</string>
+    <string name="transparency">Transparenz</string>
 
     <string name="websiteorfeed">(Webseite oder Feed)</string>
 

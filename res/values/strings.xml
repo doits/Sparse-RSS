@@ -129,6 +129,8 @@
     <string name="settings_visiblefeeds">Visible feeds</string>
     <string name="settings_widgetentrycount">Entry count</string>
     <string name="settings_widgetentrycount_description">Number of entries that are shown in the widget</string>
+    <string name="settings_widgetbackground">Background</string>
+    <string name="settings_widgetbackground_description">Color and transparency of the widget background</string>
     <string name="settings_showtabs">Show tabs</string>
     <string name="settings_showtabs_description">Additional tabs for favorite and all feed-entries</string>
 
@@ -172,6 +174,11 @@
     <string name="refreshonwifionly">Refresh only over Wifi</string>
     <string name="changelog">Changelog</string>
     <string name="share_via">Share via &#8230;</string>
+
+    <string name="red">Red</string>
+    <string name="green">Green</string>
+    <string name="blue">Blue</string>
+    <string name="transparency">Transparency</string>
 
     <string name="question_deletefeed">Do you really want to delete this feed and all of its entries?</string>
     <string name="question_refreshwowifi">Do you really want to refresh this feed while not being on wifi?</string>

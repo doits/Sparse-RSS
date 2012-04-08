@@ -9,6 +9,7 @@
     android:paddingRight="2dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <RelativeLayout
+        android:id="@+id/widgetlayout"
         android:gravity="left|top"
         android:layout_centerVertical="true"
         android:layout_width="fill_parent"
