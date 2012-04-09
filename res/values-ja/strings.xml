@@ -73,12 +73,18 @@
     <string name="settings_visiblefeeds">表示されているフィード</string>
     <string name="settings_widgetentrycount">記事数</string>
     <string name="settings_widgetentrycount_description">ウィジェットに表示する記事数</string>
+    <string name="settings_widgetbackground">背景</string>
+    <string name="settings_widgetbackground_description">ウィジェットの背景の色と透明度</string>
     <string name="settings_showtabs">タブを表示する</string>
     <string name="settings_showtabs_description">お気に入りと全ての記事のためのタブを追加</string>
 
     <string name="settings_category_network">ネットワーク</string>
     <string name="settings_standarduseragent">一般的なuser-agent</string>
     <string name="settings_standarduseragent_description">一般的なuser-agentの名前を使う</string>
+    <string name="settings_httphttpsredirects">http&lt;-&gt;httpsの転送</string>
+    <string name="settings_httphttpsredirects_description">httpとhttps間の自動相互転送をする</string>
+    <string name="settings_enableefficientfeedparsing">効率的なフィード解析</string>
+    <string name="settings_enableefficientfeedparsing_description">古いニュース、又は解析済みのニュースを含む場合はフィード解析を止める。</string>
     <string name="settings_proxy_wifionly">ワイヤレスのみ</string>
     <string name="settings_proxy_wifionly_description">ワイヤレスの場合はProxyを使用する</string>
 
@@ -102,6 +108,13 @@
     <string name="feed_title">タイトル</string>
     <string name="select_file">データを選択（SDルート）</string>
     <string name="refreshonwifionly">ワイヤレス接続のみ更新可</string>
+    <string name="changelog">変更済み</string>
+    <string name="share_via">共有&#8230;</string>
+    
+    <string name="red">赤</string>
+    <string name="green">緑</string>
+    <string name="blue">青</string>
+    <string name="transparency">透明度</string>
 
     <string name="websiteorfeed">(ウェブサイト又はフィード)</string>
 
@@ -109,7 +122,9 @@
     <string name="question_refreshwowifi">ワイヤレスの無い環境でも更新しますか？</string>
     <string name="question_areyousure">確認</string>
     <string name="question_playenclosure">%1$sというファイル(大きさは%2$sらしい）をダウンロードしますか？\nデータ量を多く必要とするかもしれません！</string>
-    
+
+    <string name="warning_moretraffic">このオプションを無効にするとデータ量より多くのデータ量が必要になるます。.</string>
+
     <string name="button_accept">許可する</string>
     <string name="button_decline">許可しない</string>
 
