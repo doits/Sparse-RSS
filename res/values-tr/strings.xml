@@ -69,12 +69,16 @@
     <string name="settings_visiblefeeds">Gösterilen beslemeler</string>
     <string name="settings_widgetentrycount">Unsur sayısı</string>
     <string name="settings_widgetentrycount_description">Widget üzerinde gösterilecek unsur sayısı</string>
+    <string name="settings_widgetbackground">Arka plan</string>
+    <string name="settings_widgetbackground_description">Widget arka planının rengi ve şeffaflığı</string>
     <string name="settings_showtabs">Sekmeleri göster</string>
     <string name="settings_showtabs_description">Favori ve tüm beslemeler için ek sekmeler</string>
 
     <string name="settings_category_network">Ağ</string>
     <string name="settings_httphttpsredirects">http &lt;-&gt; https yönlendirmelerini izle</string>
     <string name="settings_httphttpsredirects_description">http\'den https\'e ve tersi yönlendirmeleri otomatik olarak izle</string>
+    <string name="settings_enableefficientfeedparsing">Verimli besleme analizi</string>
+    <string name="settings_enableefficientfeedparsing_description">Besleme analizi mevcut ya da çok eski mesajlar için otomatik olarak devre dışı bırakılır</string>
     <string name="settings_proxy_wifionly">Sadece Wifi</string>
     <string name="settings_proxy_wifionly_description">Vekil sunucusunu sadece wifi için kullan</string>
     <string name="settings_proxy_host">Host</string>
@@ -104,10 +108,17 @@
     <string name="select_file">Dosya seç (SD kökü)</string>
     <string name="refreshonwifionly">Sadece Wifi vasıtasıyla tazele</string>
 
+    <string name="red">Kırmızı</string>
+    <string name="green">Yeşil</string>
+    <string name="blue">Mavi</string>
+    <string name="transparency">Şeffaflık</string>
+
     <string name="question_deletefeed">Bu beslemeyi ve tüm mesajlarını silmek istediğinizden emin misiniz?</string>
     <string name="question_refreshwowifi">Bu beslemeyi wifi vasıtasıyla bağlanmadığınız hâlde tazelemek istediğinizden emin misiniz?</string>
     <string name="question_areyousure">Emin misiniz?</string>
     <string name="question_playenclosure">Boyutu %2$s varsayılan %1$s dosyasını indirip okumak istediğinizden emin misiniz?\nBu yüksek ağ trafiğine yol açabilir!</string>
+
+    <string name="warning_moretraffic">Bu şıkkı devre dışı bırakmak daha fazla trafiğe neden olur.</string>
 
     <string name="button_accept">Tamam</string>
     <string name="button_decline">İptal</string>
