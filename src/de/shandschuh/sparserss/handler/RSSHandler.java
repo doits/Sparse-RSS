@@ -516,20 +516,22 @@ public class RSSHandler extends DefaultHandler {
 	}
 	
 	private void cancel() {
-		cancelled = true;
-		done = true;
-		if (inputStream != null) {
-			try {
-				inputStream.close(); // stops all parsing
-			} catch (IOException e) {
-
-			} 
-		} else if (reader != null) {
-			try {
-				reader.close(); // stops all parsing
-			} catch (IOException e) {
-				
-			} 
+		if (!cancelled) {
+			cancelled = true;
+			done = true;
+			if (inputStream != null) {
+				try {
+					inputStream.close(); // stops all parsing
+				} catch (IOException e) {
+					
+				}
+			} else if (reader != null) {
+				try {
+					reader.close(); // stops all parsing
+				} catch (IOException e) {
+					
+				}
+			}
 		}
 	}
 
