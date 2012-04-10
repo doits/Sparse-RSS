@@ -719,7 +719,7 @@ public class EntryActivity extends Activity {
 			}
 			case R.id.menu_share: {
 				if (link != null) {
-					startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(TEXTPLAIN), getString(R.string.share_via)));
+					startActivity(Intent.createChooser(new Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, link).setType(TEXTPLAIN), getString(R.string.menu_share)));
 				}
 				break;
 			}

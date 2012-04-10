@@ -173,7 +173,6 @@
     <string name="select_file">Select file (SD-root)</string>
     <string name="refreshonwifionly">Refresh only over Wifi</string>
     <string name="changelog">Changelog</string>
-    <string name="share_via">Share via &#8230;</string>
 
     <string name="red">Red</string>
     <string name="green">Green</string>

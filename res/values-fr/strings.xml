@@ -24,6 +24,7 @@
     <string name="menu_about">À propos</string>
     <string name="menu_enablefeedsort">Activer le tri des flux</string>
     <string name="menu_disablefeedsort">Désactiver le tri des flux</string>
+    <string name="menu_share">Partager</string>
 
     <string name="license_intro">Ce logiciel est distribué sous licence libre MIT et son code source est disponible sur http://code.google.com/p/sparserss</string>
 
@@ -109,7 +110,6 @@
     <string name="feed_title">Titre</string>
     <string name="select_file">Sélectionner le fichier (racine SD)</string>
     <string name="refreshonwifionly">Rafraîchir uniquement via Wifi</string>
-    <string name="share_via">Partager &#8230;</string>
 
     <string name="red">Rouge</string>
     <string name="green">Vert</string>
