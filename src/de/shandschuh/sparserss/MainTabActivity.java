@@ -76,6 +76,8 @@ public class MainTabActivity extends TabActivity {
 	
 	private Menu menu;
 	
+	private boolean hasContent;
+	
 	public void onCreate(Bundle savedInstanceState) {
 		if (isLightTheme(this)) {
 	    	setTheme(R.style.Theme_Light);
@@ -83,6 +85,7 @@ public class MainTabActivity extends TabActivity {
 	    super.onCreate(savedInstanceState);
 	    setContentView(R.layout.tabs);
 	    INSTANCE = this;
+	    hasContent = false;
         if (getPreferences(MODE_PRIVATE).getBoolean(Strings.PREFERENCE_LICENSEACCEPTED, false)) {
         	setContent();
         } else {
@@ -140,7 +143,7 @@ public class MainTabActivity extends TabActivity {
 
 		Activity activity = getCurrentActivity();
 		
-		if (activity != null) {
+		if (hasContent && activity != null) {
 			return activity.onCreateOptionsMenu(menu);
 		} else {
 			menu.add(Strings.EMPTY); // to let the menu be available
@@ -152,7 +155,7 @@ public class MainTabActivity extends TabActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		Activity activity = getCurrentActivity();
 		
-		if (activity != null) {
+		if (hasContent && activity != null) {
 			return activity.onMenuItemSelected(featureId, item);
 		} else {
 			return super.onMenuItemSelected(featureId, item);
@@ -163,7 +166,7 @@ public class MainTabActivity extends TabActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		Activity activity = getCurrentActivity();
 		
-		if (activity != null) {
+		if (hasContent && activity != null) {
 			return activity.onPrepareOptionsMenu(menu);
 		} else {
 			return super.onPrepareOptionsMenu(menu);
@@ -174,6 +177,7 @@ public class MainTabActivity extends TabActivity {
 	    TabHost tabHost = getTabHost();
 	    
 	    tabHost.addTab(tabHost.newTabSpec(TAG_NORMAL).setIndicator(getString(R.string.overview)).setContent(new Intent().setClass(this, RSSOverview.class)));
+	    hasContent = true;
 	    if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_SHOWTABS, false)) {
 	    	tabHost.addTab(tabHost.newTabSpec(TAG_ALL).setIndicator(getString(R.string.all)).setContent(new Intent(Intent.ACTION_VIEW, FeedData.EntryColumns.CONTENT_URI).putExtra(EntriesListActivity.EXTRA_SHOWFEEDINFO, true)));
 	    	
