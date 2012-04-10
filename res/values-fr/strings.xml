@@ -69,12 +69,16 @@
     <string name="settings_visiblefeeds">Flux visibles</string>
     <string name="settings_widgetentrycount">Nombre d\'entrées</string>
     <string name="settings_widgetentrycount_description">Nombre d\'entrées à afficher dans le widget</string>
+    <string name="settings_widgetbackground">Arrière-plan</string>
+    <string name="settings_widgetbackground_description">Couleur et transparence de l\'arrière-plan du widget</string>
     <string name="settings_showtabs">Montrer les onglets</string>
     <string name="settings_showtabs_description">Onglets additionnels pour les favoris et l\'ensemble des flux</string>
 
     <string name="settings_category_network">Réseau</string>
     <string name="settings_httphttpsredirects">Suivre les redirections http &lt;-&gt; https</string>
     <string name="settings_httphttpsredirects_description">Suivre automatiquement les redirections http vers https et vice versa</string>
+    <string name="settings_enableefficientfeedparsing">Analyse de flux efficace</string>
+    <string name="settings_enableefficientfeedparsing_description">L\'analyse du flux sera automatiquement arrêtée pour les articles existants ou trop anciens.</string>
     <string name="settings_proxy_wifionly">Wifi seulement</string>
     <string name="settings_proxy_wifionly_description">Utilise le proxy pour le wifi seulement</string>
     <string name="settings_proxy_host">Hôte</string>
@@ -105,11 +109,19 @@
     <string name="feed_title">Titre</string>
     <string name="select_file">Sélectionner le fichier (racine SD)</string>
     <string name="refreshonwifionly">Rafraîchir uniquement via Wifi</string>
+    <string name="share_via">Partager &#8230;</string>
+
+    <string name="red">Rouge</string>
+    <string name="green">Vert</string>
+    <string name="blue">Bleu</string>
+    <string name="transparency">Transparence</string>
 
     <string name="question_deletefeed">Voulez-vous vraiment effacer ce flux et tout son contenu\u00A0?</string>
     <string name="question_refreshwowifi">Êtes-vous sûr de vouloir rafraîchir ce flux alors que vous n\'êtes pas sur wifi\u00A0?</string>
     <string name="question_areyousure">Êtes-vous sûr\u00A0?</string>
     <string name="question_playenclosure">Voulez-vous télécharger et lire le fichier %1$s d\'une taille présumée de %2$s ?\nCela peut consommer beaucoup de bande passante\u00A0!</string>
+
+    <string name="warning_moretraffic">Désactiver cette option provoquera davantage de trafic.</string>
 
     <string name="button_accept">Accepter</string>
     <string name="button_decline">Refuser</string>
