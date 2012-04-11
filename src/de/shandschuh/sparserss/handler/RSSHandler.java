@@ -203,7 +203,7 @@ public class RSSHandler extends DefaultHandler {
 	private boolean efficientFeedParsing;
 	
 	public RSSHandler(Context context) {
-		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "2"))*86400000l;
+		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "4"))*86400000l;
 		this.context = context;
 		this.efficientFeedParsing = true;
 	}
