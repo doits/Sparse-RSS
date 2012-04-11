@@ -156,4 +156,8 @@ public final class Strings {
 	
 	public static final String QUESTIONMARKS = "'??'";
 
+	public static final String HTML_QUOT = "&quot;";
+	
+	public static final String QUOT = "\"";
+
 }
