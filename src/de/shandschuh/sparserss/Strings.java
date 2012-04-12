@@ -159,5 +159,9 @@ public final class Strings {
 	public static final String HTML_QUOT = "&quot;";
 	
 	public static final String QUOT = "\"";
+	
+	public static final String HTML_APOSTROPHE = "&#39;";
+	
+	public static final String APOSTROPHE = "'";
 
 }
