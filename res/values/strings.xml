@@ -47,6 +47,7 @@
     <string name="contextmenu_copyurl">Copy link into clipboard</string>
     <string name="contextmenu_deleteread">Delete read entries</string>
     <string name="contextmenu_deleteallentries">Delete all entries</string>
+    <string name="contextmenu_resetupdatedate">Reset update-date</string>
     <string name="menu_allread">Mark all as read</string>
     <string name="menu_import">Import from OPML</string>
     <string name="menu_export">Export to OPML</string>

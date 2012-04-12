@@ -90,6 +90,8 @@ public class RSSOverview extends ListActivity {
 	
 	private static final int CONTEXTMENU_DELETEALLENTRIES_ID = 9;
 	
+	private static final int CONTEXTMENU_RESETUPDATEDATE_ID = 10;
+	
 	private static final int ACTIVITY_APPLICATIONPREFERENCES_ID = 1;
 	
 	private static final Uri CANGELOG_URI = Uri.parse("http://code.google.com/p/sparserss/wiki/Changelog");
@@ -123,6 +125,7 @@ public class RSSOverview extends ListActivity {
 				menu.add(0, CONTEXTMENU_DELETEREAD_ID, Menu.NONE, R.string.contextmenu_deleteread);
 				menu.add(0, CONTEXTMENU_DELETEALLENTRIES_ID, Menu.NONE, R.string.contextmenu_deleteallentries);
 				menu.add(0, CONTEXTMENU_EDIT_ID, Menu.NONE, R.string.contextmenu_edit);
+				menu.add(0, CONTEXTMENU_RESETUPDATEDATE_ID, Menu.NONE, R.string.contextmenu_resetupdatedate);
 				menu.add(0, CONTEXTMENU_DELETE_ID, Menu.NONE, R.string.contextmenu_delete);
 			}
         });
@@ -387,6 +390,14 @@ public class RSSOverview extends ListActivity {
 			}
 			case CONTEXTMENU_DELETEALLENTRIES_ID: {
 				showDeleteAllEntriesQuestion(this, FeedData.EntryColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)));
+				break;
+			}
+			case CONTEXTMENU_RESETUPDATEDATE_ID: {
+				ContentValues values = new ContentValues();
+				
+				values.put(FeedData.FeedColumns.LASTUPDATE, 0);
+				values.put(FeedData.FeedColumns.REALLASTUPDATE, 0);
+				getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(Long.toString(((AdapterView.AdapterContextMenuInfo) item.getMenuInfo()).id)), values, null, null);
 				break;
 			}
 				
