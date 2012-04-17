@@ -106,11 +106,8 @@ public class FeedDataContentProvider extends ContentProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase database) {
-			database.beginTransaction();
 			database.execSQL(createTable(TABLE_FEEDS, FeedData.FeedColumns.COLUMNS, FeedData.FeedColumns.TYPES));
 			database.execSQL(createTable(TABLE_ENTRIES, FeedData.EntryColumns.COLUMNS, FeedData.EntryColumns.TYPES));
-			database.setTransactionSuccessful();
-			database.endTransaction();
 			
 			File backupFile = new File(BACKUPOPML);
 			
