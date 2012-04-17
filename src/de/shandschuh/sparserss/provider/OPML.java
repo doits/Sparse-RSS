@@ -31,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.xml.sax.Attributes;
@@ -70,12 +71,12 @@ public class OPML {
 		Xml.parse(new InputStreamReader(new FileInputStream(filename)), parser);
 	}
 	
-	protected static void importFromFile(File file, SQLiteDatabase database) {
+	protected static void importFromInputStream(InputStream inputStream, SQLiteDatabase database) {
 		parser.context = null;
 		parser.database = database;
 		try {
 			database.beginTransaction();
-			Xml.parse(new InputStreamReader(new FileInputStream(file)), parser);
+			Xml.parse(new InputStreamReader(inputStream), parser);
 			
 			/** This is ok since the database is empty */
 			database.execSQL(new StringBuilder("UPDATE ").append(FeedDataContentProvider.TABLE_FEEDS).append(" SET ").append(FeedData.FeedColumns.PRIORITY).append('=').append(FeedData.FeedColumns._ID).append("-1").toString());
@@ -84,6 +85,14 @@ public class OPML {
 			
 		} finally {
 			database.endTransaction();
+		}
+	}
+	
+	protected static void importFromFile(File file, SQLiteDatabase database) {
+		try {
+			importFromInputStream(new FileInputStream(file), database);
+		} catch (FileNotFoundException e) {
+			// do nothing
 		}
 	}
 	
