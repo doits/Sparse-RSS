@@ -251,7 +251,7 @@ public class FetcherService extends IntentService {
 									posStart = line.indexOf(HREF, pos);
 
 									if (posStart > -1) {
-										String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(RSSHandler.AMP_SG, RSSHandler.AMP);
+										String url = line.substring(posStart+6, line.indexOf('"', posStart+10)).replace(Strings.AMP_SG, Strings.AMP);
 										
 										ContentValues values = new ContentValues();
 										

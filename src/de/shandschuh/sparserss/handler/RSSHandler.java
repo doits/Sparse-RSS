@@ -47,15 +47,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import de.shandschuh.sparserss.Strings;
 import de.shandschuh.sparserss.provider.FeedData;
 import de.shandschuh.sparserss.provider.FeedDataContentProvider;
 import de.shandschuh.sparserss.service.FetcherService;
 
 public class RSSHandler extends DefaultHandler {
-	public static final String AMP_SG = "&amp;";
-	
-	public static final String AMP = "&";
+	private static final String ANDRHOMBUS = "&#";
 	
 	private static final String TAG_RSS = "rss";
 	
@@ -401,7 +400,7 @@ public class RSSHandler extends DefaultHandler {
 					values.put(FeedData.EntryColumns.DATE, entryDate.getTime());
 					values.putNull(FeedData.EntryColumns.READDATE);
 				}
-				values.put(FeedData.EntryColumns.TITLE, title.toString().trim().replace(AMP_SG, AMP).replaceAll(Strings.HTML_TAG_REGEX, Strings.EMPTY).replace(Strings.HTML_LT, Strings.LT).replace(Strings.HTML_GT, Strings.GT).replace(Strings.HTML_QUOT, Strings.QUOT).replace(Strings.HTML_APOSTROPHE, Strings.APOSTROPHE));
+				values.put(FeedData.EntryColumns.TITLE, unescapeTitle(title.toString().trim()));
 				
 				Vector<String> images = null;
 				
@@ -559,6 +558,16 @@ public class RSSHandler extends DefaultHandler {
 			} catch (ParseException e) { } // just do nothing
 		}
 		return null;
+	}
+	
+	private static String unescapeTitle(String title) {
+		String result = title.replace(Strings.AMP_SG, Strings.AMP).replaceAll(Strings.HTML_TAG_REGEX, Strings.EMPTY).replace(Strings.HTML_LT, Strings.LT).replace(Strings.HTML_GT, Strings.GT).replace(Strings.HTML_QUOT, Strings.QUOT).replace(Strings.HTML_APOSTROPHE, Strings.APOSTROPHE);
+		
+		if (result.indexOf(ANDRHOMBUS) > -1) {
+			return Html.fromHtml(title, null, null).toString();
+		} else {
+			return result;
+		}
 	}
 
 	public void setEfficientFeedParsing(boolean efficientFeedParsing) {
