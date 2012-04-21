@@ -223,13 +223,15 @@ public class FetcherService extends IntentService {
 			HttpURLConnection connection = null;
 			
 			try {
-				connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent, followHttpHttpsRedirects);
+				String feedUrl = cursor.getString(urlPosition);
+				
+				connection = setupConnection(feedUrl, imposeUserAgent, followHttpHttpsRedirects);
 				
 				String contentType = connection.getContentType();
 
 				int fetchMode = cursor.getInt(fetchmodePosition);
 				
-				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition));
+				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
 				if (fetchMode == 0) {
 					if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
 						BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));

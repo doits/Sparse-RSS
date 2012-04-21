@@ -56,6 +56,8 @@ import de.shandschuh.sparserss.service.FetcherService;
 public class RSSHandler extends DefaultHandler {
 	private static final String ANDRHOMBUS = "&#";
 	
+	private static final String SLASH = "/";
+	
 	private static final String TAG_RSS = "rss";
 	
 	private static final String TAG_RDF = "rdf";
@@ -179,6 +181,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private String feedTitle;
 	
+	private String feedBaseUrl;
+	
 	private boolean done;
 	
 	private Date keepDateBorder;
@@ -207,7 +211,7 @@ public class RSSHandler extends DefaultHandler {
 		this.efficientFeedParsing = true;
 	}
 	
-	public void init(Date lastUpdateDate, final String id, String title) {
+	public void init(Date lastUpdateDate, final String id, String title, String url) {
 		final long keepDateBorderTime = KEEP_TIME > 0 ? System.currentTimeMillis()-KEEP_TIME : 0;
 		
 		keepDateBorder = new Date(keepDateBorderTime);
@@ -223,6 +227,14 @@ public class RSSHandler extends DefaultHandler {
 		newCount = 0;
 		feedRefreshed = false;
 		feedTitle = title;
+		
+		int index = url.indexOf('/', 8); // this also covers https://
+		
+		if (index > -1) {
+			feedBaseUrl = url.substring(0, index);
+		} else {
+			feedBaseUrl = null;
+		}
 		this.title = null;
 		this.dateStringBuilder = null;
 		this.entryLink = null;
@@ -443,6 +455,10 @@ public class RSSHandler extends DefaultHandler {
 				}
 				
 				String entryLinkString = entryLink.toString().trim();
+				
+				if (entryLinkString.startsWith(SLASH) && feedBaseUrl != null) {
+					entryLinkString = feedBaseUrl + entryLinkString;
+				}
 				
 				String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] {entryLinkString, enclosureString, guidString}: new String[] {entryLinkString, enclosureString}) : (guidString != null ? new String[] {entryLinkString, guidString} : new String[] {entryLinkString});
 				
