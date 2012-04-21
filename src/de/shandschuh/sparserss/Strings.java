@@ -167,5 +167,7 @@ public final class Strings {
 	public static final String AMP = "&";
 	
 	public static final String AMP_SG = "&amp;";
+	
+	public static final String SLASH = "/";
 
 }

@@ -56,8 +56,6 @@ import de.shandschuh.sparserss.service.FetcherService;
 public class RSSHandler extends DefaultHandler {
 	private static final String ANDRHOMBUS = "&#";
 	
-	private static final String SLASH = "/";
-	
 	private static final String TAG_RSS = "rss";
 	
 	private static final String TAG_RDF = "rdf";
@@ -456,7 +454,7 @@ public class RSSHandler extends DefaultHandler {
 				
 				String entryLinkString = entryLink.toString().trim();
 				
-				if (entryLinkString.startsWith(SLASH) && feedBaseUrl != null) {
+				if (entryLinkString.startsWith(Strings.SLASH) && feedBaseUrl != null) {
 					entryLinkString = feedBaseUrl + entryLinkString;
 				}
 				

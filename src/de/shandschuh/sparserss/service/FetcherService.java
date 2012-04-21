@@ -87,8 +87,6 @@ public class FetcherService extends IntentService {
 	
 	private static final String HTML_BODY = "<body";
 	
-	private static final String SLASH = "/";
-	
 	private static final String ENCODING = "encoding=\"";
 	
 	private static final String SERVICENAME = "RssFetcherService";
@@ -257,7 +255,7 @@ public class FetcherService extends IntentService {
 										
 										ContentValues values = new ContentValues();
 										
-										if (url.startsWith(SLASH)) {
+										if (url.startsWith(Strings.SLASH)) {
 											url = cursor.getString(urlPosition)+url;
 										} else if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
 											url = new StringBuilder(cursor.getString(urlPosition)).append('/').append(url).toString();
