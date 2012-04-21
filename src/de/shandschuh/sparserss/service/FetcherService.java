@@ -256,9 +256,15 @@ public class FetcherService extends IntentService {
 										ContentValues values = new ContentValues();
 										
 										if (url.startsWith(Strings.SLASH)) {
-											url = cursor.getString(urlPosition)+url;
+											int index = feedUrl.indexOf('/', 8);
+											
+											if (index > -1) {
+												url = feedUrl.substring(0, index)+url;
+											} else {
+												url = feedUrl+url;
+											}
 										} else if (!url.startsWith(Strings.HTTP) && !url.startsWith(Strings.HTTPS)) {
-											url = new StringBuilder(cursor.getString(urlPosition)).append('/').append(url).toString();
+											url = new StringBuilder(feedUrl).append('/').append(url).toString();
 										}
 										values.put(FeedData.FeedColumns.URL, url);
 										context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
@@ -272,7 +278,7 @@ public class FetcherService extends IntentService {
 						}
 						if (posStart == -1) { // this indicates a badly configured feed
 							connection.disconnect();
-							connection = setupConnection(cursor.getString(urlPosition), imposeUserAgent, followHttpHttpsRedirects);
+							connection = setupConnection(feedUrl, imposeUserAgent, followHttpHttpsRedirects);
 							contentType = connection.getContentType();
 						}
 						
