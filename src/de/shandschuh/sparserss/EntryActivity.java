@@ -486,6 +486,9 @@ public class EntryActivity extends Activity {
 
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
 					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
+					webView.getSettings().setLoadsImagesAutomatically(false);
+				} else {
+					webView.getSettings().setLoadsImagesAutomatically(true);
 				}
 				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
