@@ -220,7 +220,11 @@ public class RSSOverview extends ListActivity {
         	stopService(new Intent(this, RefreshService.class));
         }
         if (PreferenceManager.getDefaultSharedPreferences(this).getBoolean(Strings.SETTINGS_REFRESHONPENENABLED, false)) {
-        	sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
+        	new Thread() {
+				public void run() {
+					sendBroadcast(new Intent(Strings.ACTION_REFRESHFEEDS));
+				}
+        	}.start();
         }
     }
     
