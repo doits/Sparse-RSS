@@ -395,7 +395,7 @@ public class RSSHandler extends DefaultHandler {
 			entryDate = parseUpdateDate(dateStringBuilder.toString());
 			dateTagEntered = false;
 		} else if (TAG_ENTRY.equals(localName) || TAG_ITEM.equals(localName)) {
-			if (title != null && (entryDate == null || (entryDate.after(lastUpdateDate) && entryDate.after(keepDateBorder)))) {
+			if (title != null && (entryDate == null || ((entryDate.after(lastUpdateDate) || !efficientFeedParsing) && entryDate.after(keepDateBorder)))) {
 				ContentValues values = new ContentValues();
 				
 				if (entryDate != null && entryDate.getTime() > realLastUpdate) {
