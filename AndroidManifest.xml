@@ -90,14 +90,6 @@
                 <action android:name="de.shandschuh.sparserss.REFRESH" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".SDMountBroadcastReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.MEDIA_MOUNTED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="de.shandschuh.sparserss.RESTART" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".BootCompletedBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
