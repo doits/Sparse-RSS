@@ -32,12 +32,14 @@ import android.content.ContentUris;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.ClipboardManager;
+import android.util.TypedValue;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -119,10 +121,16 @@ public class EntriesListActivity extends ListActivity {
         	setTitle(title);
         }
         if (iconBytes != null && iconBytes.length > 0) {
+			int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
+			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+			if (bitmap.getHeight() != bitmapSizeInDip) {
+				bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
+			}
+			
         	if (MainTabActivity.POSTGINGERBREAD) {
-        		CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+				CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(bitmap));
         	} else {
-        		setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
+				setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(bitmap));
         	}
         }
         if (RSSOverview.notificationManager != null) {

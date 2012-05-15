@@ -37,6 +37,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
@@ -147,8 +148,9 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 			
 			if (bitmap != null) {
-				if (bitmap.getHeight() > 16) {
-					bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
+				int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18f, context.getResources().getDisplayMetrics());
+				if (bitmap.getHeight() != bitmapSizeInDip) {
+					bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 				}
 				textView.setText(" " + (cursor.isNull(nameColumnPosition) ? cursor.getString(linkPosition) : cursor.getString(nameColumnPosition)));
 			} else {

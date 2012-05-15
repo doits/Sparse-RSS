@@ -39,6 +39,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -175,8 +176,9 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 				
 				if (bitmap != null) {
-					if (bitmap.getHeight() > 16) {
-						bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
+					int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18f, context.getResources().getDisplayMetrics());
+					if (bitmap.getHeight() != bitmapSizeInDip) {
+						bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 					}
 					dateTextView.setText(new StringBuilder().append(' ').append(dateFormat.format(date)).append(' ').append(timeFormat.format(date)).append(Strings.COMMASPACE).append(cursor.getString(feedNameColumn))); // bad style
 				} else {

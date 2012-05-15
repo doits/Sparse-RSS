@@ -38,6 +38,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -48,6 +49,7 @@ import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
+import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
@@ -434,27 +436,27 @@ public class EntryActivity extends Activity {
 				}
 				
 				if (canShowIcon) {
-					if (iconBytes != null && iconBytes.length > 0) {
-						if (MainTabActivity.POSTGINGERBREAD) {
-							CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
-						} else {
-							setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
-						}
-					} else {
+					if (iconBytes == null || iconBytes.length == 0) {
 						Cursor iconCursor = getContentResolver().query(FeedData.FeedColumns.CONTENT_URI(Integer.toString(feedId)), new String[] {FeedData.FeedColumns._ID, FeedData.FeedColumns.ICON}, null, null, null);
 						
 						if (iconCursor.moveToFirst()) {
 							iconBytes = iconCursor.getBlob(1);
-							
-							if (iconBytes != null && iconBytes.length > 0) {
-								if (MainTabActivity.POSTGINGERBREAD) {
-									CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
-								} else {
-									setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length)));
-								}
-							}
 						}
 						iconCursor.close();
+					}
+					
+					if (iconBytes != null && iconBytes.length > 0) {
+						int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
+						Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
+						if (bitmap.getHeight() != bitmapSizeInDip) {
+							bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
+						}
+						
+						if (MainTabActivity.POSTGINGERBREAD) {
+							CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(bitmap));
+						} else {
+							setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(bitmap));
+						}
 					}
 				}
 				
