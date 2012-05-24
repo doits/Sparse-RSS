@@ -25,7 +25,6 @@
 
 package de.shandschuh.sparserss;
 
-import java.text.DateFormat;
 import java.util.Date;
 
 import android.app.Activity;
