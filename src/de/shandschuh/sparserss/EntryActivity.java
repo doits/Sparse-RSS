@@ -48,6 +48,7 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.KeyEvent;
@@ -458,9 +459,11 @@ public class EntryActivity extends Activity {
 					}
 				}
 				
-				long date = entryCursor.getLong(datePosition);
+				long timestamp = entryCursor.getLong(datePosition);
 				
-				((TextView) findViewById(R.id.entry_date)).setText(DateFormat.getDateTimeInstance().format(new Date(date)));
+				Date date = new Date(timestamp);
+				
+				((TextView) findViewById(R.id.entry_date)).setText(new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date)));
 				
 				final ImageView imageView = (ImageView) findViewById(android.R.id.icon);
 				
@@ -583,8 +586,8 @@ public class EntryActivity extends Activity {
 					playButton.setVisibility(View.GONE);
 				}
 				entryCursor.close();
-				setupButton(previousButton, false, date);
-				setupButton(nextButton, true, date);
+				setupButton(previousButton, false, timestamp);
+				setupButton(nextButton, true, timestamp);
 				webView.scrollTo(scrollX, scrollY); // resets the scrolling
 				showButtons();
 			}
