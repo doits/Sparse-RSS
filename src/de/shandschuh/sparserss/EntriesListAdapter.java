@@ -53,8 +53,6 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	
 	private static final int STATE_ALLUNREAD = 2;
 	
-	public static DateFormat DATEFORMAT = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-	
 	private int titleColumnPosition;
 	
 	private int dateColumn;
@@ -74,7 +72,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private static final String SQLREAD = "length(readdate) ASC, ";
 	
 	public static final String READDATEISNULL = "readdate is null";
-	
+
 	private boolean showRead;
 	
 	private Activity context;
@@ -92,6 +90,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 	private Vector<Long> favorited;
 	
 	private Vector<Long> unfavorited;
+	
+	private DateFormat dateFormat;
+	
+	private DateFormat timeFormat;
 	
 	public EntriesListAdapter(Activity context, Uri uri, boolean showFeedInfo, boolean autoreload) {
 		super(context, R.layout.entrylistitem, createManagedCursor(context, uri, true), autoreload);
@@ -117,6 +119,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		markedAsUnread = new Vector<Long>();
 		favorited = new Vector<Long>();
 		unfavorited = new Vector<Long>();
+		dateFormat = android.text.format.DateFormat.getDateFormat(context);
+		timeFormat = android.text.format.DateFormat.getTimeFormat(context);
 	}
 
 	@Override
@@ -165,6 +169,8 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 		if (showFeedInfo && feedIconColumn > -1 && feedNameColumn > -1) {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
 			
+			Date date = new Date(cursor.getLong(dateColumn));
+			
 			if (iconBytes != null && iconBytes.length > 0) {
 				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
 				
@@ -172,14 +178,14 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 					if (bitmap.getHeight() > 16) {
 						bitmap = Bitmap.createScaledBitmap(bitmap, 16, 16, false);
 					}
-					dateTextView.setText(" "+DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn)); // bad style
+					dateTextView.setText(new StringBuilder().append(' ').append(dateFormat.format(date)).append(' ').append(timeFormat.format(date)).append(Strings.COMMASPACE).append(cursor.getString(feedNameColumn))); // bad style
 				} else {
-					dateTextView.setText(DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn));
+					dateTextView.setText(new StringBuilder(dateFormat.format(date)).append(' ').append(timeFormat.format(date)).append(Strings.COMMASPACE).append(cursor.getString(feedNameColumn)));
 				}
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(bitmap), null, null,  null);
 			} else {
 				dateTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
-				dateTextView.setText(DATEFORMAT.format(new Date(cursor.getLong(dateColumn)))+", "+cursor.getString(feedNameColumn));
+				dateTextView.setText(new StringBuilder(dateFormat.format(date)).append(' ').append(timeFormat.format(date)).append(Strings.COMMASPACE).append(cursor.getString(feedNameColumn)));
 			}
 			
 		} else {

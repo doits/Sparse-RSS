@@ -25,6 +25,7 @@
 
 package de.shandschuh.sparserss;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Vector;
 
@@ -48,8 +49,6 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	
 	private String COLON;
 	
-	private static final String COMMA = ", ";
-	
 	private int nameColumnPosition;
 	
 	private int lastUpdateColumn;
@@ -69,6 +68,10 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 	private boolean feedSort;
 	
 	private Vector<View> sortViews;
+	
+	private DateFormat dateFormat;
+	
+	private DateFormat timeFormat;
 	
 	public RSSOverviewListAdapter(Activity activity) {
 		super(activity, R.layout.feedlistitem, activity.managedQuery(FeedData.FeedColumns.CONTENT_URI, null, null, null, null));
@@ -95,6 +98,8 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 			}
 		};
 		sortViews = new Vector<View>();
+		dateFormat = android.text.format.DateFormat.getDateFormat(activity);
+		timeFormat = android.text.format.DateFormat.getTimeFormat(activity);
 	}
 
 	@Override
@@ -113,12 +118,14 @@ public class RSSOverviewListAdapter extends ResourceCursorAdapter {
 		
 		countCursor.close();
 		
-		long date = cursor.getLong(lastUpdateColumn);
+		long timestamp = cursor.getLong(lastUpdateColumn);
 		
 		TextView updateTextView = ((TextView) view.findViewById(android.R.id.text2));;
 		
 		if (cursor.isNull(errorPosition)) {
-			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(date == 0 ? context.getString(R.string.never) : new StringBuilder(EntriesListAdapter.DATEFORMAT.format(new Date(date))).append(COMMA).append(unreadCount).append('/').append(count).append(' ').append(context.getString(R.string.unread))));
+			Date date = new Date(timestamp);
+			
+			updateTextView.setText(new StringBuilder(context.getString(R.string.update)).append(COLON).append(timestamp == 0 ? context.getString(R.string.never) : new StringBuilder(dateFormat.format(date)).append(' ').append(timeFormat.format(date)).append(Strings.COMMASPACE).append(unreadCount).append('/').append(count).append(' ').append(context.getString(R.string.unread))));
 		} else {
 			updateTextView.setText(new StringBuilder(context.getString(R.string.error)).append(COLON).append(cursor.getString(errorPosition)));
 		}
