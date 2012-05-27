@@ -90,7 +90,7 @@
     <string name="settings_enabled">Enabled</string>
     <string name="settings_refreshenabled_description">This setting controls the automatic refresh of all feeds</string>
     <string name="settings_refreshinterval">Refresh interval</string>
-    <string name="settings_refreshinterval_description">Interval between two automated refreshs</string>
+    <string name="settings_refreshinterval_description">Interval between two automated refreshes</string>
 
     <string name="settings_category_notofications">Notifications</string>
     <string name="settings_notificationsenabled_description">Controls the appearance of notifications in case of new feed content</string>
