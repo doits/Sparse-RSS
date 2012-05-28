@@ -482,6 +482,7 @@ public class FetcherService extends IntentService {
 			connection.setRequestProperty("Authorization", "Basic "+BASE64.encode(url.getUserInfo().getBytes()));
 		}
 		connection.setRequestProperty("connection", "close"); // Workaround for android issue 7786
+		connection.setRequestProperty("accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
 		connection.connect();
 		
 		String location = connection.getHeaderField("Location");
