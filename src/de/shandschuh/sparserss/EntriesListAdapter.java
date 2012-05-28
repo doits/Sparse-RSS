@@ -208,6 +208,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 
 	public void showRead(boolean showRead) {
 		if (showRead != this.showRead) {
+			context.stopManagingCursor(getCursor());
 			changeCursor(createManagedCursor(context, uri, showRead));
 			this.showRead = showRead;
 		}
