@@ -163,6 +163,7 @@
     <string name="overview">Overview</string>
     <string name="kb">kb</string>
 
+    <string name="error_feederror">The Feed URL could not accessed.</string>
     <string name="error_feedurlexists">The URL already exists.</string>
     <string name="error_feedimport">The selected file could not be imported.</string>
     <string name="error_feedexport">The export has failed. Make sure you have a writable SD-card mounted.</string>

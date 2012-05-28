@@ -27,6 +27,7 @@ package de.shandschuh.sparserss.service;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -428,6 +429,13 @@ public class FetcherService extends IntentService {
 					}
 				}
 				connection.disconnect();
+			} catch (FileNotFoundException e) {
+				if (!handler.isDone() && !handler.isCancelled()) {
+					ContentValues values = new ContentValues();
+					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
+					values.put(FeedData.FeedColumns.ERROR, context.getString(R.string.error_feederror));
+					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
+				} 
 			} catch (Throwable e) {
 				if (!handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
