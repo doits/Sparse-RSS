@@ -166,10 +166,10 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			}
 		});
 		
+		Date date = new Date(cursor.getLong(dateColumn));
+		
 		if (showFeedInfo && feedIconColumn > -1 && feedNameColumn > -1) {
 			byte[] iconBytes = cursor.getBlob(feedIconColumn);
-			
-			Date date = new Date(cursor.getLong(dateColumn));
 			
 			if (iconBytes != null && iconBytes.length > 0) {
 				Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
@@ -190,7 +190,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 			
 		} else {
 			textView.setText(cursor.getString(titleColumnPosition));
-			dateTextView.setText(DateFormat.getDateTimeInstance().format(new Date(cursor.getLong(dateColumn))));
+			dateTextView.setText(new StringBuilder(dateFormat.format(date)).append(' ').append(timeFormat.format(date)));
 		}
 		
 		if (forcedState == STATE_ALLUNREAD && !markedAsRead.contains(id) || (forcedState != STATE_ALLREAD && cursor.isNull(readDateColumn) && !markedAsRead.contains(id)) || markedAsUnread.contains(id)) {
