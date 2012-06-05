@@ -189,6 +189,12 @@ public class FetcherService extends IntentService {
 		notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 	}
 	
+	@Override
+	public void onDestroy() {
+		MainTabActivity.INSTANCE.setProgressBarIndeterminateVisibility(false);
+		super.onDestroy();
+	}
+	
 	private static int refreshFeedsStatic(Context context, String feedId, NetworkInfo networkInfo, boolean overrideWifiOnly) {
 		String selection = null;
 		

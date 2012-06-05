@@ -26,13 +26,17 @@
 package de.shandschuh.sparserss;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.TabActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,10 +46,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.widget.ScrollView;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import de.shandschuh.sparserss.provider.FeedData;
+import de.shandschuh.sparserss.service.FetcherService;
 
 public class MainTabActivity extends TabActivity {
 	private static final int DIALOG_LICENSEAGREEMENT = 0;
@@ -75,6 +82,13 @@ public class MainTabActivity extends TabActivity {
 	
 	private Menu menu;
 	
+	private BroadcastReceiver refreshReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			setProgressBarIndeterminateVisibility(true);
+		}
+	};
+	
 	private boolean hasContent;
 	
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,6 +96,10 @@ public class MainTabActivity extends TabActivity {
 	    	setTheme(R.style.Theme_Light);
 	    }
 	    super.onCreate(savedInstanceState);
+	    
+        //We need to display progress information
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        
 	    setContentView(R.layout.tabs);
 	    INSTANCE = this;
 	    hasContent = false;
@@ -93,6 +111,21 @@ public class MainTabActivity extends TabActivity {
         	
         	showDialog(DIALOG_LICENSEAGREEMENT);
         }
+	}
+	
+	@Override
+	protected void onResume()
+	{
+		super.onResume();
+		setProgressBarIndeterminateVisibility(isCurrentlyRefreshing());
+		registerReceiver(refreshReceiver, new IntentFilter("de.shandschuh.sparserss.REFRESH"));
+	}
+	
+	@Override
+	protected void onPause()
+	{
+		unregisterReceiver(refreshReceiver);
+		super.onPause();
 	}
 	
 	@Override
@@ -244,6 +277,17 @@ public class MainTabActivity extends TabActivity {
 			
 		});
 		builder.setView(view);
+	}
+	
+	private boolean isCurrentlyRefreshing()
+	{
+		ActivityManager manager = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+		for (RunningServiceInfo service: manager.getRunningServices(Integer.MAX_VALUE)) {
+			if (FetcherService.class.getName().equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }
