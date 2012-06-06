@@ -177,7 +177,7 @@ public class EntriesListAdapter extends ResourceCursorAdapter {
 				
 				if (bitmap != null) {
 					int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18f, context.getResources().getDisplayMetrics());
-					if (bitmap.getHeight() != bitmapSizeInDip) {
+					if (bitmap != null && bitmap.getHeight() != bitmapSizeInDip) {
 						bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 					}
 					dateTextView.setText(new StringBuilder().append(' ').append(dateFormat.format(date)).append(' ').append(timeFormat.format(date)).append(Strings.COMMASPACE).append(cursor.getString(feedNameColumn))); // bad style

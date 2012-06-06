@@ -123,7 +123,7 @@ public class EntriesListActivity extends ListActivity {
         if (iconBytes != null && iconBytes.length > 0) {
 			int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-			if (bitmap.getHeight() != bitmapSizeInDip) {
+			if (bitmap != null && bitmap.getHeight() != bitmapSizeInDip) {
 				bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
 			}
 			
