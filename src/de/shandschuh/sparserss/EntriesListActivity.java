@@ -123,15 +123,17 @@ public class EntriesListActivity extends ListActivity {
         if (iconBytes != null && iconBytes.length > 0) {
 			int bitmapSizeInDip = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24f, getResources().getDisplayMetrics());
 			Bitmap bitmap = BitmapFactory.decodeByteArray(iconBytes, 0, iconBytes.length);
-			if (bitmap != null && bitmap.getHeight() != bitmapSizeInDip) {
-				bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
+			if (bitmap != null) {
+				if (bitmap.getHeight() != bitmapSizeInDip) {
+					bitmap = Bitmap.createScaledBitmap(bitmap, bitmapSizeInDip, bitmapSizeInDip, false);
+				}
+				
+	        	if (MainTabActivity.POSTGINGERBREAD) {
+					CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(bitmap));
+	        	} else {
+					setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(bitmap));
+	        	}
 			}
-			
-        	if (MainTabActivity.POSTGINGERBREAD) {
-				CompatibilityHelper.setActionBarDrawable(this, new BitmapDrawable(bitmap));
-        	} else {
-				setFeatureDrawable(Window.FEATURE_LEFT_ICON, new BitmapDrawable(bitmap));
-        	}
         }
         if (RSSOverview.notificationManager != null) {
         	RSSOverview.notificationManager.cancel(0);
