@@ -191,7 +191,8 @@ public class FetcherService extends IntentService {
 	
 	@Override
 	public void onDestroy() {
-		MainTabActivity.INSTANCE.setProgressBarIndeterminateVisibility(false);
+		if (MainTabActivity.INSTANCE != null)
+			MainTabActivity.INSTANCE.setProgressBarIndeterminateVisibility(false);
 		super.onDestroy();
 	}
 	
