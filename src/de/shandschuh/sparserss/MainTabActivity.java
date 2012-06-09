@@ -37,12 +37,11 @@ import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.text.util.Linkify;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ScrollView;
+import android.view.View.OnClickListener;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
@@ -219,19 +218,32 @@ public class MainTabActivity extends TabActivity {
 	}
 	
 	void setupLicenseText(AlertDialog.Builder builder) {
-		ScrollView scrollView = new ScrollView(this);
+		View view = getLayoutInflater().inflate(R.layout.license, null);
 		
-		TextView textView = new TextView(this);
-		
-		scrollView.addView(textView);
-		scrollView.setPadding(0, 0, 2, 0);
-		
+		final TextView textView = (TextView) view.findViewById(R.id.license_text);
+
 		textView.setTextColor(textView.getTextColors().getDefaultColor()); // disables color change on selection
-		textView.setPadding(5, 0, 5, 0);
-		textView.setTextSize(15);
-		textView.setAutoLinkMask(Linkify.EMAIL_ADDRESSES | Linkify.WEB_URLS);
 		textView.setText(new StringBuilder(getString(R.string.license_intro)).append(Strings.THREENEWLINES).append(getString(R.string.license)));
-		builder.setView(scrollView);
+		
+		final TextView contributorsTextView = (TextView) view.findViewById(R.id.contributors_togglebutton);
+		
+		contributorsTextView.setOnClickListener(new OnClickListener() {
+			boolean showingLicense = true;
+			
+			@Override
+			public void onClick(View view) {
+				if (showingLicense) {
+					textView.setText(R.string.contributors_list);
+					contributorsTextView.setText(R.string.license_word);
+				} else {
+					textView.setText(new StringBuilder(getString(R.string.license_intro)).append(Strings.THREENEWLINES).append(getString(R.string.license)));
+					contributorsTextView.setText(R.string.contributors);
+				}
+				showingLicense = !showingLicense;
+			}
+			
+		});
+		builder.setView(view);
 	}
 
 }

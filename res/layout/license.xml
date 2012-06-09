@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_gravity="fill"
+        android:layout_weight="1"
+        android:paddingLeft="0dip"
+        android:paddingTop="0dip"
+        android:paddingRight="2dip"
+        android:paddingBottom="0dip">
+        <TextView
+            android:id="@+id/license_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:paddingLeft="5dip"
+            android:paddingTop="0dip"
+            android:paddingRight="5dip"
+            android:paddingBottom="0dip"
+            android:autoLink="email|web"
+            android:textSize="15dip"/>
+    </ScrollView>
+    <TextView
+        android:id="@+id/contributors_togglebutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/contributors"/>
+</LinearLayout>

@@ -61,8 +61,6 @@
         Translators\n
          - Dutch: Eelko Berkenpies\n
          - Spanish: Sergio Martín\n
-         - French: &lt;unnamed&gt;\n
-         - Turkish: &lt;unnamed&gt;\n
          - Russian: Igor Nedoboy
          \n\nPermission is hereby granted, free of charge, to any person obtaining a copy
         of this software and associated documentation files (the "Software"), to deal
@@ -82,7 +80,11 @@
         OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
         THE SOFTWARE.
     </string>
+    <string name="contributors_list">Additional contributors (other translations and code):\n\n - a very nice person that wants to be unnamed (French and Turkish translations)\n
+        - another nice unnamed person (Japanese translation)</string>
     <string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://code.google.com/p/sparserss</string>
+    <string name="contributors"><u>Additional contributors &gt;&gt;</u></string>
+    <string name="license_word"><u>&lt;&lt; License</u></string>
 
     <string name="settings_category_refresh">Automated refresh</string>
     <string name="settings_enabled">Enabled</string>
