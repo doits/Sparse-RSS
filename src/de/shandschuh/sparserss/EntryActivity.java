@@ -356,6 +356,13 @@ public class EntryActivity extends Activity {
 		
 		handler = new Handler();
 	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState)
+	{
+		super.onRestoreInstanceState(savedInstanceState);
+		webView.restoreState(savedInstanceState);
+	}
 
 	@Override
 	protected void onResume() {
@@ -365,6 +372,7 @@ public class EntryActivity extends Activity {
 		}
 		uri = getIntent().getData();
 		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
+		webView.onResume();
 		reload();
 	}
 	
@@ -690,8 +698,16 @@ public class EntryActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
+		webView.onPause();
 		scrollX = webView.getScrollX();
 		scrollY = webView.getScrollY();
+	}
+	
+	@Override
+	protected void onSaveInstanceState(Bundle outState)
+	{
+		webView.saveState(outState);
+		super.onSaveInstanceState(outState);
 	}
 	
 	@Override
