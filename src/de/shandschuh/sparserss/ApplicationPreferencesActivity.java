@@ -31,6 +31,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -58,6 +59,7 @@ public class ApplicationPreferencesActivity extends PreferenceActivity {
 						}
 					}.start();
 				} else {
+					getPreferences(MODE_PRIVATE).edit().putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, 0);
 					stopService(new Intent(ApplicationPreferencesActivity.this, RefreshService.class));
 				}
 				return true;

@@ -43,7 +43,7 @@ public class RefreshService extends Service {
     private OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 		public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 			if (Strings.SETTINGS_REFRESHINTERVAL.equals(key)) {
-				restartTimer();
+				restartTimer(false);
 			}
 		}
     };
@@ -83,13 +83,13 @@ public class RefreshService extends Service {
 			preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		}
 		
-		refreshBroadcastIntent = new Intent(Strings.ACTION_REFRESHFEEDS);
+		refreshBroadcastIntent = new Intent(Strings.ACTION_REFRESHFEEDS).putExtra(Strings.SCHEDULED, true);
 		alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
 		preferences.registerOnSharedPreferenceChangeListener(listener);
-		restartTimer();
+		restartTimer(true);
 	}
 
-	private void restartTimer() {
+	private void restartTimer(boolean created) {
 		if (timerIntent == null) {
 			timerIntent = PendingIntent.getBroadcast(this, 0, refreshBroadcastIntent, 0);
 		} else {
@@ -103,7 +103,19 @@ public class RefreshService extends Service {
 		} catch (Exception exception) {
 
 		}
-		alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 10000, time, timerIntent);
+		
+		long initialRefreshTime = SystemClock.elapsedRealtime() + 10000;
+		
+		if (created) {
+			long lastRefresh = preferences.getLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, 0);
+			
+			if (lastRefresh > 0) {
+				// this indicates a service restart by the system
+				initialRefreshTime = Math.max(SystemClock.elapsedRealtime() + 10000, lastRefresh+time);
+			}
+		}
+		
+		alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, initialRefreshTime, time, timerIntent);
 	}
 
 	@Override

@@ -136,6 +136,8 @@ public final class Strings {
 
 	public static final String PREFERENCE_LICENSEACCEPTED = "license.accepted";
 	
+	public static final String PREFERENCE_LASTSCHEDULEDREFRESH = "lastscheduledrefresh";
+	
 	public static final String HTML_LT = "&lt;";
 	
 	public static final String HTML_GT = "&gt;";
@@ -171,5 +173,7 @@ public final class Strings {
 	public static final String SLASH = "/";
 	
 	public static final String COMMASPACE = ", ";
-
+	
+	public static final String SCHEDULED = "scheduled";
+	
 }

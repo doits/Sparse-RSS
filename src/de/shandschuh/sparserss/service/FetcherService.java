@@ -55,6 +55,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.util.Xml;
 import de.shandschuh.sparserss.BASE64;
@@ -115,6 +116,10 @@ public class FetcherService extends IntentService {
 			} catch (NameNotFoundException e) {
 				preferences = PreferenceManager.getDefaultSharedPreferences(FetcherService.this);
 			}
+		}
+		
+		if (intent.getBooleanExtra(Strings.SCHEDULED, false)) {
+			preferences.edit().putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, SystemClock.elapsedRealtime());
 		}
 		
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
