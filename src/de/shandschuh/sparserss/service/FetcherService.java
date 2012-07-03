@@ -54,7 +54,6 @@ import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -98,11 +97,6 @@ public class FetcherService extends IntentService {
 	private static SharedPreferences preferences = null;
 	
 	private static Proxy proxy;
-	
-	private static final boolean PRIOR_GINGERBREAD = Build.VERSION.RELEASE.startsWith("1") ||
-	   Build.VERSION.RELEASE.startsWith("2.0") ||
-	   Build.VERSION.RELEASE.startsWith("2.1") ||
-	   Build.VERSION.RELEASE.startsWith("2.2");
 	
 	public FetcherService() {
 		super(SERVICENAME);
@@ -150,7 +144,7 @@ public class FetcherService extends IntentService {
 							
 					String text = new StringBuilder().append(newCount).append(' ').append(getString(R.string.newentries)).toString();
 							
-					Notification notification = new Notification(PRIOR_GINGERBREAD ? R.drawable.ic_statusbar_rss : R.drawable.ic_statusbar_rss_23, text, System.currentTimeMillis());
+					Notification notification = new Notification(R.drawable.ic_statusbar_rss, text, System.currentTimeMillis());
 							
 					Intent notificationIntent = new Intent(FetcherService.this, MainTabActivity.class);
 							
