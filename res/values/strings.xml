@@ -81,7 +81,8 @@
         THE SOFTWARE.
     </string>
     <string name="contributors_list">Additional contributors (other translations and code):\n\n - a very nice person that wants to be unnamed (French and Turkish translations)\n
-        - another nice unnamed person (Japanese translation)</string>
+        - another nice unnamed person (Japanese translation)\n
+        - Joel Low (several patches [refresh spinner, UI adjustments and more]); see commit log for details</string>
     <string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://code.google.com/p/sparserss</string>
     <string name="contributors"><u>Additional contributors &gt;&gt;</u></string>
     <string name="license_word"><u>&lt;&lt; License</u></string>
