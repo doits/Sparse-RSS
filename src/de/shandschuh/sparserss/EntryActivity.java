@@ -372,7 +372,9 @@ public class EntryActivity extends Activity {
 		}
 		uri = getIntent().getData();
 		parentUri = FeedData.EntryColumns.PARENT_URI(uri.getPath());
-		webView.onResume();
+		if (MainTabActivity.POSTGINGERBREAD) {
+			CompatibilityHelper.onResume(webView);
+		}
 		reload();
 	}
 	
@@ -698,7 +700,9 @@ public class EntryActivity extends Activity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		webView.onPause();
+		if (MainTabActivity.POSTGINGERBREAD) {
+			CompatibilityHelper.onPause(webView);
+		}
 		scrollX = webView.getScrollX();
 		scrollY = webView.getScrollY();
 	}
