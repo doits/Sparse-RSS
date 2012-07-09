@@ -139,10 +139,8 @@
         <item>１時間</item>
         <item>２時間</item>
         <item>６時間</item>
+        <item>１２時間</item>
         <item>１日</item>
-        <item>２日</item>
-        <item>３日</item>
-        <item>永遠に</item>
     </string-array>
 
     <string-array name="settings_keeptimes">
@@ -152,6 +150,9 @@
         <item>１週間</item>
         <item>２週間</item>
         <item>１ヶ月</item>
+        <item>２ヶ月</item>
+        <item>３ヶ月</item>
+        <item>永遠に</item>
     </string-array>
 
     <string-array name="settings_fontsizes">
