@@ -149,6 +149,7 @@
     <string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
     <string name="settings_proxy_host">Host</string>
     <string name="settings_proxy_port">Port</string>
+    <string name="settings_proxy_type">Type</string>
 
     <string name="never">never</string>
     <string name="update">Update</string>
@@ -229,6 +230,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+
+    <string-array name="settings_proxytypes_names">
+        <item>HTTP</item>
+        <item>SOCKS</item>
     </string-array>
 
     <string name="permission_readfeeds">Read feed data</string>

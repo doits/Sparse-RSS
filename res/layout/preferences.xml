@@ -13,7 +13,7 @@
             android:summary="@string/settings_refreshinterval_description"
             android:title="@string/settings_refreshinterval"
             android:key="refresh.interval" 
-            android:numeric="integer"
+            android:inputType="number"
             android:dependency="refresh.enabled"
             android:defaultValue="1800000"
             android:entries="@array/settings_intervals"
@@ -69,7 +69,7 @@
             android:summary="@string/settings_keeptime_description"
             android:title="@string/settings_keeptime"
             android:key="keeptime" 
-            android:numeric="integer"
+            android:inputType="number"
             android:defaultValue="4"
             android:entries="@array/settings_keeptimes"
             android:entryValues="@array/settings_keeptimevalues" />
@@ -103,7 +103,7 @@
             android:summary="@string/settings_fontsize_description"
             android:key="fontsize"
             android:defaultValue="0"
-            android:numeric="integer"
+            android:inputType="number"
             android:entries="@array/settings_fontsizes"
             android:entryValues="@array/settings_fontsizevalues"/>
         <CheckBoxPreference
@@ -146,7 +146,16 @@
                 android:key="proxy.port"
                 android:title="@string/settings_proxy_port"
                 android:inputType="number"
-                android:dependency="proxy.enabled"/>		
+                android:dependency="proxy.enabled"/>
+            <ListPreference
+                android:name="@string/settings_proxy_type"
+                android:title="@string/settings_proxy_type"
+                android:key="proxy.type"
+                android:inputType="number"
+                android:defaultValue="0"
+                android:entries="@array/settings_proxytypes_names"
+                android:entryValues="@array/settings_proxytypes"
+                android:dependency="proxy.enabled"/>
         </PreferenceScreen>
     </PreferenceCategory>
 </PreferenceScreen>

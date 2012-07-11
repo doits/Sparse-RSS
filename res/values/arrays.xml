@@ -34,4 +34,8 @@
         <item>9</item>
         <item>10</item>
     </string-array>
+    <string-array name="settings_proxytypes">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
 </resources>

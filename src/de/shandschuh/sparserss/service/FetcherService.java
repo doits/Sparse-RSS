@@ -92,6 +92,8 @@ public class FetcherService extends IntentService {
 	
 	private static final String SERVICENAME = "RssFetcherService";
 	
+	private static final String ZERO = "0";
+	
 	private NotificationManager notificationManager;
 	
 	private static SharedPreferences preferences = null;
@@ -124,7 +126,7 @@ public class FetcherService extends IntentService {
 		if (networkInfo != null && networkInfo.getState() == NetworkInfo.State.CONNECTED && intent != null) {
 			if (preferences.getBoolean(Strings.SETTINGS_PROXYENABLED, false) && (networkInfo.getType() == ConnectivityManager.TYPE_WIFI || !preferences.getBoolean(Strings.SETTINGS_PROXYWIFIONLY, false))) {
 				try {
-					proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(preferences.getString(Strings.SETTINGS_PROXYHOST, Strings.EMPTY), Integer.parseInt(preferences.getString(Strings.SETTINGS_PROXYPORT, Strings.DEFAULTPROXYPORT))));
+					proxy = new Proxy(ZERO.equals(preferences.getString(Strings.SETTINGS_PROXYTYPE, ZERO)) ? Proxy.Type.HTTP : Proxy.Type.SOCKS, new InetSocketAddress(preferences.getString(Strings.SETTINGS_PROXYHOST, Strings.EMPTY), Integer.parseInt(preferences.getString(Strings.SETTINGS_PROXYPORT, Strings.DEFAULTPROXYPORT))));
 				} catch (Exception e) {
 					proxy = null;
 				}
