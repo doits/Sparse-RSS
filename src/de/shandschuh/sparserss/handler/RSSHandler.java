@@ -438,7 +438,7 @@ public class RSSHandler extends DefaultHandler {
 				
 				StringBuilder existanceStringBuilder = new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG);
 				
-				if (enclosure != null) {
+				if (enclosure != null && enclosure.length() > 0) {
 					enclosureString = enclosure.toString();
 					values.put(FeedData.EntryColumns.ENCLOSURE, enclosureString);
 					existanceStringBuilder.append(Strings.DB_AND).append(FeedData.EntryColumns.ENCLOSURE).append(Strings.DB_ARG);
@@ -460,13 +460,24 @@ public class RSSHandler extends DefaultHandler {
 				
 				String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] {entryLinkString, enclosureString, guidString}: new String[] {entryLinkString, enclosureString}) : (guidString != null ? new String[] {entryLinkString, guidString} : new String[] {entryLinkString});
 				
-				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
+				boolean skip = false;
+				
+				if (!efficientFeedParsing) {
+					if (context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString()+" AND "+FeedData.EntryColumns.DATE+"<"+entryDate.getTime(), existanceValues) == 1) {
+						newCount++;
+						skip = true;
+					} else {
+						values.remove(FeedData.EntryColumns.READDATE);
+						// continue with the standard procedure but don't reset the read-date
+					}
+				}
+				
+				if (!skip && (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0)) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					if (entryDate == null) {
 						values.put(FeedData.EntryColumns.DATE, now--);
-					} else {
-						values.remove(FeedData.EntryColumns.READDATE);
 					}
+					
 					
 					String entryId = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
 					
