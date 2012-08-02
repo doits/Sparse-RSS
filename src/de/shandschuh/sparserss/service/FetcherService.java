@@ -119,7 +119,9 @@ public class FetcherService extends IntentService {
 		}
 		
 		if (intent.getBooleanExtra(Strings.SCHEDULED, false)) {
-			preferences.edit().putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, SystemClock.elapsedRealtime());
+			SharedPreferences.Editor editor = preferences.edit();
+			editor.putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, SystemClock.elapsedRealtime());
+			editor.commit();
 		}
 		
 		ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
