@@ -59,7 +59,7 @@ public class ApplicationPreferencesActivity extends PreferenceActivity {
 						}
 					}.start();
 				} else {
-					getPreferences(MODE_PRIVATE).edit().putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, 0);
+					getPreferences(MODE_PRIVATE).edit().putLong(Strings.PREFERENCE_LASTSCHEDULEDREFRESH, 0).commit();
 					stopService(new Intent(ApplicationPreferencesActivity.this, RefreshService.class));
 				}
 				return true;
