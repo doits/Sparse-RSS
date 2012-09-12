@@ -454,8 +454,8 @@ public class RSSHandler extends DefaultHandler {
 				
 				String entryLinkString = entryLink.toString().trim();
 				
-				if (entryLinkString.startsWith(Strings.SLASH) && feedBaseUrl != null) {
-					entryLinkString = feedBaseUrl + entryLinkString;
+				if (feedBaseUrl != null && !entryLinkString.startsWith(Strings.HTTP) && !entryLinkString.startsWith(Strings.HTTPS)) {
+					entryLinkString = feedBaseUrl + (entryLinkString.startsWith(Strings.SLASH) || feedBaseUrl.startsWith(Strings.SCHEDULED) ? entryLinkString : Strings.SLASH + entryLinkString);
 				}
 				
 				String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] {entryLinkString, enclosureString, guidString}: new String[] {entryLinkString, enclosureString}) : (guidString != null ? new String[] {entryLinkString, guidString} : new String[] {entryLinkString});
