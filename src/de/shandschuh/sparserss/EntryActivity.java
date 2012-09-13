@@ -537,6 +537,7 @@ public class EntryActivity extends Activity {
 				
 				if (link != null && link.length() > 0) {
 					urlButton.setEnabled(true);
+					urlButton.setAlpha(BUTTON_ALPHA+20);
 					urlButton.setOnClickListener(new OnClickListener() {
 						public void onClick(View view) {
 							startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse(link)), 0);
@@ -544,6 +545,7 @@ public class EntryActivity extends Activity {
 					});
 				} else {
 					urlButton.setEnabled(false);
+					urlButton.setAlpha(80);
 				}
 				
 				final String enclosure = entryCursor.getString(enclosurePosition);
