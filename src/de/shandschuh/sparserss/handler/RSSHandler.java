@@ -452,10 +452,13 @@ public class RSSHandler extends DefaultHandler {
 					existanceStringBuilder.append(Strings.DB_AND).append(FeedData.EntryColumns.GUID).append(Strings.DB_ARG);
 				}
 				
-				String entryLinkString = entryLink.toString().trim();
+				String entryLinkString = Strings.EMPTY; // don't set this to null as we need *some* value
 				
-				if (feedBaseUrl != null && !entryLinkString.startsWith(Strings.HTTP) && !entryLinkString.startsWith(Strings.HTTPS)) {
-					entryLinkString = feedBaseUrl + (entryLinkString.startsWith(Strings.SLASH) ? entryLinkString : Strings.SLASH + entryLinkString);
+				if (entryLink != null &&  entryLink.length() > 0) {
+					entryLinkString = entryLink.toString().trim();
+					if (feedBaseUrl != null && !entryLinkString.startsWith(Strings.HTTP) && !entryLinkString.startsWith(Strings.HTTPS)) {
+						entryLinkString = feedBaseUrl + (entryLinkString.startsWith(Strings.SLASH) ? entryLinkString : Strings.SLASH + entryLinkString);
+					}
 				}
 				
 				String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] {entryLinkString, enclosureString, guidString}: new String[] {entryLinkString, enclosureString}) : (guidString != null ? new String[] {entryLinkString, guidString} : new String[] {entryLinkString});
@@ -472,12 +475,11 @@ public class RSSHandler extends DefaultHandler {
 					}
 				}
 				
-				if (!skip && (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0)) {
+				if (!skip && ((entryLinkString.length() == 0 && guidString == null) || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0)) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					if (entryDate == null) {
 						values.put(FeedData.EntryColumns.DATE, now--);
 					}
-					
 					
 					String entryId = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
 					
