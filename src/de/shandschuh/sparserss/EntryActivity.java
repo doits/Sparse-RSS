@@ -502,9 +502,16 @@ public class EntryActivity extends Activity {
 
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
 					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
-					webView.getSettings().setLoadsImagesAutomatically(false);
+					webView.getSettings().setBlockNetworkImage(true);
 				} else {
-					webView.getSettings().setLoadsImagesAutomatically(true);
+					if (webView.getSettings().getBlockNetworkImage()) {
+						/*
+						 * setBlockNetwortImage(false) calls postSync, which takes time,
+						 * so we clean up the html first and change the value afterwards
+						 */
+						webView.loadData(Strings.EMPTY, TEXT_HTML, UTF8);
+						webView.getSettings().setBlockNetworkImage(false);
+					}
 				}
 				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
