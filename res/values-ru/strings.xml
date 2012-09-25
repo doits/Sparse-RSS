@@ -16,18 +16,21 @@
     <string name="contextmenu_markasunread">Непрочитано</string>
     <string name="contextmenu_hideread">Фильтр</string>
     <string name="contextmenu_showread">Показать всё</string>
-    <string name="contextmenu_copyurl">Копировать ссылку В буфер</string>
+    <string name="contextmenu_copyurl">URL в буфер</string>
     <string name="contextmenu_deleteread">Очистить</string>
     <string name="contextmenu_deleteallentries">Очистить всё</string>
+    <string name="contextmenu_resetupdatedate">Сбросить дату</string>
     <string name="menu_allread">Прочитано</string>
     <string name="menu_import">Импорт</string>
     <string name="menu_export">Экспорт</string>
-    <string name="menu_about">About</string>
+    <string name="menu_about">Сведения</string>
     <string name="menu_enablefeedsort">Сортировка</string>
-    <string name="menu_disablefeedsort">Назад</string>
+    <string name="menu_disablefeedsort">Завершить</string>
     <string name="menu_share">Отправить</string>
 
     <string name="license_intro">This software is distributed under the MIT open source license and its source code is available under http://code.google.com/p/sparserss</string>
+    <string name="contributors"><u>Также участвовали &gt;&gt;</u></string>
+    <string name="license_word"><u>&lt;&lt; Лицензия</u></string>
 
     <string name="settings_category_refresh">Автообновление</string>
     <string name="settings_enabled">Включить</string>
@@ -84,13 +87,14 @@
     <string name="settings_standarduseragent">Сменить user-agent</string>
     <string name="settings_standarduseragent_description">Использовать стандартное значение user-agent</string>
     <string name="settings_httphttpsredirects">Редирект http-https</string>
-    <string name="settings_httphttpsredirects_description">Использовать автоматическое перенаправление с http на https и обратно</string>
-    <string name="settings_enableefficientfeedparsing">Мастер-проверка</string>
+    <string name="settings_httphttpsredirects_description">Обрабатывать автоматическое перенаправление с http на https и обратно</string>
+    <string name="settings_enableefficientfeedparsing">Краткая проверка</string>
     <string name="settings_enableefficientfeedparsing_description">Остановить проверку ленты при нахождении прочитанной или очень старой новости</string>
     <string name="settings_proxy_wifionly">Для Wi-Fi</string>
     <string name="settings_proxy_wifionly_description">Использовать только для Wi-Fi</string>
     <string name="settings_proxy_host">Адрес</string>
     <string name="settings_proxy_port">Порт</string>
+    <string name="settings_proxy_type">Тип</string>
 
     <string name="never">никогда</string>
     <string name="update">Обновлено</string>
@@ -103,7 +107,9 @@
     <string name="all_feeds">Все ленты (и будущие)</string>
     <string name="all">Новости</string>
     <string name="overview">Ленты</string>
+    <string name="kb">Кб</string>
 
+    <string name="error_feederror">Сервер не отвечает</string>
     <string name="error_feedurlexists">Лента с таким адресом уже существует</string>
     <string name="error_feedimport">Импорт невозможен</string>
     <string name="error_feedexport">Экспорт не выполнен. Убедитесь, что карта подключена и не защищена от записи</string>
@@ -116,7 +122,7 @@
     <string name="feed_title">Название</string>
     <string name="select_file">Выберите файл в корне карты</string>
     <string name="refreshonwifionly">Только по Wi-Fi</string>
-    <string name="changelog">Changelog</string>
+    <string name="changelog">Изменения</string>
 
     <string name="red">Красный</string>
     <string name="green">Зелёный</string>
@@ -134,7 +140,7 @@
     <string name="button_decline">Отклонить</string>
     <string name="button_alwaysokforall">Да для всех</string>
     <string name="message_exportedto">Экспорт выполнен в %s</string>
-    <string name="dialog_licenseagreement">License agreement</string>
+    <string name="dialog_licenseagreement">Лицензия</string>
     <string name="dialog_hint">Совет</string>
 
     <string-array name="settings_intervals">
@@ -167,4 +173,9 @@
         <item>+2</item>
         <item>+3</item>
     </string-array>
+    
+    <string name="permission_readfeeds">Разрешить чтение</string>
+    <string name="permission_readfeeds_description">Разрешить приложениям чтение лент Sparse rss</string>
+    <string name="permission_writefeeds">Разрешить запись</string>
+    <string name="permission_writefeeds_description">Разрешить приложениям запись лент Sparse rss</string>
 </resources>
