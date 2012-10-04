@@ -105,11 +105,11 @@ public class EntryActivity extends Activity {
 	
 	private static final String FONTSIZE_END = "</font>";
 	
-	private static final String FONT_END = "</font></body>";
+	private static final String FONT_END = "</font><br/><br/><br/><br/></body>";
 	
 	private static final String BODY_START = "<body>";
 	
-	private static final String BODY_END = "</body>";
+	private static final String BODY_END = "<br/><br/><br/><br/></body>";
 	
 	private static final int BUTTON_ALPHA = 180;
 
@@ -174,12 +174,6 @@ public class EntryActivity extends Activity {
 	private String link;
 	
 	private LayoutParams layoutParams;
-	
-	LinearLayout buttonPanel;
-	
-	private Handler handler;
-	
-	private SimpleTask buttonHideTask;
 	
 	private View content;
 	
@@ -248,7 +242,6 @@ public class EntryActivity extends Activity {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 		
-		buttonPanel = (LinearLayout) findViewById(R.id.button_panel);
 		nextButton = (ImageButton) findViewById(R.id.next_button);
 		urlButton = (ImageButton) findViewById(R.id.url_button);
 		urlButton.setAlpha(BUTTON_ALPHA+30);
@@ -293,7 +286,6 @@ public class EntryActivity extends Activity {
 		
 		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
 			public boolean onDown(MotionEvent e) {
-				showButtons();
 				return false;
 			}
 	
@@ -316,12 +308,11 @@ public class EntryActivity extends Activity {
 			}
 	
 			public void onLongPress(MotionEvent e) {
-				showButtons();
+				
 			}
 	
 			public boolean onScroll(MotionEvent e1, MotionEvent e2,
 					float distanceX, float distanceY) {
-				showButtons();
 				return false;
 			}
 	
@@ -353,8 +344,6 @@ public class EntryActivity extends Activity {
 		
 		scrollX = 0;
 		scrollY = 0;
-		
-		handler = new Handler();
 	}
 	
 	@Override
@@ -384,27 +373,6 @@ public class EntryActivity extends Activity {
 		setIntent(intent);
 	}
 	
-	private void showButtons() {
-		buttonPanel.setVisibility(View.VISIBLE);
-		
-		if (buttonHideTask != null) {
-			buttonHideTask.cancel();
-		}
-		buttonHideTask = generateHideTimerTask();
-		handler.postDelayed(buttonHideTask, 2000);
-	}
-	
-	private SimpleTask generateHideTimerTask() {
-		return new SimpleTask() {
-			@Override
-			public void runControlled() {
-				if (webView.getBottom() > buttonPanel.getTop()) {
-					buttonPanel.setVisibility(View.GONE);
-				}
-			}
-		};
-	}
-
 	private void reload() {
 		if (_id != null && _id.equals(uri.getLastPathSegment())) {
 			return;
@@ -611,7 +579,6 @@ public class EntryActivity extends Activity {
 				setupButton(previousButton, false, timestamp);
 				setupButton(nextButton, true, timestamp);
 				webView.scrollTo(scrollX, scrollY); // resets the scrolling
-				showButtons();
 			}
 		} else {
 			entryCursor.close();
