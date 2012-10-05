@@ -40,6 +40,7 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.zip.GZIPInputStream;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -93,6 +94,8 @@ public class FetcherService extends IntentService {
 	private static final String SERVICENAME = "RssFetcherService";
 	
 	private static final String ZERO = "0";
+	
+	private static final String GZIP = "gzip";
 	
 	private NotificationManager notificationManager;
 	
@@ -241,7 +244,7 @@ public class FetcherService extends IntentService {
 				handler.init(new Date(cursor.getLong(lastUpdatePosition)), id, cursor.getString(titlePosition), feedUrl);
 				if (fetchMode == 0) {
 					if (contentType != null && contentType.startsWith(CONTENT_TYPE_TEXT_HTML)) {
-						BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+						BufferedReader reader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
 						
 						String line = null;
 						
@@ -310,7 +313,7 @@ public class FetcherService extends IntentService {
 						}
 						
 					} else {
-						BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+						BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getConnectionInputStream(connection)));
 						
 						char[] chars = new char[20];
 						
@@ -348,7 +351,7 @@ public class FetcherService extends IntentService {
 					HttpURLConnection iconURLConnection = setupConnection(new URL(new StringBuilder(connection.getURL().getProtocol()).append(Strings.PROTOCOL_SEPARATOR).append(connection.getURL().getHost()).append(Strings.FILE_FAVICON).toString()), imposeUserAgent, followHttpHttpsRedirects);
 					
 					try {
-						iconBytes = getBytes(iconURLConnection.getInputStream());
+						iconBytes = getBytes(getConnectionInputStream(iconURLConnection));
 						ContentValues values = new ContentValues();
 						
 						values.put(FeedData.FeedColumns.ICON, iconBytes); 
@@ -366,17 +369,17 @@ public class FetcherService extends IntentService {
 				switch (fetchMode) {
 					default:
 					case FETCHMODE_DIRECT: {
-						
 						if (contentType != null) {
 							int index = contentType.indexOf(CHARSET);
 							
 							int index2 = contentType.indexOf(';', index);
-							InputStream inputStream = connection.getInputStream();
+							
+							InputStream inputStream = getConnectionInputStream(connection);
 							
 							handler.setInputStream(inputStream);
 							Xml.parse(inputStream, Xml.findEncodingByName(index2 > -1 ?contentType.substring(index+8, index2) : contentType.substring(index+8)), handler);
 						} else {
-							InputStreamReader reader = new InputStreamReader(connection.getInputStream());
+							InputStreamReader reader = new InputStreamReader(getConnectionInputStream(connection));
 							
 							handler.setReader(reader);
 							Xml.parse(reader, handler);
@@ -386,7 +389,7 @@ public class FetcherService extends IntentService {
 					case FETCHMODE_REENCODE: {
 						ByteArrayOutputStream ouputStream = new ByteArrayOutputStream();
 						
-						InputStream inputStream = connection.getInputStream();
+						InputStream inputStream = getConnectionInputStream(connection);
 						
 						byte[] byteBuffer = new byte[4096]; 
 						
@@ -438,7 +441,7 @@ public class FetcherService extends IntentService {
 					values.put(FeedData.FeedColumns.FETCHMODE, 0); // resets the fetchmode to determine it again later
 					values.put(FeedData.FeedColumns.ERROR, context.getString(R.string.error_feederror));
 					context.getContentResolver().update(FeedData.FeedColumns.CONTENT_URI(id), values, null, null);
-				} 
+				}
 			} catch (Throwable e) {
 				if (!handler.isDone() && !handler.isCancelled()) {
 					ContentValues values = new ContentValues();
@@ -523,5 +526,19 @@ public class FetcherService extends IntentService {
 		output.close();
 		inputStream.close();
 		return result;
+	}
+	
+	/**
+	 * This is a small wrapper for getting the properly encoded inputstream if is is gzip compressed
+	 * and not properly recognized.
+	 */
+	private static InputStream getConnectionInputStream(HttpURLConnection connection) throws IOException {
+		InputStream inputStream = connection.getInputStream();
+		
+		if (GZIP.equals(connection.getContentEncoding()) && !(inputStream instanceof GZIPInputStream)) {
+			return new GZIPInputStream(inputStream);
+		} else {
+			return inputStream;
+		}
 	}
 }
