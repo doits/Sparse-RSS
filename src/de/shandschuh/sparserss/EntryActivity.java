@@ -44,7 +44,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
@@ -66,7 +65,6 @@ import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -117,6 +115,8 @@ public class EntryActivity extends Activity {
 	
 	private static final String TEXTPLAIN = "text/plain";
 	
+	private static final String BRACKET = " (";
+	
 	private int titlePosition;
 	
 	private int datePosition;
@@ -132,6 +132,8 @@ public class EntryActivity extends Activity {
 	private int readDatePosition;
 	
 	private int enclosurePosition;
+	
+	private int authorPosition;
 	
 	private String _id;
 	
@@ -236,6 +238,7 @@ public class EntryActivity extends Activity {
 		favoritePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FAVORITE);
 		readDatePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.READDATE);
 		enclosurePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.ENCLOSURE);
+		authorPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.AUTHOR);
 		
 		entryCursor.close();
 		if (RSSOverview.notificationManager == null) {
@@ -444,7 +447,15 @@ public class EntryActivity extends Activity {
 				
 				Date date = new Date(timestamp);
 				
-				((TextView) findViewById(R.id.entry_date)).setText(new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date)));
+				StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
+				
+				String author = entryCursor.getString(authorPosition);
+				
+				if (author != null) {
+					dateStringBuilder.append(BRACKET).append(author).append(')');
+				}
+				
+				((TextView) findViewById(R.id.entry_date)).setText(dateStringBuilder);
 				
 				final ImageView imageView = (ImageView) findViewById(android.R.id.icon);
 				

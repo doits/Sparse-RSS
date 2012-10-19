@@ -14,7 +14,8 @@
             android:id="@+id/entry_date"
             android:layout_width="0dip"
             android:layout_gravity="fill"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:autoLink="email"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
