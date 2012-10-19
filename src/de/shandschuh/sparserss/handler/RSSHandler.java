@@ -106,6 +106,8 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String ATTRIBUTE_LENGTH = "length";
 	
+	private static final String ATTRIBUTE_REL = "rel";
+	
 	private static final String[] TIMEZONES = {"MEST", "EST", "PST"};
 	
 	private static final String[] TIMEZONES_REPLACE = {"+0200", "-0500", "-0800"};
@@ -306,24 +308,28 @@ public class RSSHandler extends DefaultHandler {
 			if (authorTagEntered) {
 				return;
 			}
-			entryLink = new StringBuilder();
-			
-			boolean foundLink = false;
-			
-			for (int n = 0, i = attributes.getLength(); n < i; n++) {
-				if (ATTRIBUTE_HREF.equals(attributes.getLocalName(n))) {
-					if (attributes.getValue(n) != null) {
-						entryLink.append(attributes.getValue(n));
-						foundLink = true;
-						linkTagEntered = false;
-					} else {
-						linkTagEntered = true;
+			if (TAG_ENCLOSURE.equals(attributes.getValue(Strings.EMPTY, ATTRIBUTE_REL))) {
+				startEnclosure(attributes, attributes.getValue(Strings.EMPTY, ATTRIBUTE_HREF));
+			} else {
+				entryLink = new StringBuilder();
+				
+				boolean foundLink = false;
+				
+				for (int n = 0, i = attributes.getLength(); n < i; n++) {
+					if (ATTRIBUTE_HREF.equals(attributes.getLocalName(n))) {
+						if (attributes.getValue(n) != null) {
+							entryLink.append(attributes.getValue(n));
+							foundLink = true;
+							linkTagEntered = false;
+						} else {
+							linkTagEntered = true;
+						}
+						break;
 					}
-					break;
 				}
-			}
-			if (!foundLink) {
-				linkTagEntered = true;
+				if (!foundLink) {
+					linkTagEntered = true;
+				}
 			}
 		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
 			descriptionTagEntered = true;
@@ -346,22 +352,7 @@ public class RSSHandler extends DefaultHandler {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_ENCLOSURE.equals(localName)) {
-			if (enclosure == null) { // fetch the first enclosure only
-				enclosure = new StringBuilder(attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
-				
-				enclosure.append(Strings.ENCLOSURE_SEPARATOR);
-				
-				String value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_TYPE);
-				
-				if (value != null) {
-					enclosure.append(value);
-				}
-				enclosure.append(Strings.ENCLOSURE_SEPARATOR);
-				value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_LENGTH);
-				if (value != null) {
-					enclosure.append(value);
-				}
-			}
+			startEnclosure(attributes, attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = true;
 			guid = new StringBuilder();
@@ -375,6 +366,24 @@ public class RSSHandler extends DefaultHandler {
 			}
 		} else if (TAG_NAME.equals(localName)) {
 			nameTagEntered = true;
+		}
+	}
+	
+	private void startEnclosure(Attributes attributes, String url) {
+		if (enclosure == null) { // fetch the first enclosure only
+			enclosure = new StringBuilder(url);
+			enclosure.append(Strings.ENCLOSURE_SEPARATOR);
+			
+			String value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_TYPE);
+			
+			if (value != null) {
+				enclosure.append(value);
+			}
+			enclosure.append(Strings.ENCLOSURE_SEPARATOR);
+			value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_LENGTH);
+			if (value != null) {
+				enclosure.append(value);
+			}
 		}
 	}
 
