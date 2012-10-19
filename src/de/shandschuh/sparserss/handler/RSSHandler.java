@@ -94,6 +94,10 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_GUID = "guid";
 	
+	private static final String TAG_AUTHOR = "author";
+	
+	private static final String TAG_NAME = "name";
+	
 	private static final String ATTRIBUTE_URL = "url";
 	
 	private static final String ATTRIBUTE_HREF = "href";
@@ -203,6 +207,12 @@ public class RSSHandler extends DefaultHandler {
 	
 	private boolean efficientFeedParsing;
 	
+	private boolean authorTagEntered;
+	
+	private StringBuilder author;
+	
+	private boolean nameTagEntered;
+	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "4"))*86400000l;
 		this.context = context;
@@ -257,6 +267,8 @@ public class RSSHandler extends DefaultHandler {
 		now = System.currentTimeMillis();
 		guid = null;
 		guidTagEntered = false;
+		authorTagEntered = false;
+		author = null;
 	}
 
 	@Override
@@ -291,6 +303,9 @@ public class RSSHandler extends DefaultHandler {
 				title = new StringBuilder();
 			}
 		} else if (TAG_LINK.equals(localName)) {
+			if (authorTagEntered) {
+				return;
+			}
 			entryLink = new StringBuilder();
 			
 			boolean foundLink = false;
@@ -350,6 +365,16 @@ public class RSSHandler extends DefaultHandler {
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = true;
 			guid = new StringBuilder();
+		} else if (TAG_AUTHOR.endsWith(localName)) {
+			authorTagEntered = true;
+			if (author == null) {
+				author = new StringBuilder();
+			} else {
+				// this indicates multiple authors
+				author.append(Strings.COMMASPACE);
+			}
+		} else if (TAG_NAME.equals(localName)) {
+			nameTagEntered = true;
 		}
 	}
 
@@ -371,6 +396,8 @@ public class RSSHandler extends DefaultHandler {
 			dateStringBuilder.append(ch, start, length);
 		} else if (guidTagEntered) {
 			guid.append(ch, start, length);
+		} else if (authorTagEntered && nameTagEntered) {
+			author.append(ch, start, length);
 		}
 	}
 	
@@ -411,6 +438,10 @@ public class RSSHandler extends DefaultHandler {
 					values.putNull(FeedData.EntryColumns.READDATE);
 				}
 				values.put(FeedData.EntryColumns.TITLE, unescapeTitle(title.toString().trim()));
+				
+				if (author != null) {
+					values.put(FeedData.EntryColumns.AUTHOR, author.toString());
+				}
 				
 				Vector<String> images = null;
 				
@@ -512,10 +543,15 @@ public class RSSHandler extends DefaultHandler {
 			title = null;
 			enclosure = null;
 			guid = null;
+			author = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = false;
+		} else if (TAG_NAME.equals(localName)) {
+			nameTagEntered = false;
+		} else if (TAG_AUTHOR.equals(localName)) {
+			authorTagEntered = false;
 		}
 	}
 	
