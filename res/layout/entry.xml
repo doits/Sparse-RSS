@@ -12,9 +12,10 @@
             android:paddingTop="2pt"
             android:layout_height="wrap_content"
             android:id="@+id/entry_date"
-            android:layout_width="wrap_content"
+            android:layout_width="0dip"
             android:layout_gravity="fill"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:autoLink="email"/>
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,16 +28,14 @@
     <RelativeLayout
         android:id="@+id/entry_content"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dip"
         android:layout_gravity="fill"
         android:layout_weight="1" >
         <ViewFlipper
             android:id="@+id/content_flipper"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="fill"/>
+            android:layout_height="fill_parent"/>
         <LinearLayout
-            android:id="@+id/button_panel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -50,7 +49,7 @@
             <ImageButton 
                 android:layout_height="wrap_content"
                 android:id="@+id/url_button"
-                android:layout_width="fill_parent"
+                android:layout_width="0dip"
                 android:layout_gravity="fill"
                 android:layout_weight="1"
                 android:background="#7C000000"

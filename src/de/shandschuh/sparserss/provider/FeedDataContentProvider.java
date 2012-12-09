@@ -178,6 +178,9 @@ public class FeedDataContentProvider extends ContentProvider {
 			if (oldVersion < 13) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.GUID).append(' ').append(FeedData.TYPE_TEXT).toString());
 			}
+			if (oldVersion < 11) {
+				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.AUTHOR).append(' ').append(FeedData.TYPE_TEXT).toString());	
+			}
 		}
 		
 		private void executeCatchedSQL(SQLiteDatabase database, String query) {

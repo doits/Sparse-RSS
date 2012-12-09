@@ -28,6 +28,7 @@
     <string name="menu_about">インフメーション</string>
     <string name="menu_enablefeedsort">仕分け開始</string>
     <string name="menu_disablefeedsort">仕分け終了</string>
+    <string name="menu_share">共有&#8230;</string>
 
     <string name="settings_category_refresh">自動更新</string>
     <string name="settings_enabled">ＯＮ</string>
@@ -109,8 +110,7 @@
     <string name="select_file">データを選択（SDルート）</string>
     <string name="refreshonwifionly">ワイヤレス接続のみ更新可</string>
     <string name="changelog">変更済み</string>
-    <string name="share_via">共有&#8230;</string>
-    
+
     <string name="red">赤</string>
     <string name="green">緑</string>
     <string name="blue">青</string>
@@ -139,10 +139,8 @@
         <item>１時間</item>
         <item>２時間</item>
         <item>６時間</item>
+        <item>１２時間</item>
         <item>１日</item>
-        <item>２日</item>
-        <item>３日</item>
-        <item>永遠に</item>
     </string-array>
 
     <string-array name="settings_keeptimes">
@@ -152,6 +150,9 @@
         <item>１週間</item>
         <item>２週間</item>
         <item>１ヶ月</item>
+        <item>２ヶ月</item>
+        <item>３ヶ月</item>
+        <item>永遠に</item>
     </string-array>
 
     <string-array name="settings_fontsizes">

@@ -137,7 +137,8 @@
         <item>1 saat</item>
         <item>2 saat</item>
         <item>6 saat</item>
-    <item>1 gün</item>
+        <item>12 saat</item>
+        <item>1 gün</item>
     </string-array>
 
     <string-array name="settings_keeptimes">

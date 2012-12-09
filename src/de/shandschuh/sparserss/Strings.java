@@ -63,6 +63,8 @@ public final class Strings {
 	
 	public static final String SETTINGS_PROXYWIFIONLY = "proxy.wifionly";
 	
+	public static final String SETTINGS_PROXYTYPE = "proxy.type";
+	
 	public static final String SETTINGS_KEEPTIME = "keeptime";
 	
 	public static final String SETTINGS_BLACKTEXTONWHITE = "blacktextonwhite";
@@ -182,5 +184,5 @@ public final class Strings {
 	public static final String COMMASPACE = ", ";
 	
 	public static final String SCHEDULED = "scheduled";
-	
+
 }

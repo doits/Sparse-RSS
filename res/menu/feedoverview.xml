@@ -8,7 +8,7 @@
         <item android:id="@+id/menu_refresh"
             android:icon="@android:drawable/ic_menu_rotate"
             android:title="@string/menu_refresh"
-            android:showAsAction="withText"/>
+            android:showAsAction="ifRoom|withText"/>
         <item android:id="@+id/menu_settings"
             android:icon="@android:drawable/ic_menu_preferences"
             android:title="@string/menu_settings"/>

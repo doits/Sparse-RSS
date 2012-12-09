@@ -94,6 +94,10 @@ public class RSSHandler extends DefaultHandler {
 	
 	private static final String TAG_GUID = "guid";
 	
+	private static final String TAG_AUTHOR = "author";
+	
+	private static final String TAG_NAME = "name";
+	
 	private static final String ATTRIBUTE_URL = "url";
 	
 	private static final String ATTRIBUTE_HREF = "href";
@@ -101,6 +105,8 @@ public class RSSHandler extends DefaultHandler {
 	private static final String ATTRIBUTE_TYPE = "type";
 	
 	private static final String ATTRIBUTE_LENGTH = "length";
+	
+	private static final String ATTRIBUTE_REL = "rel";
 	
 	private static final String[] TIMEZONES = {"MEST", "EST", "PST"};
 	
@@ -203,6 +209,12 @@ public class RSSHandler extends DefaultHandler {
 	
 	private boolean efficientFeedParsing;
 	
+	private boolean authorTagEntered;
+	
+	private StringBuilder author;
+	
+	private boolean nameTagEntered;
+	
 	public RSSHandler(Context context) {
 		KEEP_TIME = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(context).getString(Strings.SETTINGS_KEEPTIME, "4"))*86400000l;
 		this.context = context;
@@ -257,6 +269,8 @@ public class RSSHandler extends DefaultHandler {
 		now = System.currentTimeMillis();
 		guid = null;
 		guidTagEntered = false;
+		authorTagEntered = false;
+		author = null;
 	}
 
 	@Override
@@ -291,24 +305,31 @@ public class RSSHandler extends DefaultHandler {
 				title = new StringBuilder();
 			}
 		} else if (TAG_LINK.equals(localName)) {
-			entryLink = new StringBuilder();
-			
-			boolean foundLink = false;
-			
-			for (int n = 0, i = attributes.getLength(); n < i; n++) {
-				if (ATTRIBUTE_HREF.equals(attributes.getLocalName(n))) {
-					if (attributes.getValue(n) != null) {
-						entryLink.append(attributes.getValue(n));
-						foundLink = true;
-						linkTagEntered = false;
-					} else {
-						linkTagEntered = true;
-					}
-					break;
-				}
+			if (authorTagEntered) {
+				return;
 			}
-			if (!foundLink) {
-				linkTagEntered = true;
+			if (TAG_ENCLOSURE.equals(attributes.getValue(Strings.EMPTY, ATTRIBUTE_REL))) {
+				startEnclosure(attributes, attributes.getValue(Strings.EMPTY, ATTRIBUTE_HREF));
+			} else {
+				entryLink = new StringBuilder();
+				
+				boolean foundLink = false;
+				
+				for (int n = 0, i = attributes.getLength(); n < i; n++) {
+					if (ATTRIBUTE_HREF.equals(attributes.getLocalName(n))) {
+						if (attributes.getValue(n) != null) {
+							entryLink.append(attributes.getValue(n));
+							foundLink = true;
+							linkTagEntered = false;
+						} else {
+							linkTagEntered = true;
+						}
+						break;
+					}
+				}
+				if (!foundLink) {
+					linkTagEntered = true;
+				}
 			}
 		} else if ((TAG_DESCRIPTION.equals(localName) && !TAG_MEDIA_DESCRIPTION.equals(qName)) || (TAG_CONTENT.equals(localName) && !TAG_MEDIA_CONTENT.equals(qName))) {
 			descriptionTagEntered = true;
@@ -331,25 +352,38 @@ public class RSSHandler extends DefaultHandler {
 			descriptionTagEntered = true;
 			description = new StringBuilder();
 		} else if (TAG_ENCLOSURE.equals(localName)) {
-			if (enclosure == null) { // fetch the first enclosure only
-				enclosure = new StringBuilder(attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
-				
-				enclosure.append(Strings.ENCLOSURE_SEPARATOR);
-				
-				String value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_TYPE);
-				
-				if (value != null) {
-					enclosure.append(value);
-				}
-				enclosure.append(Strings.ENCLOSURE_SEPARATOR);
-				value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_LENGTH);
-				if (value != null) {
-					enclosure.append(value);
-				}
-			}
+			startEnclosure(attributes, attributes.getValue(Strings.EMPTY, ATTRIBUTE_URL));
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = true;
 			guid = new StringBuilder();
+		} else if (TAG_AUTHOR.endsWith(localName)) {
+			authorTagEntered = true;
+			if (author == null) {
+				author = new StringBuilder();
+			} else {
+				// this indicates multiple authors
+				author.append(Strings.COMMASPACE);
+			}
+		} else if (TAG_NAME.equals(localName)) {
+			nameTagEntered = true;
+		}
+	}
+	
+	private void startEnclosure(Attributes attributes, String url) {
+		if (enclosure == null) { // fetch the first enclosure only
+			enclosure = new StringBuilder(url);
+			enclosure.append(Strings.ENCLOSURE_SEPARATOR);
+			
+			String value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_TYPE);
+			
+			if (value != null) {
+				enclosure.append(value);
+			}
+			enclosure.append(Strings.ENCLOSURE_SEPARATOR);
+			value = attributes.getValue(Strings.EMPTY, ATTRIBUTE_LENGTH);
+			if (value != null) {
+				enclosure.append(value);
+			}
 		}
 	}
 
@@ -371,6 +405,8 @@ public class RSSHandler extends DefaultHandler {
 			dateStringBuilder.append(ch, start, length);
 		} else if (guidTagEntered) {
 			guid.append(ch, start, length);
+		} else if (authorTagEntered && nameTagEntered) {
+			author.append(ch, start, length);
 		}
 	}
 	
@@ -412,6 +448,10 @@ public class RSSHandler extends DefaultHandler {
 				}
 				values.put(FeedData.EntryColumns.TITLE, unescapeTitle(title.toString().trim()));
 				
+				if (author != null) {
+					values.put(FeedData.EntryColumns.AUTHOR, author.toString());
+				}
+				
 				Vector<String> images = null;
 				
 				if (description != null) {
@@ -438,7 +478,7 @@ public class RSSHandler extends DefaultHandler {
 				
 				StringBuilder existanceStringBuilder = new StringBuilder(FeedData.EntryColumns.LINK).append(Strings.DB_ARG);
 				
-				if (enclosure != null) {
+				if (enclosure != null && enclosure.length() > 0) {
 					enclosureString = enclosure.toString();
 					values.put(FeedData.EntryColumns.ENCLOSURE, enclosureString);
 					existanceStringBuilder.append(Strings.DB_AND).append(FeedData.EntryColumns.ENCLOSURE).append(Strings.DB_ARG);
@@ -452,20 +492,33 @@ public class RSSHandler extends DefaultHandler {
 					existanceStringBuilder.append(Strings.DB_AND).append(FeedData.EntryColumns.GUID).append(Strings.DB_ARG);
 				}
 				
-				String entryLinkString = entryLink.toString().trim();
+				String entryLinkString = Strings.EMPTY; // don't set this to null as we need *some* value
 				
-				if (entryLinkString.startsWith(Strings.SLASH) && feedBaseUrl != null) {
-					entryLinkString = feedBaseUrl + entryLinkString;
+				if (entryLink != null &&  entryLink.length() > 0) {
+					entryLinkString = entryLink.toString().trim();
+					if (feedBaseUrl != null && !entryLinkString.startsWith(Strings.HTTP) && !entryLinkString.startsWith(Strings.HTTPS)) {
+						entryLinkString = feedBaseUrl + (entryLinkString.startsWith(Strings.SLASH) ? entryLinkString : Strings.SLASH + entryLinkString);
+					}
 				}
 				
 				String[] existanceValues = enclosureString != null ? (guidString != null ? new String[] {entryLinkString, enclosureString, guidString}: new String[] {entryLinkString, enclosureString}) : (guidString != null ? new String[] {entryLinkString, guidString} : new String[] {entryLinkString});
 				
-				if (entryLinkString.length() == 0 || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0) {
+				boolean skip = false;
+				
+				if (!efficientFeedParsing) {
+					if (context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString()+" AND "+FeedData.EntryColumns.DATE+"<"+entryDate.getTime(), existanceValues) == 1) {
+						newCount++;
+						skip = true;
+					} else {
+						values.remove(FeedData.EntryColumns.READDATE);
+						// continue with the standard procedure but don't reset the read-date
+					}
+				}
+				
+				if (!skip && ((entryLinkString.length() == 0 && guidString == null) || context.getContentResolver().update(feedEntiresUri, values, existanceStringBuilder.toString(), existanceValues) == 0)) {
 					values.put(FeedData.EntryColumns.LINK, entryLinkString);
 					if (entryDate == null) {
 						values.put(FeedData.EntryColumns.DATE, now--);
-					} else {
-						values.remove(FeedData.EntryColumns.READDATE);
 					}
 					
 					String entryId = context.getContentResolver().insert(feedEntiresUri, values).getLastPathSegment();
@@ -499,10 +552,15 @@ public class RSSHandler extends DefaultHandler {
 			title = null;
 			enclosure = null;
 			guid = null;
+			author = null;
 		} else if (TAG_RSS.equals(localName) || TAG_RDF.equals(localName) || TAG_FEED.equals(localName)) {
 			done = true;
 		} else if (TAG_GUID.equals(localName)) {
 			guidTagEntered = false;
+		} else if (TAG_NAME.equals(localName)) {
+			nameTagEntered = false;
+		} else if (TAG_AUTHOR.equals(localName)) {
+			authorTagEntered = false;
 		}
 	}
 	

@@ -46,7 +46,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.ClipboardManager;
 import android.text.TextUtils;
@@ -68,7 +67,6 @@ import android.view.animation.Animation;
 import android.webkit.WebView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewFlipper;
@@ -95,7 +93,7 @@ public class EntryActivity extends Activity {
 	
 	private static final String DESC = "date desc, _id asc limit 1";
 	
-	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%}\nimg {max-width: 100%; height: auto;}\npre {white-space: pre-wrap;}</style></head>";
+	private static final String CSS = "<head><style type=\"text/css\">body {max-width: 100%}\nimg {max-width: 100%; height: auto;}\ndiv[style] {max-width: 100%;}\npre {white-space: pre-wrap;}</style></head>";
 	
 	private static final String FONT_START = CSS+"<body link=\"#97ACE5\" text=\"#C0C0C0\">";
 	
@@ -107,17 +105,19 @@ public class EntryActivity extends Activity {
 	
 	private static final String FONTSIZE_END = "</font>";
 	
-	private static final String FONT_END = "</font></body>";
+	private static final String FONT_END = "</font><br/><br/><br/><br/></body>";
 	
 	private static final String BODY_START = "<body>";
 	
-	private static final String BODY_END = "</body>";
+	private static final String BODY_END = "<br/><br/><br/><br/></body>";
 	
 	private static final int BUTTON_ALPHA = 180;
 
 	private static final String IMAGE_ENCLOSURE = "[@]image/";
 	
 	private static final String TEXTPLAIN = "text/plain";
+	
+	private static final String BRACKET = " (";
 	
 	private int titlePosition;
 	
@@ -134,6 +134,8 @@ public class EntryActivity extends Activity {
 	private int readDatePosition;
 	
 	private int enclosurePosition;
+	
+	private int authorPosition;
 	
 	private String _id;
 	
@@ -176,12 +178,6 @@ public class EntryActivity extends Activity {
 	private String link;
 	
 	private LayoutParams layoutParams;
-	
-	LinearLayout buttonPanel;
-	
-	private Handler handler;
-	
-	private SimpleTask buttonHideTask;
 	
 	private View content;
 	
@@ -244,13 +240,13 @@ public class EntryActivity extends Activity {
 		favoritePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.FAVORITE);
 		readDatePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.READDATE);
 		enclosurePosition = entryCursor.getColumnIndex(FeedData.EntryColumns.ENCLOSURE);
+		authorPosition = entryCursor.getColumnIndex(FeedData.EntryColumns.AUTHOR);
 		
 		entryCursor.close();
 		if (RSSOverview.notificationManager == null) {
 			RSSOverview.notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 		}
 		
-		buttonPanel = (LinearLayout) findViewById(R.id.button_panel);
 		nextButton = (ImageButton) findViewById(R.id.next_button);
 		urlButton = (ImageButton) findViewById(R.id.url_button);
 		urlButton.setAlpha(BUTTON_ALPHA+30);
@@ -295,7 +291,6 @@ public class EntryActivity extends Activity {
 		
 		final GestureDetector gestureDetector = new GestureDetector(this, new OnGestureListener() {
 			public boolean onDown(MotionEvent e) {
-				showButtons();
 				return false;
 			}
 	
@@ -318,12 +313,11 @@ public class EntryActivity extends Activity {
 			}
 	
 			public void onLongPress(MotionEvent e) {
-				showButtons();
+				
 			}
 	
 			public boolean onScroll(MotionEvent e1, MotionEvent e2,
 					float distanceX, float distanceY) {
-				showButtons();
 				return false;
 			}
 	
@@ -355,8 +349,6 @@ public class EntryActivity extends Activity {
 		
 		scrollX = 0;
 		scrollY = 0;
-		
-		handler = new Handler();
 	}
 	
 	@Override
@@ -386,27 +378,6 @@ public class EntryActivity extends Activity {
 		setIntent(intent);
 	}
 	
-	private void showButtons() {
-		buttonPanel.setVisibility(View.VISIBLE);
-		
-		if (buttonHideTask != null) {
-			buttonHideTask.cancel();
-		}
-		buttonHideTask = generateHideTimerTask();
-		handler.postDelayed(buttonHideTask, 2000);
-	}
-	
-	private SimpleTask generateHideTimerTask() {
-		return new SimpleTask() {
-			@Override
-			public void runControlled() {
-				if (webView.getBottom() > buttonPanel.getTop()) {
-					buttonPanel.setVisibility(View.GONE);
-				}
-			}
-		};
-	}
-
 	private void reload() {
 		if (_id != null && _id.equals(uri.getLastPathSegment())) {
 			return;
@@ -478,7 +449,15 @@ public class EntryActivity extends Activity {
 				
 				Date date = new Date(timestamp);
 				
-				((TextView) findViewById(R.id.entry_date)).setText(new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date)));
+				StringBuilder dateStringBuilder = new StringBuilder(DateFormat.getDateFormat(this).format(date)).append(' ').append(DateFormat.getTimeFormat(this).format(date));
+				
+				String author = entryCursor.getString(authorPosition);
+				
+				if (author != null) {
+					dateStringBuilder.append(BRACKET).append(author).append(')');
+				}
+				
+				((TextView) findViewById(R.id.entry_date)).setText(dateStringBuilder);
 				
 				final ImageView imageView = (ImageView) findViewById(android.R.id.icon);
 				
@@ -524,9 +503,16 @@ public class EntryActivity extends Activity {
 
 				if (preferences.getBoolean(Strings.SETTINGS_DISABLEPICTURES, false)) {
 					abstractText = abstractText.replaceAll(Strings.HTML_IMG_REGEX, Strings.EMPTY);
-					webView.getSettings().setLoadsImagesAutomatically(false);
+					webView.getSettings().setBlockNetworkImage(true);
 				} else {
-					webView.getSettings().setLoadsImagesAutomatically(true);
+					if (webView.getSettings().getBlockNetworkImage()) {
+						/*
+						 * setBlockNetwortImage(false) calls postSync, which takes time,
+						 * so we clean up the html first and change the value afterwards
+						 */
+						webView.loadData(Strings.EMPTY, TEXT_HTML, UTF8);
+						webView.getSettings().setBlockNetworkImage(false);
+					}
 				}
 				
 				int fontsize = Integer.parseInt(preferences.getString(Strings.SETTINGS_FONTSIZE, Strings.ONE));
@@ -539,7 +525,7 @@ public class EntryActivity extends Activity {
 				
 				if (MainTabActivity.isLightTheme(this) || preferences.getBoolean(Strings.SETTINGS_BLACKTEXTONWHITE, false)) {
 					if (fontsize > 0) {
-						webView.loadDataWithBaseURL(null, new StringBuilder(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONTSIZE_END).toString(), TEXT_HTML, UTF8, null);
+						webView.loadDataWithBaseURL(null, new StringBuilder(CSS).append(FONTSIZE_START).append(fontsize).append(FONTSIZE_MIDDLE).append(abstractText).append(FONTSIZE_END).toString(), TEXT_HTML, UTF8, null);
 					} else {
 						webView.loadDataWithBaseURL(null, new StringBuilder(CSS).append(BODY_START).append(abstractText).append(BODY_END).toString(), TEXT_HTML, UTF8, null);
 					}
@@ -559,6 +545,7 @@ public class EntryActivity extends Activity {
 				
 				if (link != null && link.length() > 0) {
 					urlButton.setEnabled(true);
+					urlButton.setAlpha(BUTTON_ALPHA+20);
 					urlButton.setOnClickListener(new OnClickListener() {
 						public void onClick(View view) {
 							startActivityForResult(new Intent(Intent.ACTION_VIEW, Uri.parse(link)), 0);
@@ -566,6 +553,7 @@ public class EntryActivity extends Activity {
 					});
 				} else {
 					urlButton.setEnabled(false);
+					urlButton.setAlpha(80);
 				}
 				
 				final String enclosure = entryCursor.getString(enclosurePosition);
@@ -624,7 +612,6 @@ public class EntryActivity extends Activity {
 				setupButton(previousButton, false, timestamp);
 				setupButton(nextButton, true, timestamp);
 				webView.scrollTo(scrollX, scrollY); // resets the scrolling
-				showButtons();
 			}
 		} else {
 			entryCursor.close();

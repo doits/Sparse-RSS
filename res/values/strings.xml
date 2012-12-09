@@ -61,7 +61,8 @@
         Translators\n
          - Dutch: Eelko Berkenpies\n
          - Spanish: Sergio Martín\n
-         - Russian: Igor Nedoboy
+         - Russian: Igor Nedoboy\n
+         - Swedish: Lars m
          \n\nPermission is hereby granted, free of charge, to any person obtaining a copy
         of this software and associated documentation files (the "Software"), to deal
         in the Software without restriction, including without limitation the rights
@@ -149,6 +150,7 @@
     <string name="settings_proxy_wifionly_description">Use Proxy only for wifi</string>
     <string name="settings_proxy_host">Host</string>
     <string name="settings_proxy_port">Port</string>
+    <string name="settings_proxy_type">Type</string>
 
     <string name="never">never</string>
     <string name="update">Update</string>
@@ -238,6 +240,11 @@
         <item>+1</item>
         <item>+2</item>
         <item>+3</item>
+    </string-array>
+
+    <string-array name="settings_proxytypes_names">
+        <item>HTTP</item>
+        <item>SOCKS</item>
     </string-array>
 
     <string name="permission_readfeeds">Read feed data</string>
