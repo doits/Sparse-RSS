@@ -48,7 +48,7 @@ public class FeedDataContentProvider extends ContentProvider {
 	
 	private static final String DATABASE_NAME = "sparserss.db";
 	
-	private static final int DATABASE_VERSION = 13;
+	private static final int DATABASE_VERSION = 15;
 	
 	private static final int URI_FEEDS = 1;
 	
@@ -175,12 +175,12 @@ public class FeedDataContentProvider extends ContentProvider {
 			if (oldVersion < 12) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.ENCLOSURE).append(' ').append(FeedData.TYPE_TEXT).toString());
 			}
-			if (oldVersion < 13) {
+			if (oldVersion < 14) {
 				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.GUID).append(' ').append(FeedData.TYPE_TEXT).toString());
 			}
-			if (oldVersion < 11) {
-				executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.AUTHOR).append(' ').append(FeedData.TYPE_TEXT).toString());	
-			}
+	        if (oldVersion < 15) {
+	            executeCatchedSQL(database, new StringBuilder(ALTER_TABLE).append(TABLE_ENTRIES).append(ADD).append(FeedData.EntryColumns.AUTHOR).append(' ').append(FeedData.TYPE_TEXT).toString());   
+	        }
 		}
 		
 		private void executeCatchedSQL(SQLiteDatabase database, String query) {
